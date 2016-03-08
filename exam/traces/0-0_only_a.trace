@@ -1,0 +1,45 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+e2r12p11.42.fr
+Darwin 15.2.0 x86_64
+$> date
+Fri Jan  8 09:26:32 CET 2016
+$> gcc --version
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Apple LLVM version 7.0.2 (clang-700.1.81)
+Target: x86_64-apple-darwin15.2.0
+Thread model: posix
+$> clang --version
+Apple LLVM version 7.0.2 (clang-700.1.81)
+Target: x86_64-apple-darwin15.2.0
+Thread model: posix
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: auto-exam/2016/c-exam-beginner/practice-exam_20160108/fjacquem
+
+= Git history ==================================================================
+$> git -C /var/folders/v5/l2b0tvyj3cnfby6k2nnn0j9m0000gq/T/tmpY8qAai/user log --pretty='%H - %an, %ad : %s'
+5c94a8e914d073f9c00437995cddd2918bd3c8ab - Faustin JACQUEMAIN, Fri Jan 8 09:26:15 2016 +0100 : only_a.c
+ 
+= Collected files ==========================================
+$> ls -lAR /var/folders/v5/l2b0tvyj3cnfby6k2nnn0j9m0000gq/T/tmpY8qAai/user
+total 8
+-rw-r--r--  1 deepthought  deepthought  214 Jan  8 09:26 __GIT_HISTORY
+drwxr-xr-x  3 deepthought  deepthought  102 Jan  8 09:26 only_a
+
+/var/folders/v5/l2b0tvyj3cnfby6k2nnn0j9m0000gq/T/tmpY8qAai/user/only_a:
+total 8
+-rw-r--r--  1 deepthought  deepthought  70 Jan  8 09:26 only_a.c
+ 
+= only_a =======================================================================
+$> clang -Wextra -Wall -Werror only_a.c -o user_exe 
+
+= Test 1 ===================================================
+$> ./edaa79cs9dzs3sekasp69nu9 
+$> diff -U 3 user_output_test1 test1.output | cat -e
+
+Diff OK :D
+Grade: 1
+
+= Final grade: 1 ===============================================================

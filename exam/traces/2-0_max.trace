@@ -1,0 +1,72 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+e2r3p11.42.fr
+Darwin 15.2.0 x86_64
+$> date
+Fri Jan  8 10:01:27 CET 2016
+$> gcc --version
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Apple LLVM version 7.0.2 (clang-700.1.81)
+Target: x86_64-apple-darwin15.2.0
+Thread model: posix
+$> clang --version
+Apple LLVM version 7.0.2 (clang-700.1.81)
+Target: x86_64-apple-darwin15.2.0
+Thread model: posix
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: auto-exam/2016/c-exam-beginner/practice-exam_20160108/fjacquem
+
+= Git history ==================================================================
+$> git -C /var/folders/2g/j5hjqvw91jqcsjnpwrc71y_c0000gq/T/tmpweYBO5/user log --pretty='%H - %an, %ad : %s'
+4209cad0de921c3ce070284d7a463f493dd9ecee - Faustin JACQUEMAIN, Fri Jan 8 10:01:11 2016 +0100 : max (NO TEST)
+acc69c609cf938c67e5a0b9f713b5ee51576b55a - Faustin JACQUEMAIN, Fri Jan 8 09:52:54 2016 +0100 : repeat_alpha.c
+5c94a8e914d073f9c00437995cddd2918bd3c8ab - Faustin JACQUEMAIN, Fri Jan 8 09:26:15 2016 +0100 : only_a.c
+ 
+= Collected files ==========================================
+$> ls -lAR /var/folders/2g/j5hjqvw91jqcsjnpwrc71y_c0000gq/T/tmpweYBO5/user
+total 8
+-rw-r--r--  1 deepthought  deepthought  693 Jan  8 10:01 __GIT_HISTORY
+drwxr-xr-x  3 deepthought  deepthought  102 Jan  8 10:01 max
+drwxr-xr-x  3 deepthought  deepthought  102 Jan  8 10:01 only_a
+drwxr-xr-x  3 deepthought  deepthought  102 Jan  8 10:01 repeat_alpha
+
+/var/folders/2g/j5hjqvw91jqcsjnpwrc71y_c0000gq/T/tmpweYBO5/user/max:
+total 8
+-rw-r--r--  1 deepthought  deepthought  250 Jan  8 10:01 max.c
+
+/var/folders/2g/j5hjqvw91jqcsjnpwrc71y_c0000gq/T/tmpweYBO5/user/only_a:
+total 8
+-rw-r--r--  1 deepthought  deepthought  70 Jan  8 10:01 only_a.c
+
+/var/folders/2g/j5hjqvw91jqcsjnpwrc71y_c0000gq/T/tmpweYBO5/user/repeat_alpha:
+total 8
+-rw-r--r--  1 deepthought  deepthought  466 Jan  8 10:01 repeat_alpha.c
+ 
+= max ==========================================================================
+$> clang -Wextra -Wall -Werror main.c max.c -o user_exe 
+
+= Test 1 ===================================================
+$> ./d2xx1xf3cr1b9lhxi9jtmis0
+$> diff -U 3 user_output_test1 test1.output | cat -e
+--- user_output_test1	2016-01-08 10:01:28.000000000 +0100$
++++ test1.output	2016-01-08 10:01:28.000000000 +0100$
+@@ -1,7 +1,7 @@$
+ 0$
+-0$
+-0$
+-0$
+-0$
+-0$
++42$
++42$
++33$
++12$
++14965439$
+ 0$
+
+Diff KO :(
+Grade: 0
+
+= Final grade: 0 ===============================================================

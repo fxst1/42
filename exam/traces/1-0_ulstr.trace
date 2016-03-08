@@ -1,0 +1,76 @@
+= Host-specific information ====================================================
+$> hostname; uname -msr
+e2r10p17.42.fr
+Darwin 15.2.0 x86_64
+$> date
+Tue Jan  5 19:56:04 CET 2016
+$> gcc --version
+Configured with: --prefix=/Applications/Xcode.app/Contents/Developer/usr --with-gxx-include-dir=/usr/include/c++/4.2.1
+Apple LLVM version 7.0.2 (clang-700.1.81)
+Target: x86_64-apple-darwin15.2.0
+Thread model: posix
+$> clang --version
+Apple LLVM version 7.0.2 (clang-700.1.81)
+Target: x86_64-apple-darwin15.2.0
+Thread model: posix
+
+= User files collection ========================================================
+Collecting user files from Vogsphere
+Repository URL: auto-exam/2016/c-exam-beginner/practice-exam_20160105/fjacquem3
+
+= Git history ==================================================================
+$> git -C /var/folders/f6/kwrybf3s0hq95j7_d0vf4j100000gq/T/tmpJ4m_71/user log --pretty='%H - %an, %ad : %s'
+22abc1200e9c049e0d710fc097ea2de5a70e1061 - Faustin JACQUEMAIN, Tue Jan 5 19:55:51 2016 +0100 : ulstr
+159843359e4f646d4e48cd1e2f5ff212138f4da6 - Faustin JACQUEMAIN, Tue Jan 5 19:27:14 2016 +0100 : aff_last_param
+ 
+= Collected files ==========================================
+$> ls -lAR /var/folders/f6/kwrybf3s0hq95j7_d0vf4j100000gq/T/tmpJ4m_71/user
+total 8
+-rw-r--r--  1 deepthought  deepthought  469 Jan  5 19:56 __GIT_HISTORY
+drwxr-xr-x  3 deepthought  deepthought  102 Jan  5 19:56 aff_last_param
+drwxr-xr-x  3 deepthought  deepthought  102 Jan  5 19:56 ulstr
+
+/var/folders/f6/kwrybf3s0hq95j7_d0vf4j100000gq/T/tmpJ4m_71/user/aff_last_param:
+total 8
+-rw-r--r--  1 deepthought  deepthought  179 Jan  5 19:56 aff_last_param.c
+
+/var/folders/f6/kwrybf3s0hq95j7_d0vf4j100000gq/T/tmpJ4m_71/user/ulstr:
+total 8
+-rw-r--r--  1 deepthought  deepthought  434 Jan  5 19:56 ulstr.c
+ 
+= ulstr ========================================================================
+$> clang -Wextra -Wall -Werror ulstr.c -o user_exe 
+
+= Test 1 ===================================================
+$> ./nzeuo1uj3vewk0bth9ucttcb "L'eSPrit nE peUt plUs pRogResSer s'Il staGne et sI peRsIsTent VAnIte et auto-justification."
+$> diff -U 3 user_output_test1 test1.output | cat -e
+
+Diff OK :D
+= Test 2 ===================================================
+$> ./tnwj7u8daje4atmmkdn8jmri "S'enTOuRer dE sECreT eSt uN sIGnE De mAnQuE De coNNaiSSanCe.  "
+$> diff -U 3 user_output_test2 test2.output | cat -e
+
+Diff OK :D
+= Test 3 ===================================================
+$> ./n82agquwsdxgqg3ritgii0lp "3:21 Ba  tOut  moUn ki Ka di KE m'en Ka fe fot"
+$> diff -U 3 user_output_test3 test3.output | cat -e
+
+Diff OK :D
+= Test 4 ===================================================
+$> ./9kmzvt5a39wcbexjg4og4jdk "Pour l'Imperium de l'Humanite"
+$> diff -U 3 user_output_test4 test4.output | cat -e
+
+Diff OK :D
+= Test 5 ===================================================
+$> ./jommtq9a3uvzzfamxo8h03ls "..."
+$> diff -U 3 user_output_test5 test5.output | cat -e
+
+Diff OK :D
+= Test 6 ===================================================
+$> ./c16jl1nygwbdblgy14p014zh ""
+$> diff -U 3 user_output_test6 test6.output | cat -e
+
+Diff OK :D
+Grade: 1
+
+= Final grade: 1 ===============================================================
