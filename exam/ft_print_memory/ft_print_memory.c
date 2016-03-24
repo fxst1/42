@@ -1,4 +1,4 @@
-#include "implemt.h"
+#include "../../libft/implemt.h"
 
 static void	putline(int value, int offset)
 {
@@ -74,7 +74,7 @@ static void	process(void *addr, unsigned int size, unsigned int len)
 	}
 }
 
-void	*ft_print_memory(void *addr, unsigned int size)
+void	*ft_print_memory(void *addr, size_t size)
 {
 	size_t	len;
 	int	i;
@@ -91,7 +91,7 @@ void	*ft_print_memory(void *addr, unsigned int size)
 		}
 		putline(len, 0);
 		write(1, ": ", 2);
-		process(addr, s, len);
+		process(addr, size, len);
 		myputstr(addr + len, size - len);
 		write(1, "\n", 1);
 		len += OFFSET_LINE;
