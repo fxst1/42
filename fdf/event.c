@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   event.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/24 22:45:31 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/24 22:45:32 by fjacquem         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 void		clear(t_env *e)
@@ -19,55 +31,18 @@ void		clear(t_env *e)
 	}
 }
 
-int			key_hook(int keycode, t_env *e)
+void		key_spec(int keycode, t_env *e)
 {
 	t_point	p;
 
-	p.x = 0;
-	p.y = 0;
-	p.z = 0;
-	printf("%d\n", keycode);
-	if (keycode == 53)
+	if (keycode == 67)
 	{
-		free_env(e);
-		exit(0);
-	}
-	else if (keycode == 126)
-	{
-		e->y -= 10;
-		p.y -= 1;
-		do_fdf(e->fdf, &translate, &p);
-	}
-	else if (keycode == 125)
-	{
-		e->y += 10;
-		p.y += 1;
-		do_fdf(e->fdf, &translate, &p);
-	}
-	else if (keycode == 124)
-	{
-		e->x += 10;
-		p.x += 1;
-		do_fdf(e->fdf, &translate, &p);
-	}
-	else if (keycode == 123)
-	{
-		e->x -= 10;
-		p.x -= 1;
-		do_fdf(e->fdf, &translate, &p);
-	}
-	else if (keycode == 67)
-	{
-		p.x = 2;
-		p.y = 2;
-		p.z = 2;
+		p = init_point(2, 2, 2, 0);
 		do_fdf(e->fdf, &homothesie, &p);
 	}
 	else if (keycode == 75)
 	{
-		p.x = 0.5;
-		p.y = 0.5;
-		p.z = 0.5;
+		p = init_point(0.5, 0.5, 0.5, 0);
 		do_fdf(e->fdf, &homothesie, &p);
 	}
 	else if (keycode == 69)
@@ -80,22 +55,35 @@ int			key_hook(int keycode, t_env *e)
 		e->z_dx -= 0.5;
 		e->z_dy -= 0.5;
 	}
+}
+
+int			key_hook(int keycode, t_env *e)
+{
+	if (keycode == 53)
+	{
+		free_env(e);
+		exit(0);
+	}
+	else if (keycode == 126)
+		e->y -= 100;
+	else if (keycode == 125)
+		e->y += 100;
+	else if (keycode == 124)
+		e->x += 100;
+	else if (keycode == 123)
+		e->x -= 100;
 	else if (keycode == 0)
 		e->mask = (e->mask & DRAW_AXIS) ? e->mask & ~(DRAW_AXIS)
 			: e->mask | DRAW_AXIS;
-	//mlx_clear_window(e->mlx, e->screen);
-	//ft_memset(e->buf->data, 0, e->buf->size_line * e->buf->bpp * e->l);
-	clear(e);
-	draw_fdf(e, e->fdf);
-	if (e->mask & DRAW_AXIS)
-		draw_axis(e);
-	mlx_put_image_to_window(e->mlx, e->screen, e->img, 0, 0);
+	else
+		key_spec(keycode, e);
+	expose_hook(e);
 	return (keycode);
 }
 
 int			expose_hook(t_env *e)
 {
-	//mlx_clear_window(e->mlx, e->screen);
+	clear(e);
 	draw_fdf(e, e->fdf);
 	if (e->mask & DRAW_AXIS)
 		draw_axis(e);

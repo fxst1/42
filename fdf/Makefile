@@ -16,10 +16,13 @@ LIBFT = ./../libft
 GNL = ./../get_next_line
 MLX = /usr/x11/lib
 
-FLAGS = -Wall -Wextra
+FLAGS = -Wall -Wextra -Werror
 LIB = -lmlx -framework OpenGL -framework AppKit
 
-SRC = 	./fdf.c 			\
+SRC = 	./fdf_bis.c\
+		./env.c	\
+		./opts.c	\
+		./fdf.c 			\
 		./matrix.c		\
 		./init.c			\
 		./draw.c			\

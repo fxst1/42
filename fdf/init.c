@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/24 22:47:04 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/24 22:47:06 by fjacquem         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 t_point	*new_point(int x, int y, int z, int c)
@@ -33,82 +45,31 @@ void	set_point(t_point *pt, int x, int y, int z)
 	pt->coul = 0;
 }
 
-t_env	*new_env(int h, int l)
+t_rgb	init_rgb(t_color coul)
 {
-	t_env *e;
-	
-	if ((e = (t_env*)malloc(sizeof(t_env))) &&
-		((e->mlx = mlx_init())))
-	{
-		e->mask = 0;
-		e->h = h;
-		e->l = l;
-		e->x = 10;
-		e->y = 10;
-		e->dx = 1;
-		e->dy = 1;
-		e->z_dx = 1;
-		e->z_dy = 1;
-		e->colorfdf = 0;
-		e->buf = (t_buffer*)malloc(sizeof(t_buffer));
-		e->screen = mlx_new_window(e->mlx, l, h, "win");
-		e->img = mlx_new_image(e->mlx, l, h);
-		e->buf->data = mlx_get_data_addr(e->img, &e->buf->bpp,
-			&e->buf->size_line, &e->buf->endian);
-		e->fdf = NULL;
-		e->save = NULL;
-	}
-	else
-		ft_putstr_fd("<env.c> malloc error\n", 2);
-	return (e);
+	t_rgb	c;
+
+	c.r = (coul & 0xff0000) >> 16;
+	c.g = (coul & 0xff00) >> 8;
+	c.b = coul & 0xff;
+	return (c);
 }
 
-void		nb_pts(t_point ***pts, int *x, int *y)
+t_line	init_line(t_point p1, t_point p2)
 {
-	int	i;
-	int	j;
+	t_line	l;
+	t_point	p;
+	t_point	abs;
+	t_point	sd;
 
-	i = 0;
-	while (pts[i])
-	{
-		j = 0;
-		while (pts[i][j])
-			j++;
-		if (*y < j)
-			*y = j;
-		i++;
-	}
-	*x = i;
-}
-
-void	set_scales(t_env *e, t_point ***pt)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	nb_pts(pt, &x, &y);
-	if (x)
-		e->dx = e->l / x;
-	if (y)
-		e->dy = e->h / y;
-}
-
-void	free_env(t_env *e)
-{
-	if (e)
-	{
-		if (e->save)
-		{
-			save_fdf(e->fdf, e->save);
-			free(e->save);
-		}
-		free_fdf(e->fdf);
-		mlx_destroy_window(e->mlx, e->screen);
-		mlx_destroy_image(e->mlx, e->img);
-		ft_memdel((void**)&e->buf);
-		ft_memdel((void**)&e->mlx);
-		ft_memdel((void**)&e);
-	}
+	abs.x = ft_abs(p2.x - p1.x);
+	abs.y = ft_abs(p2.y - p1.y);
+	p.x = ((int)abs.x) >> 1;
+	p.y = ((int)abs.y) >> 1;
+	sd.x = (p2.x > p1.x) ? 1 : -1;
+	sd.y = (p2.y > p1.y) ? 1 : -1;
+	l.abs = abs;
+	l.p = p;
+	l.sd = sd;
+	return (l);
 }

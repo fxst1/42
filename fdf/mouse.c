@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mouse.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/24 22:49:59 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/24 22:50:01 by fjacquem         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 t_point	*found_pt(t_point ***vct, int x, int y)
@@ -12,7 +24,7 @@ t_point	*found_pt(t_point ***vct, int x, int y)
 		while (vct[i][j])
 		{
 			if (vct[i][j]->x == x && vct[i][j]->y == y)
-				return (vct[i][j]);	
+				return (vct[i][j]);
 			j++;
 		}
 		i++;
@@ -20,7 +32,7 @@ t_point	*found_pt(t_point ***vct, int x, int y)
 	return (0);
 }
 
-int	mouse_hook(int btn, int x, int y, t_env *e)
+int		mouse_hook(int btn, int x, int y, t_env *e)
 {
 	t_point *p;
 
@@ -28,7 +40,6 @@ int	mouse_hook(int btn, int x, int y, t_env *e)
 	{
 		printf("%p\t", p);
 		printf("%x\n", p->coul);
-//select edit p
 	}
 	return (0);
 }

@@ -24,8 +24,8 @@ char	*init_args(t_env *e, char **s, char *fname)
 			if (!ft_strcmp(*s, "--color=random"))
 				e->colorfdf |= RANDOM;
 			else if (!ft_strcmp(*s, "--color=depth"))
-				e->colorfdf |= DEEP;
-			else if (!ft_strncmp(*s, "--color=graduate", 7))
+				e->colorfdf |= NORMAL;
+			else if (!ft_strcmp(*s, "--color=graduate"))
 				e->colorfdf |= GRADUATE;
 			else if (!ft_strncmp(*s, "--save=", 7))
 				e->save = ft_strdup((*s) + 7);
@@ -59,7 +59,7 @@ int		main(int argc, char **argv)
 					reset_color(e->fdf);
 				set_scales(e, e->fdf);
 				mlx_hook(e->screen, 3, 3, key_hook, e);
-				mlx_expose_hook(e->screen, expose_hook, e);		
+				mlx_expose_hook(e->screen, expose_hook, e);
 				mlx_loop(e->mlx);
 			}
 			close(fd);
