@@ -1,6 +1,0 @@
-#include "libft.h"
-#include "implemt.h"
-#include "btree.h"
-#include "stack.h"
-#include "print.h"
-#include "map.h"
