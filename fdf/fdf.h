@@ -122,6 +122,7 @@ t_point					*homothesie(t_point	*p, t_point *del);
 t_point					*translate(t_point	*p, t_point *vect);
 t_line					init_line(t_point p1, t_point p2);
 t_point					init_point(t_coord x, t_coord y, t_coord z, t_color c);
+void					init_color(t_env *e, t_point *p);
 void					put_pixel(t_env *e, int x, int y, int c);
 void					clear_image(t_env *e);
 void					build_3d_pt(t_env *e, t_point *p, t_point *dst);

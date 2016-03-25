@@ -20,6 +20,7 @@ FLAGS = -Wall -Wextra -Werror
 LIB = -lmlx -framework OpenGL -framework AppKit
 
 SRC = 	./fdf_bis.c\
+		./color.c\
 		./env.c	\
 		./opts.c	\
 		./fdf.c 			\

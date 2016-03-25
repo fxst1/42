@@ -61,19 +61,19 @@ t_point			***init_fdf_points(char *fname)
 	return (p);
 }
 
-void			init_content_fdf(char *ptr, t_point ***p, int x)
+static void		init_content_fdf(t_env *e, char *ptr, t_point ***p, int x)
 {
 	int	l;
 
 	l = 0;
-	p[n] = init_fdf_line(ptr);
+	p[x] = init_fdf_line(ptr);
 	while (*ptr)
 	{
 		while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n')
 			ptr++;
 		if (*ptr && (*ptr == '-' || ft_isalnum(*ptr)))
 		{
-			p = new_point(l, x, ft_atoi(ptr), 0xff);
+			p[x][l] = new_point(l, x, ft_atoi(ptr), 0xff);
 			init_color(e, p[x][l]);
 			while (*ptr && (ft_isalnum(*ptr) || *ptr == '-'))
 				ptr++;
@@ -91,7 +91,7 @@ t_point			***init_fdf(t_env *e, int const fd, t_point ***p)
 	ptr = NULL;
 	while (get_next_line(fd, &ptr) > 0)
 	{
-		init_content_fdf(ptr, p, n++);
+		init_content_fdf(e, ptr, p, n++);
 		free(ptr);
 	}
 	free(ptr);

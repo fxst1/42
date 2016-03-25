@@ -15,6 +15,7 @@
 void			graduate_color(t_point ***vct, int high, int low)
 {
 	int	i;
+	int	j;
 
 	i = 0;
 	while (vct[i])
