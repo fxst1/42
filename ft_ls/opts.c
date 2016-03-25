@@ -12,6 +12,71 @@
 
 #include "ls.h"
 
+void	first_of_all(t_args *arg, int n)
+{
+	arg->set = SHOW_ERR;
+	arg->ret = 0;
+	arg->deep = 0;
+	arg->mask = 0;
+	arg->sort = 0;
+	arg->path = malloc(sizeof(char*) * (n));
+	ft_memset(arg->path, 0, sizeof(char*) * (n));
+	arg->path[0] = ft_strdup(".");
+}
+
+void	file_errors_bis(int n, char **paths)
+{
+	DIR		*d;
+	t_file	*t;
+	t_file	*f;
+
+	f = NULL;
+	while (n > 0)
+	{
+		while (!*paths)
+			paths++;
+		d = opendir(*paths);
+		if (errno == ENOTDIR)
+		{
+			t = init_file("", *paths);
+			if (!((t->dat.st_mode & S_IFMT) == S_IFDIR))
+				addfile(&f, t);
+		}
+		if (d)
+			closedir(d);
+		paths++;
+		n--;
+	}
+}
+
+void	file_errors(t_args *a, char **paths)
+{
+	DIR		*d;
+	int		n;
+	int		i;
+	t_file	*f;
+
+	i = 0;
+	n = 0;
+	f = NULL;
+	while (paths[n])
+	{
+		d = opendir(paths[n]);
+		if (!d && errno != ENOTDIR)
+		{
+			ft_fprintf(2, "ft_ls: %s: %s\n", paths[n], strerror(errno));
+			paths[n] = NULL;
+		}
+		else if (d)
+			closedir(d);
+		n++;
+	}
+	file_errors_bis(n, paths);
+	a->set &= ~PRINT_TOTAL;
+	parcours("", a, f);
+	del(f);
+}
+
 t_map	*init_extension_map_from_file(char *filename)
 {
 	int		fd;

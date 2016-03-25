@@ -96,9 +96,8 @@ t_file	*open_dir(t_args *a, char *path, DIR *d, int deep)
 
 t_file	*ft_open(t_args *a, char *path, char *name, int deep)
 {
-	t_file	*files;
-	t_file	*file;
 	DIR		*d;
+	t_file	*files;
 
 	files = NULL;
 	if ((d = opendir(name)))
@@ -106,19 +105,5 @@ t_file	*ft_open(t_args *a, char *path, char *name, int deep)
 		files = open_dir(a, path, d, deep);
 		closedir(d);
 	}
-	else if (errno == ENOTDIR)
-	{
-		name[ft_strlen(name) - 1] = 0;
-		file = init_file("./", name);
-		ft_strcat(name, PATH_SEPARATOR);
-		addfile(&files, file);
-	}
-	else if (a->set & SHOW_ERR)
-	{
-		a->ret = 1;
-		name[ft_strlen(name) - 1] = 0;
-		ft_fprintf(2, "%s: cannot access %s: %s\n", a->prgm,
-			name, strerror(errno));
-	}
-	return (a->ret == 1 ? NULL : files);
+	return (files);
 }

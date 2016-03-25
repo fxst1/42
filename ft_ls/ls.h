@@ -85,7 +85,8 @@ enum
 {
 	NUM_ID = 1,
 	SHOW_ERR = 2,
-	INIT_COLOR = 4
+	INIT_COLOR = 4,
+	PRINT_TOTAL = 8
 };
 
 typedef struct			s_args
@@ -97,7 +98,6 @@ typedef struct			s_args
 	int					set;
 	int					deep;
 	int					offset[4];
-	char				*folder;
 	t_map				*colormap;
 	int					ret;
 	char				*keep;
@@ -105,7 +105,11 @@ typedef struct			s_args
 
 void					usage(void);
 int						ls(t_args *arg, int size);
+void					first_of_all(t_args *arg, int n);
+void					ls_run(char *path, int *t, t_args *arg, t_file *root);
 void					stop_ls(t_args *a, int n);
+t_file					*init_file(char *path, char *name);
+void					addfile(t_file **f, t_file *add);
 char					*set_str(char *tmp, char *s1, char *s2);
 char					*set_name_path(char *dst, char *path, char *dirname);
 void					print_spec(mode_t mode);
@@ -119,6 +123,7 @@ void					sort_files(t_args *a, t_file *root);
 void					sort_filesalph(t_args *a, t_file *root);
 void					parcours_recur(char *path, t_args *a, t_file *f);
 void					parcours(char *path, t_args *a, t_file *f);
+void					file_errors(t_args *a, char **paths);
 t_map					*init_extension_map();
 t_map					*init_extension_map_from_file(char *filename);
 

@@ -15,6 +15,7 @@
 # include "libft.h"
 # define BASE			16
 # define OFFSET_LINE		16
+# define REVERSE_ORDER	1
 
 long		ft_pow(int value, unsigned int n);
 int			ft_atoi_base(const char *nptr, const char *base);
@@ -39,5 +40,5 @@ void		ft_lstadd_begin(t_list **l, t_list *new);
 int			ft_lstsize(t_list *l);
 long int	ft_random();
 void		*ft_print_memory(const void *addr, size_t len);
-
+void		ft_strsort(char **tab, int order);
 #endif

@@ -64,9 +64,9 @@ int			compt_blocks(t_args *a, t_file *f)
 
 void		parcours(char *path, t_args *a, t_file *f)
 {
-	if (a->mask & LIST && f)
+	build_offset(a, f);
+	if (a->mask & LIST && f && a->set & PRINT_TOTAL)
 	{
-		build_offset(a, f);
 		ft_printf("total %d\n", compt_blocks(a, f));
 	}
 	while (f)
@@ -86,7 +86,7 @@ void		parcours(char *path, t_args *a, t_file *f)
 				ft_printf("%s", f->name);
 		}
 		if (f->next && !(a->mask & LIST))
-			ft_printf("  ");
+			ft_printf("\n");
 		f = f->next;
 	}
 }
@@ -109,7 +109,7 @@ void		parcours_recur(char *path, t_args *a, t_file *f)
 			tmp = ft_strnew(len);
 			set_name_path(tmp, path, f->name);
 			tmp[len - PATH_SEPARATOR_LEN] = 0;
-			ft_printf("\n\n%s:\n", tmp);
+			ft_printf("\n%s:\n", tmp);
 			ft_strcpy(tmp + len - PATH_SEPARATOR_LEN, PATH_SEPARATOR);
 			parcours_recur(tmp, a, f->dir);
 			free(tmp);

@@ -43,7 +43,6 @@ void	print_stat_bis(char *path, t_args *a, t_file *f)
 	char	*tmp;
 	char	buf[1024];
 	int		i;
-	char	*ret;
 
 	i = 0;
 	ft_printf("%lu", f->dat.st_size);

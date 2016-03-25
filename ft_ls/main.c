@@ -64,9 +64,9 @@ void			set_options_long(t_args *tmp, char *argv)
 		tmp->ret = 3;
 	else if (!ft_strncmp("--color=", argv, 8))
 	{
-		tmp->colormap = init_extension_map_from_file(argv + 8);
 		tmp->mask |= COLOR;
-		tmp->set |= INIT_COLOR;
+		if ((tmp->colormap = init_extension_map_from_file(argv + 8)))
+			tmp->set |= INIT_COLOR;
 	}
 	else
 	{
@@ -77,14 +77,7 @@ void			set_options_long(t_args *tmp, char *argv)
 
 void			init_args(t_args *arg, int *n, char **argv, int *l)
 {
-	arg->prgm = argv[0];
-	arg->set = SHOW_ERR;
-	arg->ret = 0;
-	arg->deep = 0;
-	arg->mask = 0;
-	arg->sort = 0;
-	arg->path = malloc(sizeof(char*) * (*n));
-	ft_memset(arg->path, 0, sizeof(char*) * (*n));
+	first_of_all(arg, *n);
 	*n = 0;
 	while (argv[*l] && !arg->ret)
 	{
@@ -98,10 +91,13 @@ void			init_args(t_args *arg, int *n, char **argv, int *l)
 		else
 		{
 			arg->path[*n] = ft_strdup(argv[*l]);
-			(*n)++;
+			arg->path[++(*n)] = NULL;
 		}
 		(*l)++;
 	}
+	if (*n == 0)
+		(*n)++;
+	ft_strsort(arg->path, !REVERSE_ORDER);
 }
 
 int				main(int argc, char **argv)
@@ -110,13 +106,13 @@ int				main(int argc, char **argv)
 	int		l;
 
 	l = 1;
-	tmp.folder = NULL;
 	tmp.colormap = NULL;
 	init_args(&tmp, &argc, argv, &l);
 	if (!tmp.ret)
 	{
 		if (!tmp.colormap && tmp.mask & COLOR)
 			tmp.colormap = init_extension_map();
+		file_errors(&tmp, tmp.path);
 		ls(&tmp, argc);
 	}
 	else if (tmp.ret == 2)
