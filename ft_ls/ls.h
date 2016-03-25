@@ -47,8 +47,9 @@
 # include <pwd.h>
 # include <time.h>
 # include <errno.h>
-# include <libft/master.h>
-# include <get_next_line/get_next_line.h>
+# include <master.h>
+# include <print.h>
+# include <get_next_line.h>
 # include <string.h>
 
 typedef struct			s_file

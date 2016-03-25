@@ -59,6 +59,7 @@ void		key_spec(int keycode, t_env *e)
 
 int			key_hook(int keycode, t_env *e)
 {
+	printf("%d\n", keycode);
 	if (keycode == 53)
 	{
 		free_env(e);
@@ -75,6 +76,11 @@ int			key_hook(int keycode, t_env *e)
 	else if (keycode == 0)
 		e->mask = (e->mask & DRAW_AXIS) ? e->mask & ~(DRAW_AXIS)
 			: e->mask | DRAW_AXIS;
+	else if (keycode == 14)
+	{
+		e->mask = (e->mask & EDITOR) ? e->mask & ~(EDITOR)
+			: e->mask | EDITOR;
+	}
 	else
 		key_spec(keycode, e);
 	expose_hook(e);
@@ -83,6 +89,8 @@ int			key_hook(int keycode, t_env *e)
 
 int			expose_hook(t_env *e)
 {
+	if (e->mask & EDITOR)
+		active_editor(e);
 	clear(e);
 	draw_fdf(e, e->fdf);
 	if (e->mask & DRAW_AXIS)

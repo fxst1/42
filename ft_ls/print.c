@@ -30,14 +30,20 @@ void	print_stat_bis(char *path, t_args *a, t_file *f)
 	char	*tmp;
 	char	buf[1024];
 	int		i;
+	char	*ret;
 
 	i = 0;
 	ft_printf("%lu", f->dat.st_size);
 	print_time(f->dat.st_mtime);
 	if (a->colormap)
-		print_color(ft_mapget(a->colormap, ft_strrchr(f->name, '.'),
+	{
+		ret = ft_strrchr(f->name, '.');
+		if (!ret)
+			ret = f->name;
+		print_color(ft_mapget(a->colormap, ret,
 			&ft_strcmp),
 			f->dat.st_mode);
+	}
 	if ((f->dat.st_mode & S_IFMT) == S_IFLNK)
 	{
 		tmp = ft_strdup(path);

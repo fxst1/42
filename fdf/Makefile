@@ -19,7 +19,8 @@ MLX = /usr/x11/lib
 FLAGS = -Wall -Wextra -Werror
 LIB = -lmlx -framework OpenGL -framework AppKit
 
-SRC = 	./fdf_bis.c\
+SRC = 	./editor.c\
+		./fdf_bis.c\
 		./color.c\
 		./env.c	\
 		./opts.c	\

@@ -31,6 +31,8 @@ char	*init_args(t_env *e, char **s, char *fname)
 				e->save = ft_strdup((*s) + 7);
 			else if (!ft_strcmp(*s, "--axis"))
 				e->mask |= DRAW_AXIS;
+			else if (!ft_strcmp(*s, "--editor"))
+				e->mask |= EDITOR;
 		}
 		else
 			fname = ft_strdup(*s);

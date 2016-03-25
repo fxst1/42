@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-LIBFT = libft
+LIBFT = ../libft
 TEST = tests.c
 NAME = libftprintf.a
 
@@ -27,17 +27,17 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 $(OBJ):
-	$(CC) $(FLAGS) -I$(LIBFT) -I. -c $(LIBFT_S)
+	make -C $(LIBFT)
 	$(CC) $(FLAGS) -I$(LIBFT) -I. -c $(SRC)
 
 $(NAME): $(OBJ)
-	ar rc $(NAME) $(OBJ) $(LIBFT_O)
+	ar rc $(NAME) $(OBJ)
 	ranlib $(NAME)
 
 clean:
 	/bin/rm -f $(LIBFT_O)
 	/bin/rm -f $(OBJ)
-	/bin/rm -f tests
+	/bin/rm -f test
 
 dclean:
 	make -C $(LIBFT) fclean
@@ -48,7 +48,7 @@ fclean: clean dclean
 re: fclean all
 
 test: $(NAME)
-	$(CC) $(FLAGS) $(TEST) $(NAME) -I. -o test
+	$(CC) $(FLAGS) $(TEST) $(NAME) -I. -I$(LIBFT) $(LIBFT)/libft.a -o test
 	./test
 
 dymlib: $(NAME)

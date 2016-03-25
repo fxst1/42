@@ -20,6 +20,7 @@ t_env	*new_env(int h, int l)
 	if ((e = (t_env*)malloc(sizeof(t_env))) &&
 		((e->mlx = mlx_init())))
 	{
+		e->editor = NULL;
 		e->mask = 0;
 		e->h = h;
 		e->l = l;
@@ -83,6 +84,8 @@ void	free_env(t_env *e)
 			free(e->save);
 		}
 		free_fdf(e->fdf);
+		if (e->editor)
+			mlx_destroy_window(e->mlx, e->editor);
 		mlx_destroy_window(e->mlx, e->screen);
 		mlx_destroy_image(e->mlx, e->img);
 		ft_memdel((void**)&e->buf);

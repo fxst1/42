@@ -24,6 +24,7 @@
 # define NORMAL	0
 # define GRADUATE 2
 # define DRAW_AXIS 1
+# define EDITOR 2
 # define LINE_GRADIENT 0xff
 # define LINE_DEPTH	0xff00ff
 # include <string.h>
@@ -58,6 +59,14 @@ typedef struct			s_buffer
 	char				*data;
 }						t_buffer;
 
+typedef struct			s_editor
+{
+	int					h;
+	int					l;
+
+	t_scn				screen;
+}						t_editor;
+
 typedef struct			s_env
 {
 	int					h;
@@ -72,7 +81,7 @@ typedef struct			s_env
 	void				*mlx;
 	void				*img;
 	t_scn				*screen;
-
+	t_scn				*editor;
 	t_point				***fdf;
 
 	t_coord				dx;
@@ -107,15 +116,11 @@ void					set_scales(t_env *e, t_point ***pt);
 t_point					***init_fdf_points(char *fname);
 t_point					***init_fdf(t_env *e, int const fd, t_point ***p);
 void					free_fdf(t_point ***p);
-void					draw_rect(t_env *e, t_point *center, int len, int h,
-							int coul);
 void					free_env(t_env *e);
 void					draw_line(t_env *e, t_point p1, t_point p2, int color);
 t_env					*new_env(int h, int l);
 t_point					*new_point(int x, int y, int z, int coul);
 void					set_point(t_point *pt, int x, int y, int z);
-void					draw_hline(t_env *e, int x, int len, int coul);
-void					draw_vline(t_env *e, int y, int len, int coul);
 void					draw_fdf(t_env *e, t_point ***p);
 void					reset_color(t_point ***vct);
 t_point					*homothesie(t_point	*p, t_point *del);
@@ -128,5 +133,6 @@ void					clear_image(t_env *e);
 void					build_3d_pt(t_env *e, t_point *p, t_point *dst);
 t_point					init_point(t_coord x, t_coord y, t_coord z, t_color c);
 t_rgb					init_rgb(t_color coul);
+void					active_editor(t_env *e);
 
 #endif
