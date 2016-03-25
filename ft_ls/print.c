@@ -25,6 +25,19 @@ void	print_perm(int perm)
 						perm & 1 ? 'x' : '-');
 }
 
+void	print_map(t_args *a, t_file *f)
+{
+	char	*ret;
+
+	if (a->colormap)
+	{
+		ret = ft_strrchr(f->name, '.');
+		print_color(ft_mapget(a->colormap, ret ? ret : f->name,
+			&ft_strcmp),
+			f->dat.st_mode);
+	}
+}
+
 void	print_stat_bis(char *path, t_args *a, t_file *f)
 {
 	char	*tmp;
@@ -35,15 +48,7 @@ void	print_stat_bis(char *path, t_args *a, t_file *f)
 	i = 0;
 	ft_printf("%lu", f->dat.st_size);
 	print_time(f->dat.st_mtime);
-	if (a->colormap)
-	{
-		ret = ft_strrchr(f->name, '.');
-		if (!ret)
-			ret = f->name;
-		print_color(ft_mapget(a->colormap, ret,
-			&ft_strcmp),
-			f->dat.st_mode);
-	}
+	print_map(a, f);
 	if ((f->dat.st_mode & S_IFMT) == S_IFLNK)
 	{
 		tmp = ft_strdup(path);
