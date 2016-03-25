@@ -34,7 +34,7 @@ $(NAME): $(OBJ)
 		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) $(LIBFT_A) $(PRINTF_A) $(OBJ) get_next_line.o -o $(NAME)
 
 clean:
-		/bin/rm -f $(OBJ)
+		/bin/rm -f $(OBJ) get_next_line.o
 
 dclean:
 		make -C $(PRINTF) fclean
