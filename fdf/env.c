@@ -36,7 +36,6 @@ t_env	*new_env(int h, int l)
 		e->img = mlx_new_image(e->mlx, l, h);
 		e->buf->data = mlx_get_data_addr(e->img, &e->buf->bpp,
 			&e->buf->size_line, &e->buf->endian);
-		e->fdf = NULL;
 		e->save = NULL;
 	}
 	return (e);

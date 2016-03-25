@@ -77,10 +77,8 @@ int			key_hook(int keycode, t_env *e)
 		e->mask = (e->mask & DRAW_AXIS) ? e->mask & ~(DRAW_AXIS)
 			: e->mask | DRAW_AXIS;
 	else if (keycode == 14)
-	{
 		e->mask = (e->mask & EDITOR) ? e->mask & ~(EDITOR)
 			: e->mask | EDITOR;
-	}
 	else
 		key_spec(keycode, e);
 	expose_hook(e);
