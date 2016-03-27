@@ -6,6 +6,7 @@
 # include <stdio.h>
 # include <master.h>
 # define DEFAULT "0"
+# define CLEAR "\033[0;0H"
 # define INCR_BOLD "1"
 # define DECR_BOLD "2"
 # define RESET_BOLD "22"
@@ -64,7 +65,7 @@
 # define DARKCYAN "22;36"
 # define DARKGREY "22;37"
 # define RESET "\x1B[0m"
-//# define printf(str,va_l) {ft_printf("no more printf:\n"str,va_l);}
+//ft_printf("no more printf:\n"str,va_l);}
 # define ft_vfprintf(fd,str,va_l) ft_fvprintf(fd,str,va_l)
 # define ft_vsprintf(buf,str,va_l) ft_svprintf(buf,str,va_l)
 # define ft_svfprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)  

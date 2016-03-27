@@ -26,7 +26,7 @@ void		usage(void)
 	ft_printf("  -t : sort by modification time (newest first)\n");
 	ft_printf("  -r : reverse output\n");
 	ft_printf("  -G : use formated text; default configs\n\t");
-	ft_printf("(--color=<filname> for user configs !! OVERWRITE -C !!)\n");
+	ft_printf("(--color=<filename> for user configs !! OVERWRITE -C !!)\n");
 	ft_printf("  -e (--error): stop if any error occured\n");
 	ft_printf("  -h (--help): print this help\n");
 	ft_printf("\n%k<=---------------=   r e t u r n   ", 131);

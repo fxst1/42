@@ -30,7 +30,7 @@ t_octet				*get_matrix(t_octet *mat, int fd, int c)
 	{
 		if (c == '#' || c == '.')
 			mat[i++ / 4] += (c == '#') ? 1 << (i % 4) : 0;
-		else if (c != '\n')
+		else if (c != '\n' || (i % 4 && c == '\n'))
 		{
 			free(mat);
 			return (NULL);

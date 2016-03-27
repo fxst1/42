@@ -16,6 +16,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <libft/libft.h>
+#include <stdio.h>
 # define MAX_TETRINOID 26
 # define MAX 1000000
 

@@ -86,7 +86,9 @@ enum
 	NUM_ID = 1,
 	SHOW_ERR = 2,
 	INIT_COLOR = 4,
-	PRINT_TOTAL = 8
+	PRINT_TOTAL = 8,
+	PRINT_LINE = 16,
+	PRINT_PATH = 32
 };
 
 typedef struct			s_args

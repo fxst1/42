@@ -47,13 +47,13 @@ void		key_spec(int keycode, t_env *e)
 	}
 	else if (keycode == 69)
 	{
-		e->z_dx += 0.5;
-		e->z_dy += 0.5;
+		e->z_dx += 0.25;
+		e->z_dy += 0.25;
 	}
 	else if (keycode == 78)
 	{
-		e->z_dx -= 0.5;
-		e->z_dy -= 0.5;
+		e->z_dx -= 0.25;
+		e->z_dy -= 0.25;
 	}
 }
 

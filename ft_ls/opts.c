@@ -21,10 +21,9 @@ void	first_of_all(t_args *arg, int n)
 	arg->sort = 0;
 	arg->path = malloc(sizeof(char*) * (n));
 	ft_memset(arg->path, 0, sizeof(char*) * (n));
-	arg->path[0] = ft_strdup(".");
 }
 
-void	file_errors_bis(int n, char **paths)
+void	file_errors_bis(t_args *a, int n, char **paths)
 {
 	DIR		*d;
 	t_file	*t;
@@ -47,6 +46,8 @@ void	file_errors_bis(int n, char **paths)
 		paths++;
 		n--;
 	}
+	parcours("", a, f);
+	del(f);
 }
 
 void	file_errors(t_args *a, char **paths)
@@ -71,10 +72,8 @@ void	file_errors(t_args *a, char **paths)
 			closedir(d);
 		n++;
 	}
-	file_errors_bis(n, paths);
+	file_errors_bis(a, n, paths);
 	a->set &= ~PRINT_TOTAL;
-	parcours("", a, f);
-	del(f);
 }
 
 t_map	*init_extension_map_from_file(char *filename)

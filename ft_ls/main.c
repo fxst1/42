@@ -90,13 +90,13 @@ void			init_args(t_args *arg, int *n, char **argv, int *l)
 		}
 		else
 		{
-			arg->path[*n] = ft_strdup(argv[*l]);
-			arg->path[++(*n)] = NULL;
+			arg->path[(*n)++] = ft_strdup(argv[*l]);
 		}
 		(*l)++;
 	}
 	if (*n == 0)
-		(*n)++;
+		arg->path[(*n)++] = ft_strdup(".");
+	arg->path[*n] = NULL;
 	ft_strsort(arg->path, !REVERSE_ORDER);
 }
 

@@ -16,9 +16,10 @@ int				build_lsstr(char *path, char *arg)
 {
 	int	len;
 
-	len = ft_strlen(arg);
-	ft_strcat(arg, PATH_SEPARATOR);
+	if (ft_strcmp(arg, "/"))
+		ft_strcat(arg, PATH_SEPARATOR);
 	ft_strcpy(path, arg);
+	len = ft_strlen(path - PATH_SEPARATOR_LEN);
 	return (len);
 }
 
@@ -29,8 +30,7 @@ void			ls_run(char *path, int *t, t_args *arg, t_file *root)
 	arg->set |= PRINT_TOTAL;
 	if (arg->mask & RECURSIF || t[1] > 1)
 	{
-		if (ft_strcmp(arg->path[t[0]], "/"))
-			arg->path[t[0]][ft_strlen(arg->path[t[0]]) - PATH_SEPARATOR_LEN] =
+		arg->path[t[0]][ft_strlen(arg->path[t[0]]) - PATH_SEPARATOR_LEN] =
 			0;
 		ft_strcat(arg->path[t[0]], PATH_SEPARATOR);
 	}
@@ -40,13 +40,31 @@ void			ls_run(char *path, int *t, t_args *arg, t_file *root)
 		parcours(path, arg, root);
 }
 
+int				test(char **path, int size, t_args *a)
+{
+	int		n;
+	int		i;
+
+	n = 0;
+	i = 0;
+	while (n < size && i < 2)
+	{
+		if (path[n])
+			i++;
+		n++;
+	}
+	if (i == 2)
+		a->set |= PRINT_PATH;
+	return (i);
+}
+
 static void		ls_loop(char *path, t_file *root, t_args *arg, int size)
 {
 	int		n;
 	int		t[2];
 	int		i;
 
-	i = 0;
+	i = test(arg->path, size, arg);
 	n = 0;
 	t[1] = size;
 	while (n < size)
@@ -54,12 +72,17 @@ static void		ls_loop(char *path, t_file *root, t_args *arg, int size)
 		if (arg->path[n])
 		{
 			t[0] = n;
-			if (n > 0)
+			if (arg->set & PRINT_PATH)
+			{
+				i = build_lsstr(path, arg->path[n]);
+				if (arg->set & PRINT_LINE)
+					ft_printf("\n");
+				arg->path[n][i + 1] = 0;
 				ft_printf("%s:\n", arg->path[n]);
-			build_lsstr(path, arg->path[n]);
+				arg->set |= PRINT_LINE;
+			}
 			if ((root = ft_open(arg, path, arg->path[n], arg->deep)))
 			{
-				i++;
 				ls_run(path, t, arg, root);
 				del(root);
 			}
