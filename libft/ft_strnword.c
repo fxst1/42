@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strsort.c                                       :+:      :+:    :+:   */
+/*   ft_strnword.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/30 00:52:39 by fjacquem          #+#    #+#             */
-/*   Updated: 2016/03/30 00:52:43 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/03/30 00:49:19 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/30 00:49:31 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "implemt.h"
-
-void	ft_strsort(char **tab, int order)
+int	ft_strnword(char *word)
 {
-	char	**ptr;
-	int		ret;
+	int		is_space;
+	int		index;
 
-	while (*tab)
+	is_space = 0;
+	index = 0;
+	while (word[index])
 	{
-		ptr = tab + 1;
-		while (*ptr)
+		if (word[index] == ' ' || word[index] == '\t' || word[index] == '\n')
 		{
-			ret = ft_strcmp(*tab, *ptr);
-			if (ret > 0 && order == REVERSE_ORDER)
-				ft_swap(&*tab, &*ptr);
-			else if (ret < 0 && order != REVERSE_ORDER)
-				ft_swap(&*tab, &*ptr);
-			ptr++;
+			is_space++;
+			while ((word[index] == ' ' || word[index] == '\t' ||
+				word[index] == '\n'))
+				index++;
 		}
-		tab++;
+		else
+			index++;
 	}
+	return (is_space);
 }

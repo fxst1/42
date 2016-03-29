@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/30 00:21:13 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/30 00:21:15 by fjacquem         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <term.h>
 
 void	print_env(char **env)
@@ -12,14 +24,13 @@ void	print_env(char **env)
 	}
 }
 
-char	**ft_unsetenv(char	**env, char *name)
+char	**ft_unsetenv(char **env, char *name)
 {
 	int		index;
 	char	*str;
 
 	index = 0;
-	while (env[index] &&
-		ft_strncmp(env[index], name, ft_strlen(name)))	
+	while (env[index] && ft_strncmp(env[index], name, ft_strlen(name)))
 		index++;
 	if (env[index])
 	{
@@ -34,7 +45,10 @@ char	**ft_unsetenv(char	**env, char *name)
 		env[index] = NULL;
 	}
 	else
-		ft_printf("Cannot unset %s\n", name);
+	{
+		ft_putstr_fd("Cannot unset ", 2);
+		ft_putendl_fd(name, 2);
+	}
 	return (env);
 }
 
@@ -47,7 +61,7 @@ char	**ft_resetenv(char **env, char *name, char *args, int size)
 	index = 0;
 	while (env[index])
 	{
-		copy[index] = ft_strdup(env[index]); 
+		copy[index] = ft_strdup(env[index]);
 		free(env[index]);
 		index++;
 	}
@@ -60,44 +74,48 @@ char	**ft_resetenv(char **env, char *name, char *args, int size)
 	return (copy);
 }
 
+char	**reparse_env(char **env, int size, char *args, int index)
+{
+	char	*cpy;
+	char	**tmp;
+
+	tmp = env;
+	env += size;
+	index = ft_strlen(*env);
+	if (!(size = ft_strlen(args)))
+		ft_putstr_fd("cannot add an empty string\n", 2);
+	else
+	{
+		cpy = ft_strnew(index + size + 1);
+		ft_strcpy(cpy, *env);
+		ft_strcat(cpy, ENV_SEPARATOR);
+		ft_strcat(cpy, args + 1);
+		*env = cpy;
+	}
+	return (tmp);
+}
+
 char	**ft_setenv(char **env, char *args)
 {
-	char	**tmp;
 	char	name[256];
-	char	*cpy;
 	int		index;
 	int		size;
 
 	index = 0;
 	size = 0;
-	tmp = env;
 	while (*args != ' ')
 	{
 		name[index] = *args;
 		args++;
 		index++;
 	}
-	name[index] = '=';	
+	name[index] = '=';
 	name[index + 1] = 0;
 	index = ft_strlen(name);
 	while (env[size] && ft_strncmp(env[size], name, ft_strlen(name)))
 		size++;
 	if (env[size])
-	{
-		env += size;
-		index = ft_strlen(*env);
-		if (!(size = ft_strlen(args)))
-			ft_printf("cannot add an empty string\n");
-		else
-		{
-			cpy = ft_strnew(index + size + 1);
-			ft_strcpy(cpy, *env);
-			ft_strcat(cpy, ENV_SEPARATOR);
-			ft_strcat(cpy, args + 1);
-			*env = cpy;
-		}
-		return (tmp);
-	}
+		return (reparse_env(env, size, args, index));
 	else
 		env = ft_resetenv(env, name, args + 1, size);
 	return (env);

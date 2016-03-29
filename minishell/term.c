@@ -1,19 +1,39 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   term.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/30 00:21:27 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/30 00:21:29 by fjacquem         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <term.h>
 
 void	initterm(t_term *t, int cb, int ct, char *prompt)
 {
 	if (t)
 	{
-		getcwd(t->dirpath, sizeof(char)  * 1024);	
+		getcwd(t->dirpath, sizeof(char) * 1024);
 		t->back = cb;
 		t->txt = ct;
 		t->prompt = prompt;
 		t->log = "log_minishell.log";
 		t->fd = open(t->log, O_RDWR | O_CREAT, 0666);
 		if (cb)
-			ft_printf("%K", cb);
+		{
+			ft_putstr("\x1B[48;5;");
+			ft_putnbr(cb);
+			ft_putchar('m');
+		}
 		if (ct)
-			ft_printf("%k", ct);
+		{
+			ft_putstr("\x1B[38;5;");
+			ft_putnbr(ct);
+			ft_putchar('m');
+		}
 	}
 }
 
@@ -40,7 +60,7 @@ char	**init_env(char **env)
 	index = 0;
 	while (env[index])
 	{
-		copy[index] = ft_strdup(env[index]); 
+		copy[index] = ft_strdup(env[index]);
 		index++;
 	}
 	copy[index] = NULL;
@@ -50,10 +70,22 @@ char	**init_env(char **env)
 void	print_prompt(t_term *t)
 {
 	if (t->back)
-		ft_printf("%K", t->back);
+	{
+		ft_putstr("\033[48;5;");
+		ft_putnbr(t->back);
+		ft_putchar('m');
+	}
 	if (t->txt)
-		ft_printf("%k", t->txt);
-	ft_printf("%s, %s $>"RESET, t->prompt, t->dirpath);
+	{
+		ft_putstr("\033[38;5;");
+		ft_putnbr(t->txt);
+		ft_putchar('m');
+	}
+	ft_putstr(t->prompt);
+	ft_putstr(": ");
+	ft_putstr(t->dirpath);
+	ft_putstr("$>");
+	ft_putstr(RESET);
 }
 
 void	stop(t_term *t)
@@ -65,5 +97,3 @@ void	stop(t_term *t)
 		free(t->path[n++]);
 	free(t->path);
 }
-
-
