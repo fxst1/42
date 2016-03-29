@@ -12,6 +12,7 @@
 
 #include <ls.h>
 
+# if (OS_FT == MAC_OS)
 int		test_sort_alph(t_file *swap, t_file *tmp, t_args *a)
 {
 	return ((((!a->sort) || ((a->sort & SIZE) &&
@@ -39,6 +40,33 @@ int		test_sort_mask(t_file *swap, t_file *tmp, t_args *a)
 		swap->dat.st_mtimespec.tv_nsec > tmp->dat.st_mtimespec.tv_nsec))))))));
 }
 
+# else
+
+int		test_sort_alph(t_file *swap, t_file *tmp, t_args *a)
+{
+	return ((((!a->sort) || ((a->sort & SIZE) &&
+			(swap->dat.st_size == tmp->dat.st_size)) ||
+			((a->sort & MTIME) && (swap->dat.st_mtime == tmp->dat.st_mtime)))
+			&&
+			((!(a->mask & REVERSE) && ft_strcmp(swap->name, tmp->name) > 0) ||
+			(a->mask & REVERSE && ft_strcmp(swap->name, tmp->name) < 0))));
+}
+
+int		test_sort_mask(t_file *swap, t_file *tmp, t_args *a)
+{
+	return (((
+		((a->sort & SIZE) && ((!(a->mask & REVERSE) &&
+		swap->dat.st_size < tmp->dat.st_size) ||
+		(a->mask & REVERSE && swap->dat.st_size > tmp->dat.st_size))))
+		||
+		((a->sort & MTIME) && (
+		((!(a->mask & REVERSE) && ((swap->dat.st_mtime < tmp->dat.st_mtime) ||
+		(swap->dat.st_mtime == tmp->dat.st_mtime))) ||
+		((a->mask & REVERSE) && ((swap->dat.st_mtime > tmp->dat.st_mtime) ||
+		(swap->dat.st_mtime == tmp->dat.st_mtime))))))));
+}
+
+#endif
 void	sort_files(t_args *a, t_file *root)
 {
 	t_file	*swap;

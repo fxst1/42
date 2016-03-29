@@ -15,7 +15,7 @@ PRINTF = ../ft_printf
 GNL = ../get_next_line
 
 NAME = ft_ls
-FLAGS = -Wall -Wextra
+FLAGS = -Wall -Wextra -Werror
 
 CC = gcc
 SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c sort.c opts.c usage.c

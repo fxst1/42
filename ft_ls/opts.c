@@ -54,12 +54,8 @@ void	file_errors(t_args *a, char **paths)
 {
 	DIR		*d;
 	int		n;
-	int		i;
-	t_file	*f;
 
-	i = 0;
 	n = 0;
-	f = NULL;
 	while (paths[n])
 	{
 		d = opendir(paths[n]);

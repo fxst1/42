@@ -11,10 +11,10 @@
 /* ************************************************************************** */
 
 #ifndef LS_H
+# include <libft/os.h>
 # define LS_H
-# if defined WIN32 || defined WIN64
-#  define PATH_SEPARATOR "\\"
-#  define PATH_SEPARATOR_LEN 2
+# if (OS_FT != MAC_OS) && (OS_FT != UNIX_OS)
+#  error Incompatible system (need UNIX/MAC only)
 # else
 #  define PATH_SEPARATOR "/"
 #  define PATH_SEPARATOR_LEN 1

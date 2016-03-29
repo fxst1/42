@@ -69,7 +69,7 @@ dymlib: $(NAME)
 dymheader:
 		@echo "May sure to have root permissions"
 		@sudo rm -f /usr/include/libft/libft.h /usr/include/libft/implemt.h /usr/include/libft/btree.h /usr/include/libft/stack.h
-		@sudo cp -f libft.h master.h map.h btree.h implemt.h stack.h /usr/include/libft/
+		@sudo cp -f libft.h os.h master.h map.h btree.h implemt.h stack.h /usr/include/libft/
 		@sudo chmod 644 /usr/include/libft/*.h
 
 $(OBJ_STACK):
@@ -91,12 +91,6 @@ $(OBJ_MAP):
 		$(CC) $(FLAGS) -c $(BONUS_MAP)
 		@ar rc $(NAME) $(OBJ_MAP) $(OBJ)
 		@ranlib $(NAME)
-
-$(OBJ_ALL):
-		echo \033[1;32;m
-		$(CC) $(FLAGS) -c $(BONUS_ALL)
-		@ar rc $(NAME) $(OBJ) $(OBJ_MAP) $(OBJ_FCT) $(OBJ_BTREE) $(OBJ_STACK)
-		@ranlib $(NAME)	
 
 addmap: $(OBJ) $(OBJ_MAP)
 
