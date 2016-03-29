@@ -61,7 +61,10 @@ void	file_errors(t_args *a, char **paths)
 		d = opendir(paths[n]);
 		if (!d && errno != ENOTDIR)
 		{
-			ft_fprintf(2, "ft_ls: %s: %s\n", paths[n], strerror(errno));
+			ft_putstr_fd("ft_ls: ", 2);
+			ft_putstr_fd(paths[n], 2);
+			ft_putstr_fd(" : ", 2);
+			ft_putendl_fd(strerror(errno), 2);
 			paths[n] = NULL;
 		}
 		else if (d)

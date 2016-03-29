@@ -1,4 +1,4 @@
-	/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   file.c                                             :+:      :+:    :+:   */
@@ -18,9 +18,8 @@ t_file	*init_file(char *path, char *name)
 	char	tmp[1024];
 
 	ft_memset(tmp, 0, sizeof(char) * 1024);
-	if (!*path)
-		*path = '/';
-	ft_sprintf(tmp, "%s%s", path, name);
+	ft_strcat(tmp, path);
+	ft_strcat(tmp, name);
 	if ((file = (t_file*)malloc(sizeof(t_file))))
 	{
 		file->name = ft_strnew(ft_strlen(name) + 2);
@@ -101,14 +100,18 @@ t_file	*ft_open(t_args *a, char *path, char *name, int deep)
 	t_file	*files;
 
 	files = NULL;
-	if ((d = opendir(name)))
+	printf("<%s><%s>\n", path, name);
+	if ((d = opendir(!*name && !ft_strcmp(path, "/") : "/" : name)))
 	{
 		files = open_dir(a, path, d, deep);
 		closedir(d);
 	}
 	else if (errno != ENOTDIR)
 	{
-		ft_fprintf(2, "ft_ls: %s: %s\n", name, strerror(errno));
+		ft_putstr_fd("ft_ls: ", 2);
+		ft_putstr_fd(name, 2);
+		ft_putstr_fd(" : ", 2);
+		ft_putendl_fd(strerror(errno), 2);
 		if (a->set & SHOW_ERR)
 			a->ret = 1;
 	}

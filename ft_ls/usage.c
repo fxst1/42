@@ -13,7 +13,7 @@
 #include "ls.h"
 
 void		usage(void)
-{
+{/*
 	ft_printf("%k<======================= ft_ls ", 38);
 	ft_printf("=======================>%s\n", RESET);
 	ft_printf("\n%k<=---------------= c o m m a n d s", 131);
@@ -36,5 +36,5 @@ void		usage(void)
 	ft_printf("\n\t(stop with -e / --error)\n");
 	ft_printf("  2: Command error, stop execution\n");
 	ft_printf("\n%k<==================================", 38);
-	ft_printf("===================>%s\n", RESET);
+	ft_printf("===================>%s\n", RESET);*/
 }

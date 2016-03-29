@@ -9,7 +9,7 @@ addbin: $(NAME)
 	#sudo mkdir /bin/libft
 	sudo cp -f $(NAME) /bin/libft
 
-addsys:
+bin:
 	sudo cp -f $(NAME) /bin
 
 clean:

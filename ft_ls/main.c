@@ -22,7 +22,9 @@ static void		set_option_short_bis(t_args *tmp, char argv)
 		tmp->ret = 3;
 	else
 	{
-		ft_fprintf(2, "ft_ls: illegal option -- %c\n", argv);
+		ft_putstr_fd("ft_ls: illegal option -- ", 2);
+		ft_putchar_fd(argv, 2);
+		ft_putstr_fd("\n", 2);
 		tmp->ret = 2;
 	}
 }
@@ -70,7 +72,8 @@ void			set_options_long(t_args *tmp, char *argv)
 	}
 	else
 	{
-		ft_fprintf(2, "ft_ls: illegal option -- %s\n", argv);
+		ft_putstr_fd("ft_ls: illegal option -- ", 2);
+		ft_putendl_fd(argv, 2);
 		tmp->ret = 2;
 	}
 }
@@ -116,7 +119,11 @@ int				main(int argc, char **argv)
 		ls(&tmp, argc);
 	}
 	else if (tmp.ret == 2)
-		ft_fprintf(2, "Try '%s -h' option for more information.\n", argv[0]);
+	{
+		ft_putstr_fd("Try '", 2);
+		ft_putstr_fd(argv[0], 2);
+		ft_putstr_fd(" -h' option for more information.\n", 2);
+	}
 	else
 	{
 		usage();

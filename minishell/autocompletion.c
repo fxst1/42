@@ -1,4 +1,4 @@
-/*
+
 t_list	*find_file(char *filen, char *cmd)
 {
 	t_list		*file;
@@ -75,4 +75,4 @@ char	*do_autocomplet(char *d, char **path, char *cmd, int *ok)
 	}
 	ft_lstdel(&t, &ft_lstfree);
 	return (cmd);
-}*/
+}

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #ifndef LS_H
+# define LS_H
 # include <libft/os.h>
 # define LS_H
 # if (OS_FT != MAC_OS) && (OS_FT != UNIX_OS)

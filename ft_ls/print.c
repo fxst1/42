@@ -20,9 +20,8 @@ void	print_offset(int offset, int c)
 
 void	print_perm(int perm)
 {
-	ft_printf("%c%c%c", perm & 4 ? 'r' : '-',
-						perm & 2 ? 'w' : '-',
-						perm & 1 ? 'x' : '-');
+	ft_putchar(perm & 4 ? 'r' : '-');
+	ft_putchar(perm & 2 ? 'w' : '-');
 }
 
 void	print_map(t_args *a, t_file *f)
@@ -45,7 +44,7 @@ void	print_stat_bis(char *path, t_args *a, t_file *f)
 	int		i;
 
 	i = 0;
-	ft_printf("%lu", f->dat.st_size);
+	ft_putnbr(f->dat.st_size);
 	print_time(f->dat.st_mtime);
 	print_map(a, f);
 	if ((f->dat.st_mode & S_IFMT) == S_IFLNK)
@@ -57,11 +56,17 @@ void	print_stat_bis(char *path, t_args *a, t_file *f)
 		while (ft_isprint(buf[i]))
 			i++;
 		buf[i] = 0;
-		ft_printf("%s -> %s%s\n", f->name, buf, (a->colormap) ? RESET : "");
+		ft_putstr(f->name);
+		ft_putstr(" -> ");
+		ft_putstr(buf);
+		ft_putstr((a->colormap) ? RESET : "");
 		free(tmp);
 	}
 	else
-		ft_printf("%s%s\n", f->name, (a->colormap) ? RESET : "");
+	{
+		ft_putstr(f->name);
+		ft_putendl((a->colormap) ? RESET : "");
+	}
 }
 
 void	print_stat(char *path, t_args *a, t_file *f)
@@ -78,11 +83,13 @@ void	print_stat(char *path, t_args *a, t_file *f)
 	offset = a->offset[0] - ft_strlen(tmp);
 	free(tmp);
 	print_offset(offset + 1, ' ');
-	ft_printf("%d", f->dat.st_nlink);
+	ft_putnbr(f->dat.st_nlink);
 	offset = a->offset[1] - ft_strlen(getpwuid(f->dat.st_uid)->pw_name);
-	ft_printf(" %s", getpwuid(f->dat.st_uid)->pw_name);
+	ft_putstr(" ");
+	ft_putstr(getpwuid(f->dat.st_uid)->pw_name);
 	print_offset(offset, ' ');
-	ft_printf(" %s", getgrgid(f->dat.st_gid)->gr_name);
+	ft_putstr(" ");
+	ft_putstr(getgrgid(f->dat.st_gid)->gr_name);
 	offset = a->offset[2] - ft_strlen(getgrgid(f->dat.st_gid)->gr_name);
 	print_offset(offset + 1, ' ');
 	tmp = ft_itoa_base(f->dat.st_size, BASE_DEC);

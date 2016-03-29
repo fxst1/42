@@ -21,17 +21,15 @@ CC = gcc
 SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c sort.c opts.c usage.c
 OBJ = $(SRC:.c=.o)
 LIBFT_A = $(LIBFT)/libft.a
-PRINTF_A = $(PRINTF)/libftprintf.a
 
 all: $(NAME)
 
 $(OBJ):
 		make -C $(LIBFT) addbonus
-		make -C $(PRINTF)
-		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) -I$(GNL) -L$(LIBFT_A) -L$(PRINTF_A) -c $(SRC) $(GNL)/get_next_line.c
+		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) -I$(GNL) -I.. -c $(SRC) $(GNL)/get_next_line.c
 
 $(NAME): $(OBJ)
-		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) $(LIBFT_A) $(PRINTF_A) $(OBJ) get_next_line.o -o $(NAME) -lft -lftprintf
+		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) $(LIBFT_A) -I.. $(OBJ) get_next_line.o -o $(NAME)
 
 clean:
 		/bin/rm -f $(OBJ) get_next_line.o

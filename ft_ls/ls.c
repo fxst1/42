@@ -76,9 +76,10 @@ static void		ls_loop(char *path, t_file *root, t_args *arg, int size)
 			{
 				i = build_lsstr(path, arg->path[n]);
 				if (arg->set & PRINT_LINE)
-					ft_printf("\n");
+					ft_putstr("\n");
 				arg->path[n][i + 1] = 0;
-				ft_printf("%s:\n", arg->path[n]);
+				ft_putstr(arg->path[n]);
+				ft_putstr(":\n");
 				arg->set |= PRINT_LINE;
 			}
 			if ((root = ft_open(arg, path, arg->path[n], arg->deep)))
@@ -87,7 +88,7 @@ static void		ls_loop(char *path, t_file *root, t_args *arg, int size)
 				del(root);
 			}
 			if (!(arg->mask & LIST) && arg->ret != 1)
-				ft_printf("\n");
+				ft_putstr("\n");
 			free(arg->path[n]);
 		}
 		n++;
