@@ -28,10 +28,10 @@ all: $(NAME)
 $(OBJ):
 		make -C $(LIBFT) addbonus
 		make -C $(PRINTF)
-		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) -I$(GNL) -c $(SRC) $(GNL)/get_next_line.c
+		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) -I$(GNL) -L$(LIBFT_A) -L$(PRINTF_A) -c $(SRC) $(GNL)/get_next_line.c
 
 $(NAME): $(OBJ)
-		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) $(LIBFT_A) $(PRINTF_A) $(OBJ) get_next_line.o -o $(NAME)
+		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) $(LIBFT_A) $(PRINTF_A) $(OBJ) get_next_line.o -o $(NAME) -lft -lftprintf
 
 clean:
 		/bin/rm -f $(OBJ) get_next_line.o
@@ -44,3 +44,6 @@ fclean: dclean clean
 		/bin/rm -f $(NAME)
 
 re:		fclean all
+
+bin: $(NAME)
+	sudo cp $(NAME) /usr/bin/

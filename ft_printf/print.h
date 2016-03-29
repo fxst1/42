@@ -4,7 +4,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdio.h>
-# include <master.h>
+# include <libft/master.h>
 # define DEFAULT "0"
 # define CLEAR "\033[0;0H"
 # define INCR_BOLD "1"

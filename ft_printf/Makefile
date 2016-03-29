@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-LIBFT = libft
+LIBFT = ../libft
 TEST = tests.c
 NAME = libftprintf.a
 
@@ -28,7 +28,7 @@ $(LIBFT_A):
 	make -C $(LIBFT) re addbonus
 
 $(OBJ): $(LIBFT_A)
-	$(CC) $(FLAGS) -I$(LIBFT) -I. -c $(SRC) -lft -lftprintf
+	$(CC) $(FLAGS) -I$(LIBFT) -I. -I.. -c $(SRC) -lft -lftprintf
 
 $(NAME): $(OBJ)
 	ar rc $(NAME) $(OBJ) $(LIBFT_A)
@@ -47,7 +47,7 @@ fclean: clean dclean
 re: fclean all
 
 test: $(NAME)
-	$(CC) $(FLAGS) $(TEST) $(NAME) -I. -o test -lftprintf -lft
+	$(CC) $(FLAGS) $(TEST) $(NAME) -I. -I.. -o test -lftprintf -lft
 	./test
 
 dymlib: $(NAME)
