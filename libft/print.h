@@ -6,7 +6,8 @@
 # include <stdio.h>
 # include <libft/master.h>
 # define DEFAULT "0"
-# define CLEAR "\033[0;0H"
+# define CURSOR_UP "\033[0;0H"
+# define CLEAR "\033c"
 # define INCR_BOLD "1"
 # define DECR_BOLD "2"
 # define RESET_BOLD "22"
@@ -65,7 +66,6 @@
 # define DARKCYAN "22;36"
 # define DARKGREY "22;37"
 # define RESET "\x1B[0m"
-//# define printf(str,va_l) {ft_printf("no more printf:\n"str,va_l);}
 # define ft_vfprintf(fd,str,va_l) ft_fvprintf(fd,str,va_l)
 # define ft_vsprintf(buf,str,va_l) ft_svprintf(buf,str,va_l)
 # define ft_svfprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)  
@@ -105,3 +105,4 @@ int		ft_sprintf(char *buffer, const char *str, ...);
 int		ft_fsvprintf(const int fd, char *buffer, const char *str, va_list l);
 int		ft_fsprintf(const int fd, char *buffer, const char *str, ...);
 #endif
+
