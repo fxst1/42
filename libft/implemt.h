@@ -29,6 +29,8 @@ char		*ft_strrev(char *str);
 void		ft_putnstr(char *str, unsigned int offset);
 int			ft_abs(int n);
 void		ft_swap(void *a, void *b);
+void		ft_swapn(void *a, void *b, size_t len);
+void		ft_swaplen(void *a, void *b, size_t len_a, size_t len_b);
 void		*ft_realloc(void *addr, size_t len);
 char		*ft_setfilename(char *filename, char *ext);
 int			ft_isspace(int c);
@@ -41,4 +43,5 @@ int			ft_lstsize(t_list *l);
 long int	ft_random();
 void		*ft_print_memory(const void *addr, size_t len);
 void		ft_strsort(char **tab, int order);
+
 #endif

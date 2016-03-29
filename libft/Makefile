@@ -31,11 +31,11 @@ BONUS_STACK = ft_stknew.c ft_stkinit.c ft_stkempty.c ft_stkfull.c ft_stkclear.c\
 	ft_stkpop.c ft_stkpush.c
 BONUS_BTREE = ft_btreenew.c ft_btreeadd.c ft_btreefree.c ft_btreeforeach.c
 BONUS_FCT = ft_lstfree.c ft_lstsize.c ft_lstadd_begin.c ft_strcasecmp.c ft_atoi_casebase.c ft_atoi_base.c ft_isspace.c\
-	ft_random.c\
+	ft_random.c ft_memndel.c\
 	ft_setfilename.c ft_realloc.c ft_abs.c ft_swap.c ft_putnstr.c ft_pow.c\
 	ft_putnbr_base_fd.c ft_putnbr_base.c ft_itoa_base.c ft_print_memory.c\
-	ft_strrev.c ft_putdouble.c ft_puthex.c ft_swapn.c ft_swaplen.c ft_strsort.c
-BONUS_MAP = ft_mapnew.c ft_mapdel.c ft_mapget.c ft_mapadd_at.c ft_mapadd_end.c ft_mapadd_begin.c
+	ft_strrev.c ft_putdouble.c ft_puthex.c ft_swapn.c ft_swaplen.c
+BONUS_MAP = ft_mapnew.c ft_mapdel.c ft_mapget.c ft_mapadd_at.c ft_mapadd_begin.c ft_mapadd_end.c
 BONUS_ALL = $(SRC) $(BONUS_FCT) $(BONUS_MAP) $(BONUS_STACK) $(BONUS_BTREE) 
 
 OBJ = $(SRC:.c=.o)
@@ -43,7 +43,6 @@ OBJ_FCT = $(BONUS_FCT:.c=.o)
 OBJ_STACK = $(BONUS_STACK:.c=.o)
 OBJ_BREE = $(BONUS_BTREE:.c=.o)
 OBJ_MAP = $(BONUS_MAP:.c=.o)
-OBJ_ALL = $(BONUS_MAP:.c=.o) $(BONUS_BTREE:.c=.o) $(BONUS_STACK:.c=.o) $(SRC:.c=.o) $(BONUS_FCT:.c=.o)
 
 all: $(NAME)
 
@@ -55,14 +54,14 @@ $(NAME): $(OBJ)
 		ranlib $(NAME)
 
 clean:
-		/bin/rm -f $(OBJ_ALL)
+		rm -f $(OBJ) $(OBJ_MAP) $(OBJ_FCT) $(OBJ_BTREE) $(OBJ_STACK)
 
 fclean: clean
-		/bin/rm -f $(NAME)
+		rm -f $(NAME)
 
 re:		fclean all
 
-dymlib:
+dymlib: $(NAME)
 		@echo "May sure to have root permissions"
 		@sudo rm -f usr/lib/libft.a
 		@sudo cp -f $(NAME) /usr/lib/
@@ -71,33 +70,40 @@ dymheader:
 		@echo "May sure to have root permissions"
 		@sudo rm -f /usr/include/libft/libft.h /usr/include/libft/implemt.h /usr/include/libft/btree.h /usr/include/libft/stack.h
 		@sudo cp -f libft.h master.h map.h btree.h implemt.h stack.h /usr/include/libft/
+		@sudo chmod 644 /usr/include/libft/*.h
 
-$(OBJ_STACK): $(NAME)
+$(OBJ_STACK):
 		$(CC) $(FLAGS) -c $(BONUS_STACK)
-		@ar rc $(NAME) $(OBJ_STACK)
+		@ar rc $(NAME) $(OBJ_STACK) $(OBJ)
 		@ranlib $(NAME)
 
 $(OBJ_BTREE):
 		$(CC) $(FLAGS) -c $(BONUS_BTREE)
-		@ar rc $(NAME) $(OBJ_BTREE)
+		@ar rc $(NAME) $(OBJ_BTREE) $(OBJ)
 		@ranlib $(NAME)
 
-$(OBJ_FCT): $(NAME)
+$(OBJ_FCT):
 		$(CC) $(FLAGS) -c $(BONUS_FCT)
-		@ar rc $(NAME) $(OBJ_FCT)
+		@ar rc $(NAME) $(OBJ_FCT) $(OBJ)
 		@ranlib $(NAME)
 
-$(OBJ_MAP): $(NAME)
+$(OBJ_MAP):
 		$(CC) $(FLAGS) -c $(BONUS_MAP)
-		@ar rc $(NAME) $(OBJ_MAP)
+		@ar rc $(NAME) $(OBJ_MAP) $(OBJ)
 		@ranlib $(NAME)
 
-addmap: $(OBJ_MAP)
+$(OBJ_ALL):
+		echo \033[1;32;m
+		$(CC) $(FLAGS) -c $(BONUS_ALL)
+		@ar rc $(NAME) $(OBJ) $(OBJ_MAP) $(OBJ_FCT) $(OBJ_BTREE) $(OBJ_STACK)
+		@ranlib $(NAME)	
 
-addstack: $(OBJ_STACK)
+addmap: $(OBJ) $(OBJ_MAP)
 
-addbtree: $(OBJ_BTREE)
+addstack: $(OBJ) $(OBJ_STACK)
 
-addfct: $(OBJ_FCT)
+addbtree: $(OBJ) $(OBJ_BTREE)
 
-addbonus: $(OBJ) $(OBJ_STACK) $(OBJ_BTREE) $(OBJ_MAP) $(OBJ_FCT)
+addfct: $(OBJ) $(OBJ_FCT)
+
+addbonus: $(OBJ) $(OBJ_MAP) $(OBJ_FCT) $(OBJ_BTREE) $(OBJ_STACK)
