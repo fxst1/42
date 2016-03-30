@@ -93,7 +93,7 @@ void	stop(t_term *t)
 	free(t->exe_back);
 	free(t->name_txt);
 	free(t->name_back);
-	if (t->env)
+	if (t->path)
 	{
 		while (t->path[n])
 			free(t->path[n++]);
