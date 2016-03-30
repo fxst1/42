@@ -28,7 +28,7 @@ $(LIBFT_A):
 	make -C $(LIBFT) re addbonus
 
 $(OBJ): $(LIBFT_A)
-	$(CC) $(FLAGS) -I$(LIBFT) -I. -I.. -c $(SRC) -lft -lftprintf
+	$(CC) $(FLAGS) -I$(LIBFT) -I. -I.. -c $(SRC)
 
 $(NAME): $(OBJ)
 	ar rc $(NAME) $(OBJ) $(LIBFT_A)
@@ -47,7 +47,7 @@ fclean: clean dclean
 re: fclean all
 
 test: $(NAME)
-	$(CC) $(FLAGS) $(TEST) $(NAME) -I. -I.. -o test -lftprintf -lft
+	$(CC) $(FLAGS) $(TEST) $(NAME) $(LIBFT_A) -I. -I.. -o test
 	./test
 
 dymlib: $(NAME)

@@ -10,30 +10,26 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <term.h>
+#include <miniterm.h>
 
-void	initterm(t_term *t, int cb, int ct, char *prompt)
+void	initterm(t_term *t)
 {
 	if (t)
 	{
 		getcwd(t->dirpath, sizeof(char) * 1024);
-		t->back = cb;
-		t->txt = ct;
-		t->prompt = prompt;
-		t->log = "log_minishell.log";
-		t->fd = open(t->log, O_RDWR | O_CREAT, 0666);
-		if (cb)
-		{
-			ft_putstr("\x1B[48;5;");
-			ft_putnbr(cb);
-			ft_putchar('m');
-		}
-		if (ct)
-		{
-			ft_putstr("\x1B[38;5;");
-			ft_putnbr(ct);
-			ft_putchar('m');
-		}
+		t->pt_back = ft_strdup("48;5;0");
+		t->pt_txt = ft_strdup("1;38;5;87");
+		t->cmd_back = ft_strdup("48;5;0");
+		t->cmd_txt = ft_strdup("38;5;28");
+		t->exe_back = ft_strdup("48;5;0");
+		t->exe_txt = ft_strdup("38;5;15");
+		t->name_back = ft_strdup("48;5;0");
+		t->name_txt = ft_strdup("1;38;5;69");
+		t->cfg = ft_strdup("minishell.cfg");
+		t->prompt = ft_strdup("@minishell");
+		t->log = ft_strdup("minishell.log");
+		t->env = NULL;
+		t->path = NULL;
 	}
 }
 
@@ -69,23 +65,17 @@ char	**init_env(char **env)
 
 void	print_prompt(t_term *t)
 {
-	if (t->back)
-	{
-		ft_putstr("\033[48;5;");
-		ft_putnbr(t->back);
-		ft_putchar('m');
-	}
-	if (t->txt)
-	{
-		ft_putstr("\033[38;5;");
-		ft_putnbr(t->txt);
-		ft_putchar('m');
-	}
+	ft_putstr(RESET);
+	ft_putansi_str(t->name_back, 1);
+	ft_putansi_str(t->name_txt, 1);
 	ft_putstr(t->prompt);
 	ft_putstr(": ");
+	ft_putansi_str(t->pt_back, 1);
+	ft_putansi_str(t->pt_txt, 1);
 	ft_putstr(t->dirpath);
 	ft_putstr("$>");
-	ft_putstr(RESET);
+	ft_putansi_str(t->cmd_back, 1);
+	ft_putansi_str(t->cmd_txt, 1);
 }
 
 void	stop(t_term *t)
@@ -93,7 +83,27 @@ void	stop(t_term *t)
 	int	n;
 
 	n = 0;
-	while (t->path[n])
-		free(t->path[n++]);
-	free(t->path);
+	free(t->prompt);
+	free(t->log);
+	free(t->cmd_txt);
+	free(t->cmd_back);
+	free(t->pt_txt);
+	free(t->pt_back);
+	free(t->exe_txt);
+	free(t->exe_back);
+	free(t->name_txt);
+	free(t->name_back);
+	if (t->env)
+	{
+		while (t->path[n])
+			free(t->path[n++]);
+		free(t->path);
+	}
+	if (t->env)
+	{
+		n = 0;
+		while (t->env[n])
+			free(t->env[n++]);
+		free(t->env);
+	}
 }

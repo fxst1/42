@@ -7,7 +7,7 @@ GNL = ../get_next_line
 CFLAGS = -Wall -Wextra -Werror
 
 LIBS = $(LIBFT_A)
-SRC = term.c env.c main.c
+SRC = term.c env.c main.c config.c
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)

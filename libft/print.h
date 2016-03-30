@@ -36,7 +36,7 @@
 # define RESET_FONT "23"
 # define TEXT_COLOR "38"
 # define DEFAULT_TEXT_COLOR "37;0"
-# define BACK_COLOR "40"
+# define BACK_COLOR "48"
 # define DEFAULT_BACK_COLOR "39;0"
 # define ENABLE_FRAMED "51"
 # define DISABLE_FRAMED "54"
@@ -45,7 +45,6 @@
 # define ENABLE_OVERLINE "53"
 # define DISABLE_OVERLINE "55"
 # define RESET_COLOR "39;37"
-# define SYSTEM_COLOR
 # define BLACK "30"
 # define RED "31"
 # define GREEN "32"

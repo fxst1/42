@@ -47,5 +47,7 @@ void		ft_strsort(char **tab, int order);
 int			ft_strnword(char *word);
 char		**ft_strsplit_cmd(const char *cmd);
 char		*ft_strcut(char *str, int c);
+void		ft_putansi_str(char *code, int const fd);
+void		ft_putansi_nbr(int code, int const fd);
 
 #endif

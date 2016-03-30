@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <term.h>
+#include <miniterm.h>
 
 char	*get_home(t_term *t, char **env)
 {
@@ -35,12 +35,17 @@ int		start_prgm(t_term *t, char *cmd)
 	argv = ft_strsplit(cmd, ' ');
 	child_pid = fork();
 	tpid = 0;
+	ft_putansi_str(t->exe_txt, 1);
+	ft_putansi_str(t->exe_back, 1);
 	if (child_pid == 0)
 	{
 		execve(argv[0], argv, t->env);
-		ft_putstr_fd("@term: ", 2);
+		ft_putansi_str(t->name_txt, 2);
+		ft_putansi_str(t->name_back, 2);
+		ft_putstr_fd(t->prompt, 2);
+		ft_putstr(": \033[0m\033[38;5;196m");
 		ft_putstr_fd(argv[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
+		ft_putstr_fd(": command not found\033[0m\n", 2);
 		exit(0);
 	}
 	else
@@ -59,19 +64,33 @@ int		call_builtins(t_term *t, char *cmd, int *ok)
 		*ok = 0;
 	else if (!ft_strncmp(cmd, "cd ", (*(cmd + 2) ? 3 : 2)))
 	{
-		if (chdir(ft_strnword(cmd) == 1 ? get_home(t, t->env) : cmd + 3))
-			ft_putstr_fd("@term: cd: No such file or directory\n", 2);
+		if (chdir(!*(cmd + 2) ? get_home(t, t->env) : cmd + 3))
+		{
+			ft_putansi_str(t->name_back, 2);
+			ft_putansi_str(t->name_txt, 2);
+			ft_putstr_fd(t->prompt, 2);
+			ft_putstr_fd(": \033[38;5;196mcd: No such file or directory\033[0m\n", 2);
+		}
 		else
 			getcwd(t->dirpath, sizeof(char) * 1024);
 	}
-	else if (!ft_strcmp(cmd, ft_strcut("env", ' ')))
+	else if (!ft_strcmp(cmd, "env"))
 		print_env(t->env);
 	else if (!ft_strncmp(cmd, "setenv ", 7))
-		t->env = ft_setenv(t->env, ft_strcut(cmd + 7, ' '));
+		t->env = ft_setenv(t->env, cmd + 7);
 	else if (!ft_strncmp(cmd, "unsetenv ", 9))
-		t->env = ft_unsetenv(t->env, ft_strcut(cmd + 9, ' '));
+		t->env = ft_unsetenv(t, t->env, cmd + 9);
 	else if (!ft_strcmp("reset", cmd))
-		ft_putstr("\033c");
+		ft_putstr(CLEAR);
+	else if (!ft_strcmp(cmd, "setenv") || !ft_strcmp(cmd, "unsetenv"))
+	{
+		ft_putansi_str(t->name_back, 2);
+		ft_putansi_str(t->name_txt, 2);
+		ft_putstr_fd(t->prompt, 2);
+		ft_putstr_fd(": \033[38;5;196m", 2);
+		ft_putstr_fd(cmd, 2);
+		ft_putstr_fd(": bad arguments\033[0m\n", 2);
+	}
 	else
 		return (0);
 	return (1);
@@ -87,7 +106,7 @@ int		term_main(t_term *t)
 	print_prompt(t);
 	while (ok && get_next_line(0, &cmd) > 0)
 	{
-		if (!call_builtins(t, cmd, &ok))
+		if (*cmd && !call_builtins(t, cmd, &ok))
 			start_prgm(t, cmd);
 		if (ok)
 			print_prompt(t);
@@ -100,15 +119,19 @@ int		term_main(t_term *t)
 int		main(int argc, char **argv, char **env)
 {
 	t_term	t;
+	int		ret;
 
-	ft_putstr("\033c");
-	initterm(&t, 0, 20, "@term");
-	t.env = init_env(env);
-	t.argc = argc;
-	t.argv = argv;
-	t.path = init_path(env);
-	term_main(&t);
+	ft_putstr(CLEAR);
+	initterm(&t);
+	if ((ret = init_args(&t, argv + 1)) == 0)
+	{
+		t.env = init_env(env);
+		t.argc = argc;
+		t.argv = argv;
+		t.path = init_path(env);
+		term_main(&t);
+		ft_putstr(RESET);
+	}
 	stop(&t);
-	ft_putstr(RESET);
-	return (0);
+	return (ret);
 }

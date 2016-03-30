@@ -1,3 +1,4 @@
+#include <miniterm.h>
 
 t_list	*find_file(char *filen, char *cmd)
 {
@@ -66,11 +67,10 @@ char	*do_autocomplet(char *d, char **path, char *cmd, int *ok)
 		free(cmd);
 		cmd = ft_strdup(l->content);
 	}
-	//ft_printf("(%d) %s\n", ft_lstsize(l), cmd);
 	while (l)
 	{
 		if (prnt)
-			printf("%s\n", (char*)l->content);
+			ft_putendl((char*)l->content);
 		l = l->next;
 	}
 	ft_lstdel(&t, &ft_lstfree);

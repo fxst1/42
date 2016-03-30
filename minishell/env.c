@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <term.h>
+#include <miniterm.h>
 
 void	print_env(char **env)
 {
@@ -24,7 +24,7 @@ void	print_env(char **env)
 	}
 }
 
-char	**ft_unsetenv(char **env, char *name)
+char	**ft_unsetenv(t_term *t, char **env, char *name)
 {
 	int		index;
 	char	*str;
@@ -46,8 +46,11 @@ char	**ft_unsetenv(char **env, char *name)
 	}
 	else
 	{
-		ft_putstr_fd("Cannot unset ", 2);
+		ft_putstr_fd(t->prompt, 2);
+		ft_putstr_fd("\033[38;5;196m: ", 2);
+		ft_putstr_fd(": unsetenv: cannot unset ", 2);
 		ft_putendl_fd(name, 2);
+		ft_putstr_fd(RESET, 2);
 	}
 	return (env);
 }
