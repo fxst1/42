@@ -22,7 +22,7 @@ $(NAME): $(LIBS) $(OBJ)
 	gcc $(CFLAGS) -I. -I.. $(OBJ) get_next_line.o $(LIBFT_A) -o $(NAME)
 
 clean:
-	rm -f $(OBJ)
+	rm -f $(OBJ) get_next_line.o
 	make -C $(LIBFT) fclean
 
 fclean: clean
