@@ -15,23 +15,22 @@
 char	*ft_strcut(char *word, int c)
 {
 	char	*tmp;
-	char	*tmp1;
 	int		n;
-	int		i;
+	int		keep_char;
 
 	tmp = word;
-	i = 0;
+	keep_char = (*word != c);
 	while (*word)
 	{
 		n = 0;
-		while (word[n] == c)
+		while (word[n] == c && word[n])
 			n++;
 		if (!word[n])
-			i = 0;
-		if ((n > 1 && i > 1) || (n >= 1 && !i))
+			keep_char = 0;
+		if ((n > 1 && keep_char > 1) || (n >= 1 && !keep_char))
 			ft_memmove(word, word + n, ft_strlen(word));
 		if (n)
-			i++;
+			keep_char++;
 		word++;
 	}
 	return (tmp);

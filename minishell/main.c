@@ -64,12 +64,12 @@ int		call_builtins(t_term *t, char *cmd, int *ok)
 		else
 			getcwd(t->dirpath, sizeof(char) * 1024);
 	}
-	else if (!ft_strcmp(cmd, "env"))
+	else if (!ft_strcmp(cmd, ft_strcut("env", ' ')))
 		print_env(t->env);
 	else if (!ft_strncmp(cmd, "setenv ", 7))
-		t->env = ft_setenv(t->env, cmd + 7);
+		t->env = ft_setenv(t->env, ft_strcut(cmd + 7, ' '));
 	else if (!ft_strncmp(cmd, "unsetenv ", 9))
-		t->env = ft_unsetenv(t->env, cmd + 9);
+		t->env = ft_unsetenv(t->env, ft_strcut(cmd + 9, ' '));
 	else if (!ft_strcmp("reset", cmd))
 		ft_putstr("\033c");
 	else
