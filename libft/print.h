@@ -12,11 +12,6 @@
 
 #ifndef PRINT_H
 # define PRINT_H
-# include <stdarg.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <stdio.h>
-# include <libft/master.h>
 # define DEFAULT "0"
 # define CURSOR_UP "\033[0;0H"
 # define CLEAR "\033c"
