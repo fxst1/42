@@ -59,7 +59,7 @@ int		call_builtins(t_term *t, char *cmd, int *ok)
 		*ok = 0;
 	else if (!ft_strncmp(cmd, "cd ", (*(cmd + 2) ? 3 : 2)))
 	{
-		if (chdir((*(cmd + 3) ? cmd + 3 : get_home(t, t->env))))
+		if (chdir(ft_strnword(cmd) == 1 ? get_home(t, t->env) : cmd + 3))
 			ft_putstr_fd("@term: cd: No such file or directory\n", 2);
 		else
 			getcwd(t->dirpath, sizeof(char) * 1024);
@@ -70,6 +70,8 @@ int		call_builtins(t_term *t, char *cmd, int *ok)
 		t->env = ft_setenv(t->env, cmd + 7);
 	else if (!ft_strncmp(cmd, "unsetenv ", 9))
 		t->env = ft_unsetenv(t->env, cmd + 9);
+	else if (!ft_strcmp("reset", cmd))
+		ft_putstr("\033c");
 	else
 		return (0);
 	return (1);

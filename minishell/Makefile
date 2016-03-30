@@ -23,7 +23,7 @@ $(NAME): $(LIBS) $(OBJ)
 
 clean:
 	rm -f $(OBJ)
-	make -C $(LIBFT) clean
+	make -C $(LIBFT) fclean
 
 fclean: clean
 	rm -f $(NAME)

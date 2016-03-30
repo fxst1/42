@@ -19,11 +19,11 @@ static int		count_words(const char *s, char c)
 
 	tmp = 0;
 	cnt = 0;
-	while (*s != '\0')
+	while (*s)
 	{
-		if (tmp == 1 && *s == c)
+		if (tmp && *s == c)
 			tmp = 0;
-		if (tmp == 0 && *s != c)
+		if (!tmp && *s != c)
 		{
 			tmp = 1;
 			cnt++;
@@ -38,7 +38,7 @@ static int		count_letter(const char *s, char c)
 	int		len;
 
 	len = 0;
-	while (*s != c && *s != '\0')
+	while (*s != c && *s)
 	{
 		len++;
 		s++;
@@ -59,9 +59,9 @@ char			**ft_strsplit(char const *s, char c)
 		return (NULL);
 	while (nb_word--)
 	{
-		while (*s == c && *s != '\0')
+		while (*s == c && *s)
 			s++;
-		t[index] = ft_strsub((const char *)s, 0,\
+		t[index] = ft_strsub((const char *)s, 0,
 			count_letter((const char *)s, c));
 		if (t[index] == NULL)
 			return (NULL);

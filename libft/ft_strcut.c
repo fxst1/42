@@ -1,33 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnword.c                                      :+:      :+:    :+:   */
+/*   ft_strcut.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/30 00:49:19 by fjacquem          #+#    #+#             */
-/*   Updated: 2016/03/30 00:49:31 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/03/30 04:10:04 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/30 04:10:07 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_strnword(char *word)
-{
-	int		n_words;
-	int		index;
+#include "implemt.h"
 
-	n_words = 0;
-	index = 0;
-	while (word[index])
+char	*ft_strcut(char *word, int c)
+{
+	char	*tmp;
+	char	*tmp1;
+	int		n;
+	int		i;
+
+	tmp = word;
+	i = 0;
+	while (*word)
 	{
-		if (word[index] != ' ' && word[index] != '\t' && word[index] == '\n')
-		{
-			n_words++;
-			while (word[index] && (word[index] != ' ' && word[index] != '\t' &&
-				word[index] != '\n'))
-				index++;
-		}
-		else
-			index++;
+		n = 0;
+		while (word[n] == c)
+			n++;
+		if (!word[n])
+			i = 0;
+		if ((n > 1 && i > 1) || (n >= 1 && !i))
+			ft_memmove(word, word + n, ft_strlen(word));
+		if (n)
+			i++;
+		word++;
 	}
-	return (n_words);
+	return (tmp);
 }

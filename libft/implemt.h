@@ -16,6 +16,7 @@
 # define BASE			16
 # define OFFSET_LINE		16
 # define REVERSE_ORDER	1
+# define CUT_BEGIN	1
 
 long		ft_pow(int value, unsigned int n);
 int			ft_atoi_base(const char *nptr, const char *base);
@@ -43,5 +44,8 @@ int			ft_lstsize(t_list *l);
 long int	ft_random();
 void		*ft_print_memory(const void *addr, size_t len);
 void		ft_strsort(char **tab, int order);
+int			ft_strnword(char *word);
+char		**ft_strsplit_cmd(const char *cmd);
+char		*ft_strcut(char *str, int c);
 
 #endif
