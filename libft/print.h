@@ -1,5 +1,17 @@
-#ifndef PRINTF
-# define PRINTF
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/03/30 05:12:26 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/03/30 05:12:27 by fjacquem         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef PRINT_H
+# define PRINT_H
 # include <stdarg.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -66,43 +78,4 @@
 # define DARKCYAN "22;36"
 # define DARKGREY "22;37"
 # define RESET "\x1B[0m"
-# define ft_vfprintf(fd,str,va_l) ft_fvprintf(fd,str,va_l)
-# define ft_vsprintf(buf,str,va_l) ft_svprintf(buf,str,va_l)
-# define ft_svfprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)  
-# define ft_vsfprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)
-# define ft_sfvprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)
-# define ft_vfsprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)
-# define ft_fvsprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)
-
-typedef	struct	s_printer
-{
-	char	*str;
-	char	*buffer;
-	size_t	alloc_size;
-	size_t	len;
-	int		mask;
-	int		prec;
-	int		spaces;
-	struct __va_list_tag *l;
-	int		fd;
-}				t_printer;
-
-void	init_printer(t_printer *ptr, const char *str, va_list l, const int fd);
-void	build_flag(t_printer *ptr);
-void	build_str(t_printer *ptr);
-void	build_spaces(t_printer *ptr, int expected);
-void	printchar(int c, t_printer *tmp);
-void	printstr(char *str, t_printer *tmp);
-void	printnbr(long long int value, char *base_digits, t_printer *tmp);
-void	printdouble(double d, char *base, t_printer *tmp);
-void	print(t_printer *ptr);
-int		ft_svprintf(char *buffer, const char *str, va_list l);
-int		ft_vprintf(const char *str, va_list l);
-int		ft_fvprintf(const int fd, const char *str, va_list l);
-int		ft_printf(const char *str, ...);
-int		ft_fprintf(const int fd, const char *str, ...);
-int		ft_sprintf(char *buffer, const char *str, ...);
-int		ft_fsvprintf(const int fd, char *buffer, const char *str, va_list l);
-int		ft_fsprintf(const int fd, char *buffer, const char *str, ...);
 #endif
-

@@ -12,9 +12,16 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 100
+# define BUFF_SIZE_DEF 1024
+# define NB_FD_DEF		256
+# if (FD_MAX > NB_FD_DEF)
+#  define NB_FD FD_MAX
+# else
+#  define NB_FD NB_FD_DEF
+# endif
 # include <fcntl.h>
 # include <libft/libft.h>
+# define BUFF_SIZE BUFF_SIZE_DEF
 
 typedef struct	s_gnl
 {
