@@ -19,14 +19,12 @@
 #  define DELIM '\n'
 # endif
 # ifndef BIN_MODE
-#  define BIN_MODE 1
-#  undef DELIM
-#  define DELIM '\n'
+#  define BIN_MODE 0
 # endif
 # include <fcntl.h>
 # include "libft/libft.h"
 
-typedef struct	s_gn
+typedef struct	s_gnl
 {
 	int			fd;
 	char		*buffer;
