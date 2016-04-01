@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_add.c                                           :+:      :+:    :+:   */
+/*   ft_gcadd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/24 21:48:15 by fjacquem          #+#    #+#             */
-/*   Updated: 2016/03/24 21:48:18 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/04/01 21:22:41 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/04/01 21:22:43 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include "implemt.h"
+#include "gc.h"
 
-t_longest		ft_add(int size, ...)
+void		ft_gcadd(t_mem **gc, t_mem *new)
 {
-	va_list	l;
-	int		i;
-	int		len;
+	t_mem	*root;
 
-	i = 0;
-	len = 0;
-	va_start(l, size);
-	while (i++ <= size)
-		len += va_arg(l, int);
-	va_end(l);
-	return (len);
+	root = *gc;
+	if (root)
+	{
+		while (root->next)
+			root = root->next;
+		root->next = new;
+	}
+	else
+		*gc = new;
 }

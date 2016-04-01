@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/22 14:04:37 by fjacquem          #+#    #+#             */
-/*   Updated: 2016/01/22 14:04:39 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/04/01 08:40:17 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/04/01 08:40:18 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,14 @@ static	char	*set_line(char *buf, char *line, size_t len)
 	size_t	index;
 
 	index = 0;
-	while (index < len && *buf != '\n' && *buf)
+	while (index < len && *buf != DELIM && *buf)
 	{
 		line[index] = *(buf++);
 		index++;
 	}
+	line[index] = 0;
 	if (*buf)
 		buf++;
-	line[index] = 0;
 	return (buf);
 }
 
@@ -52,7 +52,7 @@ static	char	*stop(t_gnl *g, char *buf, int *len)
 	*len = ft_strlen(buf);
 	while (ret > 0)
 	{
-		if (!ft_strchr(buf, '\n'))
+		if (!ft_strchr(buf, DELIM))
 		{
 			*len += BUFF_SIZE;
 			buf = realloc_buffer(buf, *len);
@@ -72,7 +72,7 @@ static	char	*stop(t_gnl *g, char *buf, int *len)
 
 static	int		read_buffer(const int fd, char **line)
 {
-	static char *(keep[255]) = {0};
+	static char *(keep[1024]) = {0};
 	char		*buf;
 	int			len;
 	t_gnl		g;
@@ -102,12 +102,27 @@ int				get_next_line(int const fd, char **line)
 {
 	int	size;
 
-	if (fd < 0 || !line)
+	if (fd < 0 || !line || BUFF_SIZE <= 0 || DELIM < 0)
 		return (-1);
-	size = read_buffer(fd, line);
+	if (!BIN_MODE)
+		size = read_buffer(fd, line);
+	else
+	{
+		*line = ft_strnew(BUFF_SIZE);
+		if ((size = read(fd, *line, BUFF_SIZE)) < 0)
+		{
+			free(*line);
+			*line = NULL;
+			return (-1);
+		}
+		else
+			return (size);
+	}
 	if (size == -2)
 		return (-1);
 	else if (size == -1)
 		return (0);
-	return (!!(*line && size));
+	if ((*line && size) == 0)
+		*line = NULL;
+	return ((*line && size));
 }

@@ -40,7 +40,7 @@ int		test_sort_mask(t_file *swap, t_file *tmp, t_args *a)
 		swap->dat.st_mtimespec.tv_nsec > tmp->dat.st_mtimespec.tv_nsec))))))));
 }
 
-# else
+# elif (OS_FT == UNIX)
 
 int		test_sort_alph(t_file *swap, t_file *tmp, t_args *a)
 {
@@ -67,6 +67,7 @@ int		test_sort_mask(t_file *swap, t_file *tmp, t_args *a)
 }
 
 #endif
+
 void	sort_files(t_args *a, t_file *root)
 {
 	t_file	*swap;

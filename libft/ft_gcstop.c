@@ -1,29 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_add.c                                           :+:      :+:    :+:   */
+/*   ft_gcstop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/24 21:48:15 by fjacquem          #+#    #+#             */
-/*   Updated: 2016/03/24 21:48:18 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/04/01 21:23:39 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/04/01 21:23:41 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include "implemt.h"
+#include "gc.h"
 
-t_longest		ft_add(int size, ...)
+static void		ft_freerec_gt(t_mem *gc)
 {
-	va_list	l;
-	int		i;
-	int		len;
+	if (gc)
+	{
+		ft_freerec_gt(gc->next);
+		gc->size = 0;
+		gc->index = -1;
+		gc->pointer = 0x0;
+		if (gc->mask & IS_DUMP)
+			free(gc);
+		gc = NULL;
+	}
+}
 
-	i = 0;
-	len = 0;
-	va_start(l, size);
-	while (i++ <= size)
-		len += va_arg(l, int);
-	va_end(l);
-	return (len);
+/*
+**	ft_freeall_gc
+**
+**	Clear gc
+**
+*/
+
+void			ft_gcstop(void)
+{
+	t_mem	**gc;
+
+	gc = ft_gc();
+	ft_freerec_gt(*gc);
+	*gc = NULL;
+	gc = NULL;
 }

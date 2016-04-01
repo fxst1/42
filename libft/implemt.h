@@ -13,10 +13,24 @@
 #ifndef IMPLEMT_H
 # define IMPLEMT_H
 # include "libft.h"
+
+/*
+**	ft_print_memory defines
+**
+**		BASE:			values' base
+**		OFFSET_LINE:	number of values by lines
+*/
 # define BASE			16
 # define OFFSET_LINE		16
+
+/*
+**	ft_strsort defines
+**
+**		REVERSE_ORDER	: high -> low
+*/
 # define REVERSE_ORDER	1
-# define CUT_BEGIN	1
+
+typedef long long t_longest;
 
 long		ft_pow(int value, unsigned int n);
 int			ft_atoi_base(const char *nptr, const char *base);
@@ -49,5 +63,6 @@ char		**ft_strsplit_cmd(const char *cmd);
 char		*ft_strcut(char *str, int c);
 void		ft_putansi_str(char *code, int const fd);
 void		ft_putansi_nbr(int code, int const fd);
+t_longest	ft_add(int size, ...);
 
 #endif

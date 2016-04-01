@@ -12,11 +12,21 @@
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 100
+# ifndef BUFF_SIZE
+#  define BUFF_SIZE 1024
+# endif
+# ifndef DELIM
+#  define DELIM '\n'
+# endif
+# ifndef BIN_MODE
+#  define BIN_MODE 1
+#  undef DELIM
+#  define DELIM '\n'
+# endif
 # include <fcntl.h>
-# include "../libft/libft.h"
+# include "libft/libft.h"
 
-typedef struct	s_gnl
+typedef struct	s_gn
 {
 	int			fd;
 	char		*buffer;

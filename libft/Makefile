@@ -36,68 +36,90 @@ BONUS_FCT = ft_lstfree.c ft_lstsize.c ft_lstadd_begin.c ft_strcasecmp.c ft_atoi_
 	ft_putnbr_base_fd.c ft_putnbr_base.c ft_itoa_base.c ft_print_memory.c\
 	ft_strrev.c ft_putdouble.c ft_puthex.c ft_swapn.c ft_swaplen.c ft_strnword.c
 BONUS_MAP = ft_mapnew.c ft_mapdel.c ft_mapget.c ft_mapadd_at.c ft_mapadd_begin.c ft_mapadd_end.c
-BONUS_ALL = $(SRC) $(BONUS_FCT) $(BONUS_MAP) $(BONUS_STACK) $(BONUS_BTREE) 
+BONUS_GARBAGE = ft_gc.c ft_gcnew.c ft_gcdym.c ft_gcref.c ft_gcadd.c ft_gcstop.c ft_gcprint.c
+BONUS_ALL = $(SRC) $(BONUS_FCT) $(BONUS_MAP) $(BONUS_STACK) $(BONUS_BTREE) $(BONUS_GARBAGE)
 
 OBJ = $(SRC:.c=.o)
 OBJ_FCT = $(BONUS_FCT:.c=.o)
 OBJ_STACK = $(BONUS_STACK:.c=.o)
-OBJ_BREE = $(BONUS_BTREE:.c=.o)
+OBJ_BTREE = $(BONUS_BTREE:.c=.o)
 OBJ_MAP = $(BONUS_MAP:.c=.o)
+OBJ_GARBAGE = $(BONUS_GARBAGE:.c=.o)
 
 all: $(NAME)
 
 $(OBJ):
-		$(CC) $(FLAGS) -c $(SRC)
+		@$(CC) $(FLAGS) -c $(SRC)
 
 $(NAME): $(OBJ)
-		ar rc $(NAME) $(OBJ)
-		ranlib $(NAME)
+		@ar rc $(NAME) $(OBJ)
+		@echo "\033[38;5;27mLibft essentisials added\033[0m"
+		@ranlib $(NAME)
 
 clean:
-		rm -f $(OBJ) $(OBJ_MAP) $(OBJ_FCT) $(OBJ_BTREE) $(OBJ_STACK)
+		@rm -f $(OBJ)
+		@rm -f $(OBJ_MAP)
+		@rm -f $(OBJ_FCT)
+		@rm -f $(OBJ_BTREE)
+		@rm -f $(OBJ_STACK)
+		@rm -f $(OBJ_GARBAGE)
 
 fclean: clean
-		rm -f $(NAME)
+		@rm -f $(NAME)
 
 re:		fclean all
 
 dymlib: $(NAME)
-		@echo "May sure to have root permissions"
+		@echo "\033[38;5;1mMay sure to have root permissions\033[0m"
 		@sudo rm -f usr/lib/libft.a
 		@sudo cp -f $(NAME) /usr/lib/
 
 dymheader:
-		@echo "May sure to have root permissions"
-		@sudo rm -f /usr/include/libft/libft.h /usr/include/libft/implemt.h /usr/include/libft/btree.h /usr/include/libft/stack.h
-		@sudo cp -f libft.h os.h master.h map.h btree.h implemt.h stack.h /usr/include/libft/
+		@echo "\033[38;5;1mMay sure to have root permissions\033[0m"
+		@sudo rm -f /usr/include/libft/libft.h /usr/include/libft/implemt.h /usr/include/libft/btree.h /usr/include/libft/stack.h /usr/include/libft/gc.h
+		@sudo cp -f libft.h os.h master.h map.h btree.h implemt.h stack.h gc.h /usr/include/libft/
 		@sudo chmod 644 /usr/include/libft/*.h
 
 $(OBJ_STACK):
-		$(CC) $(FLAGS) -c $(BONUS_STACK)
+		@$(CC) $(FLAGS) -c $(BONUS_STACK)
 		@ar rc $(NAME) $(OBJ_STACK) $(OBJ)
+		@echo "\033[38;5;76mGeneric stack added\033[0m"
 		@ranlib $(NAME)
 
 $(OBJ_BTREE):
-		$(CC) $(FLAGS) -c $(BONUS_BTREE)
+		@$(CC) $(FLAGS) -c $(BONUS_BTREE)
 		@ar rc $(NAME) $(OBJ_BTREE) $(OBJ)
+		@echo "\033[38;5;76mGeneric binary tree added\033[0m"
 		@ranlib $(NAME)
 
 $(OBJ_FCT):
-		$(CC) $(FLAGS) -c $(BONUS_FCT)
+		@$(CC) $(FLAGS) -c $(BONUS_FCT)
 		@ar rc $(NAME) $(OBJ_FCT) $(OBJ)
+		@echo "\033[38;5;76mFunctions implementation added\033[0m"
 		@ranlib $(NAME)
 
 $(OBJ_MAP):
-		$(CC) $(FLAGS) -c $(BONUS_MAP)
+		@$(CC) $(FLAGS) -c $(BONUS_MAP)
 		@ar rc $(NAME) $(OBJ_MAP) $(OBJ)
+		@echo "\033[38;5;76mGeneric map added\033[0m"
 		@ranlib $(NAME)
 
-addmap: $(OBJ) $(OBJ_MAP)
+$(OBJ_GARBAGE):
+		@$(CC) $(FLAGS) -c $(BONUS_GARBAGE)
+		@ar rc $(NAME) $(OBJ_GARBAGE) $(OBJ) $(OBJ_FCT)
+		@echo "\033[38;5;76mGarbage collector added\033[0m"
+		@ranlib $(NAME)
 
-addstack: $(OBJ) $(OBJ_STACK)
+addmap: $(NAME) $(OBJ_MAP)
 
-addbtree: $(OBJ) $(OBJ_BTREE)
+addstack: $(NAME) $(OBJ_STACK)
 
-addfct: $(OBJ) $(OBJ_FCT)
+addbtree: $(NAME) $(OBJ_BTREE)
 
-addbonus: $(OBJ) $(OBJ_MAP) $(OBJ_FCT) $(OBJ_BTREE) $(OBJ_STACK)
+addfct: $(NAME) $(OBJ_FCT)
+
+addgc: $(NAME) $(OBJ_FCT) $(OBJ_GARBAGE)
+
+addbonus: $(NAME) $(OBJ_MAP) $(OBJ_FCT) $(OBJ_STACK) $(OBJ_GARBAGE) $(OBJ_BTREE)
+
+.PHONY: addmap addstack addbonus addgc addbtree re fclean clean all 

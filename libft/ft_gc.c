@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_add.c                                           :+:      :+:    :+:   */
+/*   ft_gc.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/03/24 21:48:15 by fjacquem          #+#    #+#             */
-/*   Updated: 2016/03/24 21:48:18 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/04/01 21:22:27 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/04/01 21:22:29 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdarg.h>
-#include "implemt.h"
+#include "gc.h"
 
-t_longest		ft_add(int size, ...)
+t_mem	**ft_gc(void)
 {
-	va_list	l;
-	int		i;
-	int		len;
+	static t_mem	*gc = NULL;
 
-	i = 0;
-	len = 0;
-	va_start(l, size);
-	while (i++ <= size)
-		len += va_arg(l, int);
-	va_end(l);
-	return (len);
+	return (&gc);
 }
