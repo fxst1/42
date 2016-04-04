@@ -14,7 +14,9 @@
 
 void	first_of_all(t_args *arg, int n)
 {
-	arg->set = SHOW_ERR;
+	arg->set = STOP_ERR;
+	arg->typemap = NULL;
+	arg->colormap = NULL;
 	arg->ret = 0;
 	arg->deep = 0;
 	arg->mask = 0;
@@ -47,7 +49,7 @@ void	file_errors_bis(t_args *a, int n, char **paths)
 		n--;
 	}
 	parcours("", a, f);
-	del(f);
+	del(&f);
 }
 
 void	file_errors(t_args *a, char **paths)
@@ -102,11 +104,4 @@ t_map	*init_extension_map_from_file(char *filename)
 		}
 	}
 	return (m);
-}
-
-char	*set_str(char *tmp, char *s1, char *s2)
-{
-	tmp = ft_strnew(ft_strlen(s1) + ft_strlen(s2) + PSL);
-	tmp = set_name_path(tmp, s1, s2);
-	return (tmp);
 }

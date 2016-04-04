@@ -24,7 +24,7 @@ void		clear(t_env *e)
 		y = 0;
 		while (y < e->h)
 		{
-			put_pixel(e, x, y, 0);
+			put_pixel(e, x, y, 0x0);
 			y++;
 		}
 		x++;

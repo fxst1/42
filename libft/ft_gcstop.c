@@ -12,16 +12,17 @@
 
 #include "gc.h"
 
-static void		ft_freerec_gt(t_mem *gc)
+static void		ft_freerec_gt(t_mem *gc, int index)
 {
 	if (gc)
 	{
-		ft_freerec_gt(gc->next);
+		if (index < gc->index && gc->mask & IS_DUMP)
+			free((void*)gc->pointer);
+		gc->pointer = 0x0;
+		ft_freerec_gt(gc->next, gc->index);
 		gc->size = 0;
 		gc->index = -1;
-		gc->pointer = 0x0;
-		if (gc->mask & IS_DUMP)
-			free(gc);
+		free(gc);
 		gc = NULL;
 	}
 }
@@ -38,7 +39,7 @@ void			ft_gcstop(void)
 	t_mem	**gc;
 
 	gc = ft_gc();
-	ft_freerec_gt(*gc);
+	ft_freerec_gt(*gc, -1);
 	*gc = NULL;
 	gc = NULL;
 }

@@ -15,7 +15,7 @@
 /*
 **	ft_add_gc
 **
-**	Add a new entry to GC (only reference it) DEBUG ONLY or NO FREEABLE POINTER
+**	Add a new entry to GC (only reference it)
 **
 */
 
@@ -23,17 +23,24 @@ void	*ft_gcref(void *addr, size_t len, int mask)
 {
 	t_mem	*new;
 	t_mem	**gc;
+	t_mem	*next;
 
 	if (len > 0)
 	{
 		gc = ft_gc();
-		if (!*gc)
-			new = ft_gcnew(addr, len, 0, mask & ~(IS_DUMP));
-		else
-			new = ft_gcnew(addr, len, (*gc)->index + 1, mask & ~(IS_DUMP));
+		next = *gc;
 		if (*gc)
-			new->next = *gc;
-		*gc = new;
+		{
+			while (next->next)
+				next = next->next;
+			new = ft_gcnew(addr, len, next->index + 1, mask & ~(1));
+			next->next = new;
+		}
+		else
+		{
+			*gc = ft_gcnew(addr, len, 0, mask & ~(1));
+			new = (*gc);
+		}
 		return (addr);
 	}
 	else

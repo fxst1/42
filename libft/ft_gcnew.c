@@ -14,8 +14,8 @@
 
 t_mem	*ft_gcnew(void *addr, int len, int index, int mask)
 {
-	t_mem	*root;
-	t_mem	*new;
+	t_mem		*root;
+	t_mem		*new;
 
 	root = NULL;
 	while (len > 0)
@@ -23,7 +23,8 @@ t_mem	*ft_gcnew(void *addr, int len, int index, int mask)
 		new = (t_mem*)malloc(sizeof(t_mem));
 		new->index = index;
 		new->mask = mask;
-		new->size = (len >= (int)sizeof(t_mem)) ? sizeof(t_mem) - 1 : len;
+		new->size = (len >= (int)sizeof(t_mem)) ?
+					(int)sizeof(t_mem) - 1 : len;
 		new->pointer = (long int)addr;
 		new->next = NULL;
 		ft_gcadd(&root, new);

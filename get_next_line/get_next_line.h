@@ -22,7 +22,7 @@
 #  define BIN_MODE 0
 # endif
 # include <fcntl.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 typedef struct	s_gnl
 {

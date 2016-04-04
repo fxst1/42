@@ -74,7 +74,7 @@ static void	process(void *addr, unsigned int size, unsigned int len)
 	}
 }
 
-void	*ft_print_memory(void *addr, size_t size)
+void	*ft_print_memory(const void *addr, size_t size)
 {
 	size_t	len;
 	int	i;
@@ -91,10 +91,10 @@ void	*ft_print_memory(void *addr, size_t size)
 		}
 		putline(len, 0);
 		write(1, ": ", 2);
-		process(addr, size, len);
-		myputstr(addr + len, size - len);
+		process((void*)addr, size, len);
+		myputstr((void*)addr + len, size - len);
 		write(1, "\n", 1);
 		len += OFFSET_LINE;
 	}
-	return (addr);
+	return ((void*)addr);
 }

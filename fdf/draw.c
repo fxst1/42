@@ -19,6 +19,7 @@ void	put_pixel(t_env *e, int x, int y, int c)
 	buf = e->buf;
 	if (x > 0 && x < e->l && y > 0 && y < e->h)
 	{
+		buf->data[(y * buf->size_line + x * buf->bpp / 8) + 3] =  (c >> 24) & 0xff;
 		buf->data[(y * buf->size_line + x * buf->bpp / 8) + 2] =
 			(c >> 16) & 0xff;
 		buf->data[(y * buf->size_line + x * buf->bpp / 8) + 1] =

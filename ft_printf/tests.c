@@ -28,6 +28,20 @@ void	backcolor_format()
 	}
 }
 
+void	tests(int max)
+{
+	int i;
+
+	i = 0;
+	printf("len: %zu", ft_strlen(RESET));
+	while (i < max)
+	{
+		printf("\e[%dm%d\t"RESET, i, i);
+		if (!(i % 10))
+			printf("\n");
+		i++;
+	}
+}
 
 void	ansi_format()
 {
@@ -90,7 +104,7 @@ int main()
 	sleep(2);
 	printf(CLEAR);
 	printf("Is clear ????\n");
-	sleep(2);
+	sleep(1);
 	printf("\tcolor test\n");
 	rgb();
 	printf("colors: 0 <= k < 255\nc = red * 36 + green * 6 + blue (color are define between 0 and 7)\n");
@@ -106,7 +120,9 @@ int main()
 	printf("\n\n");
 
 	ansi_format();
-	printf("\033[%s", ENABLE_REVERSE);
+	printf("\nTests\n");
+	tests(200);
+	//printf("\033[%s", ENABLE_REVERSE);
 	//test_other("\033[3;38;93m UNICODE : ο Δικαιοπολις εν αγρω εστιν%s\n", RESET);
 	return (0);
 }

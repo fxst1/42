@@ -20,7 +20,7 @@
 #  define NB_FD NB_FD_DEF
 # endif
 # include <fcntl.h>
-# include <libft/libft.h>
+# include "libft.h"
 # define BUFF_SIZE BUFF_SIZE_DEF
 
 typedef struct	s_gnl

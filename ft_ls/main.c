@@ -49,7 +49,7 @@ void			set_options_short(t_args *tmp, char *argv)
 		else if (*argv == 'G')
 			tmp->mask |= COLOR;
 		else if (*argv == 'e')
-			tmp->set |= SHOW_ERR;
+			tmp->set |= STOP_ERR;
 		else
 			set_option_short_bis(tmp, *argv);
 		argv++;
@@ -61,7 +61,7 @@ void			set_options_long(t_args *tmp, char *argv)
 	if (!(ft_strcmp(argv, "--numerical-id")))
 		tmp->set |= NUM_ID;
 	else if (!ft_strcmp(argv, "--error"))
-		tmp->set |= SHOW_ERR;
+		tmp->set |= STOP_ERR;
 	else if (!ft_strcmp(argv, "--help"))
 		tmp->ret = 3;
 	else if (!ft_strncmp("--color=", argv, 8))
@@ -82,19 +82,17 @@ void			init_args(t_args *arg, int *n, char **argv, int *l)
 {
 	first_of_all(arg, *n);
 	*n = 0;
-	while (argv[*l] && !arg->ret)
+	while (argv[*l] && !arg->ret && argv[*l][0] == '-')
 	{
-		if (argv[*l][0] == '-')
-		{
-			if (argv[*l][1] == '-')
-				set_options_long(arg, argv[*l]);
-			else
-				set_options_short(arg, argv[*l] + 1);
-		}
+		if (argv[*l][1] == '-')
+			set_options_long(arg, argv[*l]);
 		else
-		{
-			arg->path[(*n)++] = ft_strdup(argv[*l]);
-		}
+			set_options_short(arg, argv[*l] + 1);
+		(*l)++;
+	}
+	while (!arg->ret && argv[*l])
+	{
+		arg->path[(*n)++] = ft_strdup(argv[*l]);
 		(*l)++;
 	}
 	if (*n == 0)
@@ -103,32 +101,28 @@ void			init_args(t_args *arg, int *n, char **argv, int *l)
 	ft_strsort(arg->path, !REVERSE_ORDER);
 }
 
-int				main(int argc, char **argv)
+int				main(int argc, char **argv, char **env)
 {
 	t_args	tmp;
 	int		l;
 
 	l = 1;
-	tmp.colormap = NULL;
 	init_args(&tmp, &argc, argv, &l);
 	if (!tmp.ret)
 	{
 		if (!tmp.colormap && tmp.mask & COLOR)
-			tmp.colormap = init_extension_map();
+			tmp.colormap = init_extension_map(env);
+		if (tmp.mask & COLOR)
+			tmp.typemap = init_typemap(env);
 		file_errors(&tmp, tmp.path);
 		ls(&tmp, argc);
 	}
 	else if (tmp.ret == 2)
-	{
-		ft_putstr_fd("Try '", 2);
-		ft_putstr_fd(argv[0], 2);
-		ft_putstr_fd(" -h' option for more information.\n", 2);
-	}
+		print_help(argv[0]);
 	else
 	{
 		usage();
 		tmp.ret = 0;
 	}
-	stop_ls(&tmp, argc);
 	return (tmp.ret);
 }

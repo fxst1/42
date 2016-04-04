@@ -12,78 +12,113 @@
 
 #include <ls.h>
 
-void	print_color(char *ext, int mode)
+void	print_color(char **cl, int mode)
 {
-	ft_putstr("\x1B[");
-	if (ext)
-		ft_putstr(ext);
-	else
+	print_color_bis_bis(cl, mode);
+	if (S_IFSOCK == (mode & S_IFMT))
 	{
-		if (S_IFLNK == (mode & S_IFMT))
-		{
-			ft_putstr(INCR_BOLD);
-			ft_putstr(LINK);
-		}
-		else if (S_IFDIR == (S_IFMT & mode))
-		{
-			ft_putstr(INCR_BOLD);
-			ft_putstr(DIRECTORY);
-		}
-		else if (S_IXUSR & mode)
-		{
-			ft_putstr(INCR_BOLD);
-			ft_putstr(EXEC);
-		}
+		ft_putansi_str(cl[4], 1);
+		ft_putansi_str(cl[5], 1);
 	}
-	ft_putstr("m");
+	if (S_IFIFO == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[6], 1);
+		ft_putansi_str(cl[7], 1);
+	}
+	if ((S_IFDIR != (mode & S_IFMT)) && (S_IXUSR & mode))
+	{
+		ft_putansi_str(cl[8], 1);
+		ft_putansi_str(cl[9], 1);
+	}
+	if (S_IFBLK == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[10], 1);
+		ft_putansi_str(cl[11], 1);
+	}
+	print_color_bis(cl, mode);
+}
+
+void	print_color_bis_bis(char **cl, int mode)
+{
+	if (S_IFDIR == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[0], 1);
+		ft_putansi_str(cl[1], 1);
+	}
+	if (S_IFLNK == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[2], 1);
+		ft_putansi_str(cl[3], 1);
+	}
+}
+
+void	print_color_bis(char **cl, int mode)
+{
+	if ((S_IFMT & mode) == S_IFCHR)
+	{
+		ft_putansi_str(cl[12], 1);
+		ft_putansi_str(cl[13], 1);
+	}
+	if (mode & S_ISUID && ((S_IXGRP & mode) || (S_IXUSR & mode)))
+	{
+		ft_putansi_str(cl[14], 1);
+		ft_putansi_str(cl[15], 1);
+	}
+	if (S_ISGID & mode && ((S_IXGRP & mode) || (S_IXUSR & mode)))
+	{
+		ft_putansi_str(cl[16], 1);
+		ft_putansi_str(cl[17], 1);
+	}
+	if (S_IFDIR == (mode & S_IFMT) && (mode & S_IWOTH) && (mode & S_ISVTX))
+	{
+		ft_putansi_str(cl[18], 1);
+		ft_putansi_str(cl[19], 1);
+	}
+	if (S_IFDIR == (mode & S_IFMT) && (mode & S_IWOTH) && !(mode & S_ISVTX))
+	{
+		ft_putansi_str(cl[20], 1);
+		ft_putansi_str(cl[21], 1);
+	}
 }
 
 void	print_type(mode_t mode)
 {
 	if (S_IFLNK == mode)
-		ft_putchar('l');
+		write(1, "l", 1);
 	else if (S_IFDIR == mode)
-		ft_putchar('d');
+		write(1, "d", 1);
 	else if (S_IFIFO == mode)
-		ft_putchar('p');
+		write(1, "p", 1);
 	else if (S_IFBLK == mode)
-		ft_putchar('b');
+		write(1, "b", 1);
 	else if (S_IFSOCK == mode)
-		ft_putchar('s');
+		write(1, "s", 1);
 	else if (S_IFCHR == mode)
-		ft_putchar('c');
+		write(1, "c", 1);
 	else
-		ft_putchar('-');
+		write(1, "-", 1);
 }
 
 void	print_spec(mode_t mode)
 {
-	ft_putchar(0x7 & mode & 4 ? 'r' : '-');
-	ft_putchar(0x7 & mode & 2 ? 'w' : '-');
-	if (((mode & S_ISUID) && !(mode & S_IXUSR)) ||
-		((mode & S_ISGID) && !(mode & S_IXGRP)))
-		ft_putchar('S');
-	else if (((mode & S_ISUID) && (mode & S_IXUSR)) ||
-		((mode & S_ISGID) && (mode & S_IXGRP)))
-		ft_putchar('s');
-	else if (mode & S_ISVTX && !(mode & S_IXOTH))
-		ft_putchar('T');
+	if (mode & S_ISVTX && !(mode & S_IXOTH))
+		write(1, "T", 1);
 	else if (mode & S_ISVTX && (mode & S_IXOTH))
-		ft_putchar('t');
+		write(1, "t", 1);
 	else if (mode & 1 & 0x7)
-		ft_putchar('x');
+		write(1, "x", 1);
 	else
-		ft_putchar('-');
+		write(1, "-", 1);
 }
 
-void	print_time(time_t time)
+void	print_time(time_t *tim)
 {
 	char	*str;
 
-	str = ctime(&time);
+	str = ctime(tim);
 	str[16] = 0;
 	str += 4;
-	ft_putchar(' ');
-	ft_putstr(str);
-	ft_putchar(' ');
+	write(1, " ", 1);
+	write(1, str, ft_strlen(str));
+	write(1, " ", 1);
 }

@@ -12,40 +12,40 @@
 
 #include "ls.h"
 
-char		*set_name_path(char *dst, char *path, char *dirname)
+char		*set_filename(char *s1, char *s2, int add_sep)
 {
-	ft_strcpy(dst, path);
-	ft_strcat(dst, dirname);
-	ft_strcat(dst, PATH_SEPARATOR);
-	return (dst);
-}
-
-void		build_offset(t_args *arg, t_file *f)
-{
-	int		offset;
+	int		i;
+	int		j;
 	char	*str;
 
-	ft_memset(arg->offset, 0, sizeof(int) * 4);
-	while (f)
-	{
-		str = ft_itoa_base(f->dat.st_nlink, BASE_DEC);
-		offset = ft_strlen(str);
-		if (arg->offset[0] < offset)
-			arg->offset[0] = offset;
-		free(str);
-		offset = ft_strlen(getpwuid(f->dat.st_uid)->pw_name);
-		if (arg->offset[1] < offset)
-			arg->offset[1] = offset;
-		offset = ft_strlen(getgrgid(f->dat.st_gid)->gr_name);
-		if (arg->offset[2] < offset)
-			arg->offset[2] = offset;
-		str = ft_itoa_base(f->dat.st_size, BASE_DEC);
-		offset = ft_strlen(str);
-		if (arg->offset[3] < offset)
-			arg->offset[3] = offset;
-		free(str);
-		f = f->next;
-	}
+	i = ft_strlen(s1);
+	j = ft_strlen(s2);
+	str = (char*)malloc(sizeof(char) * (i + j + 1 + add_sep));
+	*str = 0;
+	ft_strcat(str, s1);
+	ft_strcat(str + i, s2);
+	if (add_sep && *(str + i + j - 1) != '/')
+		*(str + i + j) = '/';
+	*(str + i + j + add_sep) = 0;
+	return (str);
+}
+
+void		build_offset(int *off, t_print *p)
+{
+	int		offset;
+
+	offset = ft_strlen(p->nlink);
+	if (off[0] < offset)
+		off[0] = offset;
+	offset = ft_strlen(p->usr);
+	if (off[1] < offset)
+		off[1] = offset;
+	offset = ft_strlen(p->grp);
+	if (off[2] < offset)
+		off[2] = offset;
+	offset = ft_strlen(p->size);
+	if (off[3] < offset)
+		off[3] = offset;	
 }
 
 int			compt_blocks(t_args *a, t_file *f)
@@ -62,62 +62,65 @@ int			compt_blocks(t_args *a, t_file *f)
 	return (n);
 }
 
+t_print	init_print(char *name, struct stat *s, int sort)
+{
+	t_print			p;
+	void			*ptr;
+
+	p.alloc = 0;
+	p.mode = s->st_mode;
+	p.nlink = ft_itoa(s->st_nlink);
+	if ((ptr = (struct passwd*)getpwuid(s->st_uid)))
+		p.usr = ((struct passwd*)ptr)->pw_name;
+	else
+	{
+		p.usr = ft_itoa(s->st_uid);
+		p.alloc |= 1;
+	}
+	if ((ptr = (struct group*)getgrgid(s->st_gid)))
+		p.grp = ((struct group*)ptr)->gr_name;
+	else
+	{
+		p.grp = ft_itoa(s->st_gid);
+		p.alloc |= 2;
+	}
+	p.tim = (sort & CTIME) ? s->st_ctime : s->st_mtime;
+	p.size = s->st_size;
+	p.name = name;
+# if (OS_FT == MAC_OS)
+
+	p.sec = (sort & CTIME) ? s->st_ctimespec : s->st_mtimespec;
+
+# endif
+
+	return (p);
+}
+
 void		parcours(char *path, t_args *a, t_file *f)
 {
+	t_print	p;
+
 	build_offset(a, f);
 	if (a->mask & LIST && f && a->set & PRINT_TOTAL)
 	{
-		ft_putstr("total ");
-		ft_putnbr(compt_blocks(a, f));
-		ft_putchar('\n');
+		write(1, "total ", 6);
+		ft_putnbr_fd(compt_blocks(a, f), 1);
+		write(1, "\n", 1);
 	}
 	while (f)
 	{
 		if (a->mask & LIST)
-			print_stat(path, a, f);
+		{
+			p = init_print(f, a);
+			print_stat(path, a, &p);
+		}
 		else
 		{
-			if (a->colormap)
-			{
-				print_color(ft_mapget(a->colormap, ft_strrchr(f->name, '.'),
-					&ft_strcmp),
-				f->dat.st_mode);
-				ft_putstr(f->name);
-				ft_putstr(RESET);
-			}
+			ft_putstr_fd(f->name, 1);
+			if (f->next)
+				write(1, "\e[0m\n", 6);
 			else
-				ft_putstr(f->name);
-		}
-		if (f->next && !(a->mask & LIST))
-			ft_putchar('\n');
-		f = f->next;
-	}
-}
-
-void		parcours_recur(char *path, t_args *a, t_file *f)
-{
-	char	*tmp;
-	int		len;
-
-	tmp = NULL;
-	len = 0;
-	parcours(path, a, f);
-	while (f)
-	{
-		if (S_IFMT & S_IFDIR & f->dat.st_mode
-			&& ft_strcmp(f->name, "..") && ft_strcmp(f->name, "."))
-		{
-			len = ft_strlen(path) + ft_strlen(f->name) +
-				PATH_SEPARATOR_LEN;
-			tmp = ft_strnew(len);
-			set_name_path(tmp, path, f->name);
-			tmp[len - PATH_SEPARATOR_LEN] = 0;
-			ft_putchar('\n');
-			ft_putstr(tmp);
-			ft_putstr(":\n");
-			ft_strcpy(tmp + len - PATH_SEPARATOR_LEN, PATH_SEPARATOR);
-			parcours_recur(tmp, a, f->dir);
-			free(tmp);
+				write(1, "\e[0m\t", 6);
 		}
 		f = f->next;
 	}

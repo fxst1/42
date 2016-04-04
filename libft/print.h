@@ -13,7 +13,7 @@
 #ifndef PRINT_H
 # define PRINT_H
 # define DEFAULT "0"
-# define CURSOR_UP "\033[0;0H"
+# define CURSOR_UP "\e[0;0H"
 # define CLEAR "\033c"
 # define INCR_BOLD "1"
 # define DECR_BOLD "2"

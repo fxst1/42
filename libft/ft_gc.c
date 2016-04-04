@@ -12,6 +12,12 @@
 
 #include "gc.h"
 
+/*
+**	ft_gc
+**
+**	return garbage collector adresse
+*/
+
 t_mem	**ft_gc(void)
 {
 	static t_mem	*gc = NULL;

@@ -21,27 +21,35 @@
 **	addr:	pointer to clone
 **	len	:	addr's alloc size
 **
+**	return the new pointer (whose stock in GC)
 */
 
 void	*ft_gcdym(void *addr, size_t len, int mask)
 {
 	t_mem	*new;
 	t_mem	**gc;
+	t_mem	*next;
 	void	*pointer;
 
 	if (len > 0)
 	{
 		gc = ft_gc();
-		pointer = malloc(sizeof(len));
+		pointer = malloc(len);
 		ft_memcpy(pointer, addr, len);
-		if (!*gc)
-			new = ft_gcnew(pointer, len, 0, IS_DUMP | mask);
-		else
-			new = ft_gcnew(pointer, len, (*gc)->index + 1, IS_DUMP | mask);
+		next = *gc;
 		if (*gc)
-			new->next = *gc;
-		*gc = new;
-		return (pointer);
+		{
+			while (next->next)
+				next = next->next;
+			new = ft_gcnew(pointer, len, next->index + 1, IS_DUMP | mask);
+			next->next = new;
+		}
+		else
+		{
+			*gc = ft_gcnew(pointer, len, 0, IS_DUMP | mask);
+			new = (*gc);
+		}
+		return ((void*)new->pointer);
 	}
 	else
 		return (NULL);

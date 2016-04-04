@@ -18,7 +18,7 @@ NAME = ft_ls
 FLAGS = -Wall -Wextra -Werror
 
 CC = gcc
-SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c sort.c opts.c usage.c
+SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c sort_fcts.c sort_parse_os.c opts.c usage.c
 OBJ = $(SRC:.c=.o)
 LIBFT_A = $(LIBFT)/libft.a
 
@@ -34,11 +34,11 @@ $(NAME): $(OBJ)
 clean:
 		/bin/rm -f $(OBJ) get_next_line.o
 
-dclean:
-		make -C $(PRINTF) fclean
-		make -C $(LIBFT) fclean
+#dclean:
+#		make -C $(PRINTF) fclean
+#		make -C $(LIBFT) fclean
 
-fclean: dclean clean
+fclean: clean
 		/bin/rm -f $(NAME)
 
 re:		fclean all

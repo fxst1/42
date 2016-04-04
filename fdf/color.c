@@ -23,7 +23,7 @@ void			graduate_color(t_point ***vct, int high, int low)
 		j = 0;
 		while (vct[i][j])
 		{
-			vct[i][j]->coul = vct[i][j]->z * (int)(0xffffff /
+			vct[i][j]->coul = vct[i][j]->z * (int)(0xffffffff /
 				((high != low) ? (high - low) : (high + low)));
 			j++;
 		}
@@ -64,8 +64,8 @@ void			init_color(t_env *e, t_point *p)
 	else
 	{
 		if (p->z > 0)
-			p->coul = 0xff00;
+			p->coul = 0x8000ff00;
 		else if (p->z < 0)
-			p->coul = 0xff0000;
+			p->coul = 0x80ff0000;
 	}
 }

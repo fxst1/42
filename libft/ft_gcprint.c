@@ -12,22 +12,38 @@
 
 #include "gc.h"
 
+static void		print_mask(int mask)
+{
+	if (mask & IS_DUMP)
+		printf(MASK_COLOR_GC"Dump\033[0m ");
+	else
+		printf(MASK_COLOR_GC"Reference\033[0m ");		
+	printf("\n");
+}
+
 static void		print_process(t_mem *lst)
 {
 	int		index;
+	void	*addr;
+	int		len;
+	int		mask;
 
 	index = 0;
 	while (lst)
 	{
 		index = lst->index;
+		len = 0;
+		addr = (void*)lst->pointer;
+		mask = lst->mask;
+		printf((char*)CATEGORIES_FORMAT1_GC, lst->index, lst, (void*)lst->pointer);			
 		while (lst && index == lst->index)
 		{
-			printf((char*)CATEGORIES_FORMAT_GC, lst->index, lst,
-				(void*)lst->pointer, (void*)lst->pointer + lst->size,
-				lst->size, lst->mask);
-			ft_print_memory((void*)lst->pointer, lst->size);
+			len += lst->size;
 			lst = lst->next;
 		}
+		printf(CATEGORIES_FORMAT2_GC, addr + len, len);
+		print_mask(mask);
+		ft_print_memory(addr, len);
 		printf("\n");
 	}
 	printf(STR2_GC);
@@ -45,6 +61,6 @@ void			ft_gcprint(void)
 		print_process(*gc);
 	}
 	else
-		printf("\033[1;38;5;1mCannot map memory ft_gc :\033[0m %p", gc);
+		printf("\033[1;48;5;1mCannot map memory ft_gc :\033[0m %p", gc);
 	printf("\n");
 }

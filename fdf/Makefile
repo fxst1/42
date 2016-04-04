@@ -40,7 +40,7 @@ OBJ = $(SRC:.c=.o)
 all : $(NAME)
 
 $(LIB_A):
-	make -C $(LIBFT) addbonus
+	make -C $(LIBFT) re addfct
 
 $(NAME): $(LIB_A)
 	@gcc $(FLAGS) $(SRC) -I $(HEAD) $(LIB) -o $(NAME)

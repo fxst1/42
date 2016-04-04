@@ -5,7 +5,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <libft/master.h>
-//ft_printf("no more printf:\n"str,va_l);}
+
 # define ft_vfprintf(fd,str,va_l) ft_fvprintf(fd,str,va_l)
 # define ft_vsprintf(buf,str,va_l) ft_svprintf(buf,str,va_l)
 # define ft_svfprintf(buf,str,va_l) ft_fsvprintf(buf,str,va_l)  

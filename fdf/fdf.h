@@ -16,7 +16,7 @@
 # include <math.h>
 # include <stdio.h>
 # include "../libft/libft.h"
-# include "../get_next_line/get_next_line.h"
+# include "../libft/get_next_line.h"
 # include "../libft/implemt.h"
 # undef BUFF_SIZE
 # define BUFF_SIZE 1000
