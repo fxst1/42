@@ -15,16 +15,18 @@
 static void		set_option_short_bis(t_args *tmp, char argv)
 {
 	if (argv == 'n')
-		tmp->set |= NUM_ID;
+		tmp->mask |= (NUM_ID | LIST);
 	else if (argv == 'S')
-		tmp->sort |= SIZE;
+		tmp->mask |= SIZE;
+	else if (argv == 'C')
+		tmp->mask |= CTIME;
 	else if (argv == 'h')
 		tmp->ret = 3;
-	else
+	else if (argv)
 	{
 		ft_putstr_fd("ft_ls: illegal option -- ", 2);
 		ft_putchar_fd(argv, 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd("\nusage = [-CGRSahlnrt] [file...]\n", 2);
 		tmp->ret = 2;
 	}
 }
@@ -37,19 +39,19 @@ void			set_options_short(t_args *tmp, char *argv)
 			tmp->mask |= LIST;
 		else if (*argv == 'R')
 		{
-			tmp->deep = ft_isdigit(*(argv + 1)) ? ft_atoi(++argv) : -1;
+			tmp->deep = ft_isdigit(*(argv + 1)) ? ft_atoi(argv + 1) : -1;
+			while (*(argv + 1) && ft_isdigit(*(argv + 1)))
+				argv++;
 			tmp->mask |= RECURSIF;
 		}
 		else if (*argv == 'r')
-			tmp->mask |= REVERSE;
+			tmp->mask &= ~REVERSE;
 		else if (*argv == 'a')
 			tmp->mask |= ALL;
 		else if (*argv == 't')
-			tmp->sort |= MTIME;
+			tmp->mask |= MTIME;
 		else if (*argv == 'G')
 			tmp->mask |= COLOR;
-		else if (*argv == 'e')
-			tmp->set |= STOP_ERR;
 		else
 			set_option_short_bis(tmp, *argv);
 		argv++;
@@ -58,22 +60,17 @@ void			set_options_short(t_args *tmp, char *argv)
 
 void			set_options_long(t_args *tmp, char *argv)
 {
-	if (!(ft_strcmp(argv, "--numerical-id")))
-		tmp->set |= NUM_ID;
-	else if (!ft_strcmp(argv, "--error"))
-		tmp->set |= STOP_ERR;
-	else if (!ft_strcmp(argv, "--help"))
+	if (!(ft_strcmp(argv, "numerical-id")))
+		tmp->mask |= NUM_ID;
+	else if (!ft_strcmp(argv, "help"))
 		tmp->ret = 3;
-	else if (!ft_strncmp("--color=", argv, 8))
-	{
+	else if (!ft_strcmp("color", argv))
 		tmp->mask |= COLOR;
-		if ((tmp->colormap = init_extension_map_from_file(argv + 8)))
-			tmp->set |= INIT_COLOR;
-	}
-	else
+	else if (*argv)
 	{
 		ft_putstr_fd("ft_ls: illegal option -- ", 2);
 		ft_putendl_fd(argv, 2);
+		ft_putstr_fd("usage = [-CGRSahlnrt] [file...]\n", 2);
 		tmp->ret = 2;
 	}
 }
@@ -85,7 +82,7 @@ void			init_args(t_args *arg, int *n, char **argv, int *l)
 	while (argv[*l] && !arg->ret && argv[*l][0] == '-')
 	{
 		if (argv[*l][1] == '-')
-			set_options_long(arg, argv[*l]);
+			set_options_long(arg, argv[*l] + 2);
 		else
 			set_options_short(arg, argv[*l] + 1);
 		(*l)++;
@@ -110,12 +107,12 @@ int				main(int argc, char **argv, char **env)
 	init_args(&tmp, &argc, argv, &l);
 	if (!tmp.ret)
 	{
-		if (!tmp.colormap && tmp.mask & COLOR)
-			tmp.colormap = init_extension_map(env);
+		if (!tmp.colormap)
+			found_clicolor(&tmp, env);
 		if (tmp.mask & COLOR)
 			tmp.typemap = init_typemap(env);
 		file_errors(&tmp, tmp.path);
-		ls(&tmp, argc);
+		ls(&tmp);
 	}
 	else if (tmp.ret == 2)
 		print_help(argv[0]);
@@ -124,5 +121,5 @@ int				main(int argc, char **argv, char **env)
 		usage();
 		tmp.ret = 0;
 	}
-	return (tmp.ret);
+	return (stop_ls(&tmp));
 }

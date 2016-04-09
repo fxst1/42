@@ -15,10 +15,10 @@ PRINTF = ../ft_printf
 GNL = ../get_next_line
 
 NAME = ft_ls
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 CC = gcc
-SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c sort_fcts.c sort_parse_os.c opts.c usage.c
+SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c opts.c usage.c add_fcts.c initialize.c prt.c
 OBJ = $(SRC:.c=.o)
 LIBFT_A = $(LIBFT)/libft.a
 
@@ -34,11 +34,11 @@ $(NAME): $(OBJ)
 clean:
 		/bin/rm -f $(OBJ) get_next_line.o
 
-#dclean:
+dclean:
 #		make -C $(PRINTF) fclean
 #		make -C $(LIBFT) fclean
 
-fclean: clean
+fclean: dclean clean
 		/bin/rm -f $(NAME)
 
 re:		fclean all

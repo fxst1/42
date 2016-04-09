@@ -19,7 +19,7 @@ void	print_base(unsigned int value, char c, unsigned int bits)
 	i = 0;
 	while (i < bits)
 	{
-		ft_putchar(!((1 << i) & value) >> i ? ('.') : (c));
+		write(1, !((1 << i) & value) >> i ? (".") : (&c), 1);
 		value = value >> 1;
 		bits--;
 	}
@@ -36,29 +36,10 @@ void	print_solution(t_solution *s)
 		j = 0;
 		while (j < s->size)
 		{
-			ft_putchar(s->buffer[i + s->size * j]);
+			write(1, &s->buffer[i + s->size * j], 1);
 			j++;
 		}
-		ft_putstr("\n");
+		write(1, "\n", 1);
 		i++;
 	}
-}
-
-void	print_tab(unsigned int *tab, unsigned int size, char c)
-{
-	unsigned int i;
-
-	i = 0;
-	if (tab)
-		while (i < size)
-		{
-			print_base(tab[i], (c) ? c : '#', size);
-			ft_putstr(" | ");
-			ft_putnbr(tab[i]);
-			ft_putstr("\n");
-			i++;
-		}
-	else
-		ft_putstr("(null)");
-	ft_putstr("\n");
 }

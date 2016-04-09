@@ -19,32 +19,41 @@
 # include <fcntl.h>
 # include <dirent.h>
 # include <sys/wait.h>
+# include <termios.h>
+# include <stdio.h>
 # define ENV_SEPARATOR ":"
 
-typedef struct	s_term
+typedef struct		s_term
 {
-	char		*prompt;
-	char		dirpath[1024];
-	char		**env;
+	char			*prompt;
+	char			dirpath[1024];
+	char			**env;
 
-	char		**path;
-	char		**argv;
-	int			argc;
+	char			**path;
+	char			**argv;
+	int				argc;
 
-	int			fd;
-	char		*log;
+	int				fd;
+	char			*log;
 
-	char		*pt_back;
-	char		*pt_txt;
-	char		*cmd_back;
-	char		*cmd_txt;
-	char		*exe_back;
-	char		*exe_txt;
-	char		*name_back;
-	char		*name_txt;
-	char		*cfg;	
-}				t_term;
+	char			*pt_back;
+	char			*pt_txt;
+	char			*cmd_back;
+	char			*cmd_txt;
+	char			*exe_back;
+	char			*exe_txt;
+	char			*name_back;
+	char			*name_txt;
+	char			*cfg;
 
+	struct termios	backup;
+	struct termios	it;
+}					t_term;
+
+int				cd(t_term *t, char *cmd);
+int				env(t_term *t, char *args);
+int				setenvt(t_term *t, char *args);
+void			print_error(t_term *t, char *it, char *error);
 void			initterm(t_term *t);
 char			**init_path(char **env);
 char			**init_env(char **env);

@@ -77,9 +77,11 @@ typedef struct			s_env
 	int					mask;
 
 	t_buffer			*buf;
+	t_buffer			*edit;
 
 	void				*mlx;
 	void				*img;
+	void				*img_e;
 	t_scn				*screen;
 	t_scn				*editor;
 	t_point				***fdf;
@@ -106,6 +108,7 @@ typedef	struct			s_color_grad
 	int					nb_values;
 }						t_color_grad;
 
+void					put_pixel_edit(t_env *e, int x, int y, int c);
 void					print_fdf(t_point ***p);
 void					draw_axis(t_env *e);
 int						key_hook(int keycode, t_env *e);

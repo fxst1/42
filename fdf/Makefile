@@ -12,8 +12,8 @@
 
 NAME = fdf
 
-LIBFT = ./../libft
-GNL = ./../get_next_line
+LIBFT = ../libft
+GNL = ../get_next_line
 MLX = /usr/x11/lib
 
 FLAGS = -Wall -Wextra -Werror

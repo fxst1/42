@@ -12,18 +12,6 @@
 
 #include <miniterm.h>
 
-char	*get_home(t_term *t, char **env)
-{
-	while (*env && ft_strncmp(*env, "HOME=", 5))
-		env++;
-	if (*env)
-	{
-		*env += 5;
-		return (*env);
-	}
-	return (t->dirpath);
-}
-
 int		start_prgm(t_term *t, char *cmd)
 {
 	char	**argv;
@@ -63,21 +51,11 @@ int		call_builtins(t_term *t, char *cmd, int *ok)
 	if (!ft_strcmp(cmd, "exit"))
 		*ok = 0;
 	else if (!ft_strncmp(cmd, "cd ", (*(cmd + 2) ? 3 : 2)))
-	{
-		if (chdir(!*(cmd + 2) ? get_home(t, t->env) : cmd + 3))
-		{
-			ft_putansi_str(t->name_back, 2);
-			ft_putansi_str(t->name_txt, 2);
-			ft_putstr_fd(t->prompt, 2);
-			ft_putstr_fd(": \033[38;5;196mcd: No such file or directory\033[0m\n", 2);
-		}
-		else
-			getcwd(t->dirpath, sizeof(char) * 1024);
-	}
-	else if (!ft_strcmp(cmd, "env"))
-		print_env(t->env);
+		cd(t, cmd);
+	else if (!ft_strcmp(cmd, "env "))
+		env(t, cmd + 3);
 	else if (!ft_strncmp(cmd, "setenv ", 7))
-		t->env = ft_setenv(t->env, cmd + 7);
+		setenv(t, cmd + 7);
 	else if (!ft_strncmp(cmd, "unsetenv ", 9))
 		t->env = ft_unsetenv(t, t->env, cmd + 9);
 	else if (!ft_strcmp("reset", cmd))
@@ -99,19 +77,32 @@ int		call_builtins(t_term *t, char *cmd, int *ok)
 int		term_main(t_term *t)
 {
 	int		ok;
-	char	*cmd;
+	char	*line;
+	char	**cmd;
 
 	ok = 1;
 	cmd = NULL;
 	print_prompt(t);
-	while (ok && get_next_line(0, &cmd) > 0)
+	while (ok && get_next_line(0, &line) > 0)
 	{
-		if (*cmd && !call_builtins(t, cmd, &ok))
-			start_prgm(t, cmd);
+		cmd = ft_build_cmd(t->env, line);
+		while (*cmd)
+		{
+			if ((**cmd != ';' && **cmd != '>' && **cmd != '<'
+				&& **cmd != '|' && **cmd != '&')
+				&& **cmd)
+			{
+				if (!call_builtins(t, *cmd, &ok))
+					start_prgm(t, *cmd);
+			}
+			free(*cmd);
+			*cmd = NULL;
+			cmd++;
+		}
+		free(line);
+		line = NULL;
 		if (ok)
 			print_prompt(t);
-		free(cmd);
-		cmd = NULL;
 	}
 	return (0);
 }
@@ -121,14 +112,17 @@ int		main(int argc, char **argv, char **env)
 	t_term	t;
 	int		ret;
 
-	ft_putstr(CLEAR);
+	//ft_putstr(CLEAR);
 	initterm(&t);
 	if ((ret = init_args(&t, argv + 1)) == 0)
 	{
 		t.env = init_env(env);
 		t.argc = argc;
 		t.argv = argv;
-		t.path = init_path(env);
+		if (*env)
+			t.path = init_path(env);
+		else
+			t.path = NULL;
 		term_main(&t);
 		ft_putstr(RESET);
 	}

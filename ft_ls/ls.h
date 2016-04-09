@@ -12,6 +12,7 @@
 
 #ifndef LS_H
 # define LS_H
+# include <sys/ioctl.h>
 # include <master.h>
 # define LS_H
 # if (OS_FT != MAC_OS) && (OS_FT != UNIX_OS)
@@ -36,46 +37,59 @@
 # define C_B_MAGENTA "095"
 # define C_B_CYAN "096"
 # define C_B_L_GREY "097"
-# define C_DEF "ExFxBxDxCxegedabagacad"
+# define C_DEF "exfxcxdxbxegedabagacad"
 # define C_1 C_BLACK "\0" C_RED "\0" C_GREEN "\0" C_BROWN "\0"
-# define C_COLORS  C1 C_BLUE "\0" C_MAGENTA "\0" C_CYAN "\0" C_L_GREY "\0"
+# define C_COLORS  C_1 C_BLUE "\0" C_MAGENTA "\0" C_CYAN "\0" C_L_GREY "\0"
 # define C_2 C_B_BLACK "\0" C_B_RED "\0" C_B_GREEN "\0" C_B_BROWN "\0" C_B_BLUE
 # define C_B_COLORS C_2 "\0" C_B_MAGENTA "\0" C_B_CYAN "\0" C_B_L_GREY "\0"
+# define MONTH_I "Jan\0" "Feb\0" "Mar\0" "Apr\0" "May\0" "Jun\0"
+# define MONTH_II "Jul\0" "Aug\0" "Sep\0" "Oct\0" "Nov\0" "Dec\0"
+# define MONTH MONTH_I MONTH_II
 # include <stdio.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <dirent.h>
 # include <sys/stat.h>
 # include <sys/types.h>
+# include <sys/xattr.h>
 # include <grp.h>
 # include <pwd.h>
 # include <time.h>
 # include <string.h>
 # include <errno.h>
+# include <sys/acl.h>
+
+typedef struct stat	t_stat;
 
 typedef struct			s_print
 {
 	mode_t				mode;
 	int					alloc;
 	char				attr;
+	int					len_name;
 	char				*name;
+	int					len_nlink;
 	char				*nlink;
+	int					len_usr;
 	char				*usr;
+	int					len_grp;
 	char				*grp;
-	char				*min_maj;
+	int					len_ma;
+	int					len_mi;
+	char				*maj;
+	char				*min;
+	int					len_size;
 	char				*size;
 	time_t				tim;
-# if (OS_FT == MAC_OS)
-
 	struct timespec		sec;
-
-# endif
-
+	int					is_attr;
+	int					acl;
+	char				lnk[1024];
 }						t_print;
 
 typedef struct			s_file
 {
-	char				*name;
+	t_stat				s;
 	t_print				p;
 	struct s_file		*next;
 }						t_file;
@@ -84,74 +98,71 @@ typedef struct dirent	t_dir;
 
 enum
 {
-	RECURSIF = 1,
-	LIST = 2,
-	ALL = 4,
-	REVERSE = 8,
-	SORT = 16,
-	COLOR = 32
-};
-
-enum
-{
-	MTIME = 1,
-	CTIME = 2,
-	SIZE = 4,
-	ALPHA = 8
-};
-
-enum
-{
 	NUM_ID = 1,
-	STOP_ERR = 2,
 	INIT_COLOR = 4,
 	PRINT_TOTAL = 8,
 	PRINT_LINE = 16,
-	PRINT_PATH = 32
+	PRINT_PATH = 32,
+	MTIME = 64,
+	SIZE = 128,
+	CTIME = 256,
+	RECURSIF = 512,
+	LIST = 1024,
+	ALL = 2048,
+	REVERSE = 8192,
+	COLOR = 16384
+
 };
 
 typedef struct			s_args
 {
-	char				*prgm;
+	void				(*cmp)();
+	void				(*prt)();
+	struct winsize		ws;
 	char				**path;
-	int					sort;
 	int					mask;
-	int					set;
 	int					deep;
-	int					offset[4];
+	int					offset[6];
 	t_map				*colormap;
 	char				**typemap;
 	int					ret;
-	char				*keep;
 }						t_args;
 
 void					usage(void);
+void					parcours_simple(t_args *a, t_file *f);
+void					delete_print(t_print *p);
+void					print_maps(t_args *a, t_print *f);
+void					set_fct_cmp(t_args *arg);
+void					addfile_size(t_file **f, t_file *add, int rev);
+void					addfile_time(t_file **f, t_file *add, int rev);
+void					init_print(char *name, struct stat *s, int sort,
+							t_print *p);
 char					**init_typemap(char **env);
-int						test_sort_alph(t_file *swap, t_file *tmp, t_args *a);
-int						test_sort_mask(t_file *swap, t_file *tmp, t_args *a);
+int						test_sort_alph(t_stat *swap, t_stat *tmp, int sort);
+int						test_sort_mask(t_stat *swap, t_stat *tmp, int sort,
+							int reverse);
 void					print_help(char *prgm);
-int						ls(t_args *arg, int size);
+int						ls(t_args *arg);
 void					first_of_all(t_args *arg, int n);
 void					ls_run(char *path, t_args *arg, t_file *root,
 							int deep);
-void					stop_ls(t_args *a, int n);
-t_file					*init_file(char *path, char *name);
-void					addfile(t_file **f, t_file *add);
+int						stop_ls(t_args *a);
+t_file					*init_file(t_args *a, char *path, char *name);
+void					addfile(t_file **f, t_file *add, int rev);
 char					*set_filename(char *s1, char *s2, int add_sep);
 void					print_spec(mode_t mode);
 void					print_color(char **cl, int mode);
 void					print_type(mode_t mode);
-void					print_stat(char *path, t_args *a, t_print *f);
-void					print_time(time_t *time);
+void					print_stat(t_args *a, t_print *f);
+void					print_time(time_t *time, int mask);
 void					del(t_file **f);
-t_file					*ft_open(t_args *a, char *dirname);
-void					sort_files(t_args *a, t_file *root);
-void					sort_filesalph(t_args *a, t_file *root);
-void					parcours_recur(char *path, t_args *a, t_file *f);
-void					parcours(char *path, t_args *a, t_file *f);
+t_file					*ft_open(t_args *a, char *dirname, void (*add)());
+int						sort_files(t_args *a, t_file *root, t_file *f);
+void					parcours(t_args *a, t_file *f);
 void					file_errors(t_args *a, char **paths);
-t_map					*init_extension_map();
+int						found_clicolor(t_args *a, char **env);
 t_map					*init_extension_map_from_file(char *filename);
-void					build_offset(t_args *arg, t_file *f);
-
+void					build_offset(int *off, t_print *p);
+char					*ft_getenv(char **env, char *name);
+void					print_offset(int offset, int c);
 #endif

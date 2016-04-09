@@ -12,43 +12,17 @@
 
 #include <ls.h>
 
-void	print_color(char **cl, int mode)
-{
-	print_color_bis_bis(cl, mode);
-	if (S_IFSOCK == (mode & S_IFMT))
-	{
-		ft_putansi_str(cl[4], 1);
-		ft_putansi_str(cl[5], 1);
-	}
-	if (S_IFIFO == (mode & S_IFMT))
-	{
-		ft_putansi_str(cl[6], 1);
-		ft_putansi_str(cl[7], 1);
-	}
-	if ((S_IFDIR != (mode & S_IFMT)) && (S_IXUSR & mode))
-	{
-		ft_putansi_str(cl[8], 1);
-		ft_putansi_str(cl[9], 1);
-	}
-	if (S_IFBLK == (mode & S_IFMT))
-	{
-		ft_putansi_str(cl[10], 1);
-		ft_putansi_str(cl[11], 1);
-	}
-	print_color_bis(cl, mode);
-}
-
 void	print_color_bis_bis(char **cl, int mode)
 {
-	if (S_IFDIR == (mode & S_IFMT))
-	{
-		ft_putansi_str(cl[0], 1);
-		ft_putansi_str(cl[1], 1);
-	}
 	if (S_IFLNK == (mode & S_IFMT))
 	{
 		ft_putansi_str(cl[2], 1);
 		ft_putansi_str(cl[3], 1);
+	}
+	if (S_IFDIR == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[0], 1);
+		ft_putansi_str(cl[1], 1);
 	}
 }
 
@@ -81,6 +55,32 @@ void	print_color_bis(char **cl, int mode)
 	}
 }
 
+void	print_color(char **cl, int mode)
+{
+	if (S_IFSOCK == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[4], 1);
+		ft_putansi_str(cl[5], 1);
+	}
+	if (S_IFIFO == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[6], 1);
+		ft_putansi_str(cl[7], 1);
+	}
+	if ((S_IFDIR != (mode & S_IFMT)) && (S_IXUSR & mode))
+	{
+		ft_putansi_str(cl[8], 1);
+		ft_putansi_str(cl[9], 1);
+	}
+	if (S_IFBLK == (mode & S_IFMT))
+	{
+		ft_putansi_str(cl[10], 1);
+		ft_putansi_str(cl[11], 1);
+	}
+	print_color_bis(cl, mode);
+	print_color_bis_bis(cl, mode);
+}
+
 void	print_type(mode_t mode)
 {
 	if (S_IFLNK == mode)
@@ -109,16 +109,4 @@ void	print_spec(mode_t mode)
 		write(1, "x", 1);
 	else
 		write(1, "-", 1);
-}
-
-void	print_time(time_t *tim)
-{
-	char	*str;
-
-	str = ctime(tim);
-	str[16] = 0;
-	str += 4;
-	write(1, " ", 1);
-	write(1, str, ft_strlen(str));
-	write(1, " ", 1);
 }

@@ -22,9 +22,7 @@ void	*ft_mapget(t_map *root, void *key, int (*cmp)())
 		while (root)
 		{
 			if (!(*cmp)(key, root->key))
-			{
 				return (root->value);
-			}
 			root = root->next;
 		}
 		while (m)

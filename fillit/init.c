@@ -37,14 +37,6 @@ t_tetrinoid	*init_tetrinoid(unsigned int *mat, char c)
 	return (t);
 }
 
-void		free_tetrinoid(t_tetrinoid *t)
-{
-	if (t)
-	{
-		free(t);
-	}
-}
-
 int			dbg(unsigned int *mat)
 {
 	int	i;
@@ -56,7 +48,7 @@ int			dbg(unsigned int *mat)
 	{
 		if (!b && mat[i])
 			b = 1;
-		else if (b && mat[i] && mat[i + 1] && !(mat[i] & mat[i + 1]))
+		if (b && mat[i] && mat[i + 1] && !(mat[i] & mat[i + 1]))
 			return (0);
 		i++;
 	}

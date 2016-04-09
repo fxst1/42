@@ -12,9 +12,49 @@
 
 #include "ls.h"
 
-t_map	*init_extension_map(void)
+t_map	*init_extension_map(char *env, int index)
 {
-	return (NULL);
+	char	key[32];
+	char	value[32];
+	t_map	*c_map;
+
+	c_map = NULL;
+	while (*env)
+	{
+		index = 0;
+		if (*env == '*')
+		{
+			env++;
+			while (*env && *env != '=')
+				key[index++] = *(env++);
+			key[index] = 0;
+			env += (*env == '=');
+			index = 0;
+			while (*env && *env != ':')
+				value[index++] = *(env++);
+			value[index] = 0;
+			ft_mapadd_begin(&c_map, ft_mapnew(ft_strdup((char*)key),
+				ft_strdup((char*)value)));
+		}
+		env += !!(*env);
+	}
+	return (c_map);
+}
+
+int		found_clicolor(t_args *a, char **env)
+{
+	char	*found_clicolor;
+
+	if ((found_clicolor = ft_getenv(env, "CLICOLOR=")) &&
+		!ft_strcmp(found_clicolor + 9, "1"))
+		a->mask |= COLOR;
+	if (a->mask & COLOR)
+	{
+		found_clicolor = ft_getenv(env, "LS_COLORS=");
+		if (found_clicolor)
+			a->colormap = init_extension_map(found_clicolor + 10, 0);
+	}
+	return (0);
 }
 
 char	*init_type(char *colors, char ret, int is_pair)

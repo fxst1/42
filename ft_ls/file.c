@@ -12,22 +12,31 @@
 
 #include <ls.h>
 
-t_file		*init_file(char *path, char *name)
+t_file		*init_file(t_args *a, char *path, char *name)
 {
 	t_file	*file;
 	char	*tmp;
+	acl_t	ac;
+	int		i;
 
-	tmp = NULL;
-	file = NULL;
 	tmp = set_filename(path, name, 0);
+	i = 0;
 	if ((file = (t_file*)malloc(sizeof(t_file))))
 	{
-		file->name = ft_strdup(name);
 		file->next = NULL;
-		lstat(tmp, &file->dat);
+		lstat(tmp, &file->s);
+		init_print(name, &file->s, a->mask, &file->p);
+		if ((ac = acl_get_file(tmp, ACL_TYPE_EXTENDED)))
+		{
+			file->p.acl = 1;
+			acl_free((void *)ac);
+		}
+		if ((file->s.st_mode & S_IFMT) == S_IFLNK &&
+			(i = readlink(tmp, file->p.lnk, sizeof(char) * 1024)))
+			file->p.lnk[i] = 0;
+		file->p.attr = listxattr(tmp, NULL, 0, i ?
+			XATTR_SHOWCOMPRESSION | XATTR_NOFOLLOW : 0);
 	}
-	else
-		file = NULL;
 	free(tmp);
 	return (file);
 }
@@ -36,13 +45,16 @@ void		del(t_file **f)
 {
 	t_file	*tmp;
 	t_file	*l;
+	t_print	*p;
 
 	tmp = NULL;
 	l = *f;
 	while (l)
 	{
-		free(l->name);
 		tmp = l->next;
+		p = &l->p;
+		free(p->name);
+		delete_print(p);
 		free(l);
 		l = NULL;
 		l = tmp;
@@ -50,46 +62,32 @@ void		del(t_file **f)
 	*f = NULL;
 }
 
-void		addfile(t_file **f, t_file *add)
-{
-	t_file *tmp;
-
-	tmp = *f;
-	if (*f)
-	{
-		while (tmp && tmp->next)
-			tmp = tmp->next;
-		tmp->next = add;
-	}
-	else
-		*f = add;
-}
-
 void		ls_run(char *path, t_args *arg, t_file *f, int deep)
 {
 	t_file	*new;
+	t_file	*root;
 	char	*str;
+	char	*name;
+	void	*add;
 
-	new = NULL;
-	arg->set |= PRINT_LINE;
-	build_offset(arg, f);
-	sort_files(arg, f);
-	sort_filesalph(arg, f);
-	parcours(path, arg, f);
-	while (f && arg->mask & RECURSIF && deep != 0)
+	arg->prt(arg, f);
+	add = arg->cmp;
+	if (!deep && f)
+		del(&f);
+	while (f && deep != 0)
 	{
-		if ((f->dat.st_mode & S_IFDIR) &&
-			ft_strcmp(".", f->name) && ft_strcmp("..", f->name))
+		root = f->next;
+		if ((name = f->p.name) && (f->p.mode & S_IFDIR) &&
+			ft_strcmp(".", name) && ft_strcmp("..", name))
 		{
-			str = set_filename(path, f->name, 1);
-			if ((new = ft_open(arg, str)))
-			{
+			str = set_filename(path, name, 1);
+			if ((new = ft_open(arg, str, add)))
 				ls_run(str, arg, new, deep - 1);
-				del(&new);
-			}
 			free(str);
 		}
-		f = f->next;
+		free(name);
+		free(f);
+		f = root;
 	}
 }
 
@@ -102,30 +100,30 @@ void		ft_error(t_args *arg, char *name)
 	arg->ret = 2;
 }
 
-t_file		*ft_open(t_args *arg, char *dirname)
+t_file		*ft_open(t_args *a, char *dn, void (*add)())
 {
 	DIR		*d;
 	t_dir	*e;
 	t_file	*file;
 
 	file = NULL;
-	if ((d = opendir(dirname)))
+	if ((d = opendir(dn)))
 	{
-		if (arg->set & PRINT_LINE)
+		if (a->mask & PRINT_LINE)
 			write(1, "\n", 1);
-		write(1, dirname, ft_strlen(dirname));
+		else
+			a->mask |= PRINT_LINE;
+		write(1, dn, ft_strlen(dn) - 1);
 		write(1, ":\n", 2);
 		while ((e = readdir(d)))
 		{
-			if ((!(arg->mask & ALL) && (e->d_name[0] != '.')) ||
-				((arg->mask & ALL)))
-				addfile(&file, init_file(dirname, e->d_name));
-			else if (errno != 0)
-				ft_error(arg, e->d_name);
+			if ((!(a->mask & ALL) && (e->d_name[0] != '.')) ||
+				((a->mask & ALL)))
+				(*add)(&file, init_file(a, dn, e->d_name), a->mask & REVERSE);
 		}
 		closedir(d);
 	}
-	else if (errno != ENOTDIR && errno != 0)
-		ft_error(arg, dirname);
+	else if (errno != ENOTDIR)
+		ft_error(a, dn);
 	return (file);
 }

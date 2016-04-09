@@ -14,7 +14,7 @@
 
 void				*put_error(void)
 {
-	ft_putstr_fd("error\n", 1);
+	write(FD_ERROR, "error\n", 6);
 	return (NULL);
 }
 
@@ -35,11 +35,11 @@ t_octet				*get_matrix(t_octet *mat, int fd, int c)
 			free(mat);
 			return (NULL);
 		}
-		else
+		if (c == '\n')
 			n++;
 	}
 	read(fd, &c, 1);
-	if (n != 3 || c != '\n' || c == '.' || c == '#')
+	if (i != 16 || n != 3 || c != '\n' || c == '.' || c == '#')
 	{
 		free(mat);
 		return (NULL);
@@ -54,7 +54,7 @@ t_tetrinoid			**build_tetrinoid(const int fd, t_tetrinoid **tab)
 
 	n = 0;
 	c = 1;
-	while (read(fd, &c, 1) && c)
+	while (read(fd, &c, 1) && c > 0)
 	{
 		if (c != '\n' && n > 0)
 			return (put_error());
@@ -74,25 +74,25 @@ t_tetrinoid			**build_tetrinoid(const int fd, t_tetrinoid **tab)
 	return (tab);
 }
 
-t_tetrinoid			**init_fillit(char **argv)
+t_tetrinoid			**init_fillit(char *argv)
 {
 	int				fd;
 	t_tetrinoid		**tab;
 
 	tab = (t_tetrinoid **)malloc(sizeof(t_tetrinoid*) * 26);
-	while (*argv)
+	fd = open(argv, O_RDONLY);
+	if (fd > 0)
 	{
-		fd = open(*argv, O_RDONLY);
-		if (fd >= 0)
-		{
-			if (!build_tetrinoid(fd, tab))
-				return (NULL);
-		}
-		else
-			ft_putstr_fd("error\n", 1);
-		close(fd);
-		argv++;
+		if (!build_tetrinoid(fd, tab))
+			return (NULL);
 	}
+	else
+	{
+		write(FD_ERROR, "error\n", 6);
+		free(tab);
+		return (NULL);
+	}
+	close(fd);
 	return (tab);
 }
 

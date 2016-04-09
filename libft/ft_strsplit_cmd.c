@@ -20,8 +20,8 @@ static int		count_words(const char *s)
 	while (*s)
 	{
 		if (*s == 39 || *s == 34 || *s == '(' || *s == ')')
-			while ((*s == 39 || *s == 34 || *s == '(' || *s == ')') !=
-				(*s != 39 && *s != 34 && *s && *s != ')' && *s != '(') !=
+			while ((*s == 39 || *s == 34 || *s == '(' || *s == ')') ^
+				(*s != 39 && *s != 34 && *s && *s != ')' && *s != '(') ^
 				(*s == 39 || *s == 34 || *s == '(' || *s == ')'))
 				s++;
 		else
@@ -44,8 +44,8 @@ static int		count_letter(const char *s)
 	{
 		if (*s == 39 || *s == 34 || *s == '(' || *s == ')')
 		{
-			while ((*s == 39 || *s == 34 || *s == '(' || *s == ')') !=
-				(*s != 39 && *s != 34 && *s != ')' && *s != '(' && *s) !=
+			while ((*s == 39 || *s == 34 || *s == '(' || *s == ')') ^
+				(*s != 39 && *s != 34 && *s != ')' && *s != '(' && *s) ^
 				(*s == 39 || *s == 34 || *s == '(' || *s == ')'))
 			{
 				len++;
@@ -71,7 +71,7 @@ static char		*copy_op(char *s)
 		len++;
 		s++;
 	}
-	op = (char*)malloc(sizeof(char) * (len));
+	op = (char*)malloc(sizeof(char) * (len + 1));
 	len = 0;
 	while (*c == '<' || *c == '>' || *c == '&' || *c == '|' || *c == ';')
 	{
@@ -113,7 +113,7 @@ char			**ft_strsplit_cmd(char const *s)
 	index = 0;
 	n_ops = count_op(s);
 	nb_word = count_words((const char *)s);
-	t = (char **)malloc(sizeof(*t) * (nb_word + 1 + n_ops));
+	t = (char **)malloc(sizeof(char*) * (nb_word + 1 + n_ops));
 	while (nb_word--)
 	{
 		t[index] = NULL;

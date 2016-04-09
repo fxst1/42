@@ -32,6 +32,7 @@
 
 typedef long long t_longest;
 
+char		*ft_getenv(char **env, char *name);
 long		ft_pow(int value, unsigned int n);
 int			ft_atoi_base(const char *nptr, const char *base);
 int			ft_atoi_casebase(const char *nptr, const char *base);
@@ -64,5 +65,6 @@ char		*ft_strcut(char *str, int c);
 void		ft_putansi_str(char *code, int const fd);
 void		ft_putansi_nbr(int code, int const fd);
 t_longest	ft_add(int size, ...);
+char		**ft_build_cmd(char **env, char *cmd);
 
 #endif

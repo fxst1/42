@@ -24,7 +24,7 @@ void	usage()
 	ft_putstr(" --config=<filename> choose a configuration file (minishell.cfg by def)\n");
 	ft_putstr(" --help print this \"helpful...\" help\n");
 	ft_putstr("\n     \033[38;5;189m<-------------------------  b u l l t i n s  ------------------------->\033[0m\n\n");
-	ft_putstr("\n cd\t\tchange directory\n");
+	ft_putstr("\n cd <- / path>\tchange directory (-: switch PWD and OLDPWD)\n");
 	ft_putstr(" env\t\tprint environement\n");
 	ft_putstr(" setenv\t\tadd a new value to environnment\n");
 	ft_putstr(" unsetenv\tdel a value from environnment\n");

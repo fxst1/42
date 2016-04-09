@@ -24,7 +24,7 @@ int		main(int argc, char **argv)
 	{
 		ft_memset(ref, 0, sizeof(int) * 26);
 		s = init_solution(10);
-		tab = init_fillit(argv + 1);
+		tab = init_fillit(*(argv + 1));
 		if (tab)
 		{
 			v4(tab, 0, ref, s);
@@ -35,6 +35,7 @@ int		main(int argc, char **argv)
 		free(s);
 	}
 	else
-		ft_putstr_fd("Usage : ./fillit <filename> (only one filename)\n", 1);
+		write(FD_ERROR, "Usage : ./fillit <filename> (only one filename)\n",
+			48);
 	return (0);
 }

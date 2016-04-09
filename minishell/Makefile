@@ -7,7 +7,8 @@ GNL = ../get_next_line
 CFLAGS = -Wall -Wextra -Werror
 
 LIBS = $(LIBFT_A)
-SRC = term.c env.c main.c config.c
+BUILTIN = builtin/builtin_cd.c builtin/builtin_env.c builtin/builtin_setenv.c
+SRC = term.c env.c main.c config.c $(BUILTIN)
 OBJ = $(SRC:.c=.o)
 
 all: $(NAME)
@@ -23,7 +24,7 @@ $(NAME): $(LIBS) $(OBJ)
 
 clean:
 	rm -f $(OBJ) get_next_line.o
-	make -C $(LIBFT) fclean
+#	make -C $(LIBFT) fclean
 
 fclean: clean
 	rm -f $(NAME)

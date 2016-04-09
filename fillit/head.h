@@ -15,10 +15,9 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <unistd.h>
-# include <libft/libft.h>
-#include <stdio.h>
 # define MAX_TETRINOID 26
 # define MAX 1000000
+# define FD_ERROR 2
 
 typedef unsigned int	t_octet;
 
@@ -65,6 +64,8 @@ void					print_tab(t_octet *tab, t_octet size, char c);
 int						v4(t_tetrinoid **mat, t_octet *item, t_octet *ref,
 							t_solution *s);
 void					free_matrix(t_tetrinoid **tab);
-t_tetrinoid				**init_fillit(char **argv);
+t_tetrinoid				**init_fillit(char *argv);
+void					*ft_memset(void *b, int c, int len);
+void					*ft_memcpy(void *dst, const void *src, int n);
 
 #endif
