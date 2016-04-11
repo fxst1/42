@@ -48,6 +48,9 @@ typedef struct		s_term
 
 	struct termios	backup;
 	struct termios	it;
+
+	int				last_return;
+	t_list			*auto_compl;
 }					t_term;
 
 int				cd(t_term *t, char *cmd);

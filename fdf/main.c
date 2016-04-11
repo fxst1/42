@@ -60,7 +60,8 @@ int		main(int argc, char **argv)
 				if (e->colorfdf == GRADUATE)
 					reset_color(e->fdf);
 				set_scales(e, e->fdf);
-				mlx_hook(e->screen, 3, 3, key_hook, e);
+				mlx_key_hook(e->screen, key_hook, e);
+				mlx_mouse_hook(e->screen, mouse_hook, e);
 				mlx_expose_hook(e->screen, expose_hook, e);
 				mlx_loop(e->mlx);
 			}

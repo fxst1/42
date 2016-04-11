@@ -12,7 +12,7 @@
 
 #include "implemt.h"
 
-char	*ft_itoa_base(int value, char *base_digits)
+char	*ft_itoa_base(long int value, char *base_digits)
 {
 	int		i;
 	char	*nbr;

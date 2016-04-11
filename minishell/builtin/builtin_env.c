@@ -1,43 +1,43 @@
-#include "miniterm.h"
+#include <miniterm.h>
 
-int		print_environnment(t_term *t)
+static int		print_environnment(t_term *t)
 {
 	char	**env;
 
 	env = t->env;
-	if (!env)
+	while (*env)
 	{
-		print_error(t, "env", "empty environnment");
-		return (1);
-	}
-	else
-	{
-		while (*env)
-		{
-			ft_putstr_fd(*env, 1);
-			env++;
-		}
+		ft_putendl_fd(*env, 1);
+		env++;
 	}
 	return (0);
 }
 
-int		env(t_term *t, char *args)
+int		env(t_term *t, char *cmd)
 {
-	if (args)
-		while (*args)
+	char	**args;
+	int		index;
+	int		mask;
+
+	mask = 0;
+	index = 0;
+	if ((args = ft_strsplit(cmd, ' ')))
+	{
+		while (args[index])
 		{
-			if (*args == '-' && *(args + 1) == 'i')
-			{
-				//start prgm
-			}
+			if (!ft_strcmp(args[index], "i"))
+				mask = 1;
 			else
 			{
 				print_error(t, "env", "bad argument");
 				return (1);
 			}
-			args++;
+			free(args[index]);
+			index++;
 		}
-	else
-		return (print_environnment(t));
+		free(args);
+	}
+	if (!mask)
+		print_environnment(t);
 	return (0);
 }

@@ -78,7 +78,7 @@ void	draw_line_x(t_env *e, t_line *l, t_point p1, t_color c)
 			p1.y += sd.y;
 		}
 		p1.x += sd.x;
-		put_pixel(e, p1.x, p1.y, (l->coul) ? l->coul[i] : c);
+		put_pixel(e, p1.x, p1.y, ((l->coul) ? l->coul[i] : (int)c));
 		i++;
 	}
 }
@@ -103,7 +103,7 @@ void	draw_line_y(t_env *e, t_line *l, t_point p1, t_color c)
 			p1.x += sd.x;
 		}
 		p1.y += sd.y;
-		put_pixel(e, p1.x, p1.y, (l->coul) ? l->coul[i] : c);
+		put_pixel(e, p1.x, p1.y, (l->coul) ? l->coul[i] : (int)c);
 		i++;
 	}
 }

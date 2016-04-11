@@ -37,6 +37,7 @@ t_env	*new_env(int h, int l)
 		e->buf->data = mlx_get_data_addr(e->img, &e->buf->bpp,
 			&e->buf->size_line, &e->buf->endian);
 		e->save = NULL;
+		e->select = NULL;
 	}
 	return (e);
 }

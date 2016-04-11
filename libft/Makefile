@@ -30,7 +30,7 @@ SRC = ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c ft_memchr.c ft_memdel.c\
 BONUS_STACK = ft_stknew.c ft_stkinit.c ft_stkempty.c ft_stkfull.c ft_stkclear.c\
 	ft_stkpop.c ft_stkpush.c
 BONUS_BTREE = ft_btreenew.c ft_btreeadd.c ft_btreefree.c ft_btreeforeach.c
-BONUS_FCT = ft_lstfree.c ft_lstsize.c ft_lstadd_begin.c ft_strcasecmp.c ft_atoi_casebase.c ft_atoi_base.c ft_isspace.c\
+BONUS_FCT = ft_delete_files.c ft_open.c ft_strclen.c ft_build_cmd.c ft_getenv.c ft_lstfree.c ft_lstsize.c ft_lstadd_begin.c ft_strcasecmp.c ft_atoi_casebase.c ft_atoi_base.c ft_isspace.c\
 	ft_random.c ft_memndel.c ft_strsort.c ft_strsplit_cmd.c ft_strcut.c ft_putansi_str.c ft_putansi_nbr.c\
 	ft_setfilename.c ft_realloc.c ft_abs.c ft_swap.c ft_putnstr.c ft_pow.c\
 	ft_putnbr_base_fd.c ft_putnbr_base.c ft_itoa_base.c ft_print_memory.c\

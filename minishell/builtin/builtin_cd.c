@@ -1,6 +1,6 @@
-#include "miniterm.h"
+#include <miniterm.h>
 
-char	**change_env(t_term *t, char *new, char *old)
+static char	**change_env(t_term *t, char *new, char *old)
 {
 	char	*new_loc;
 	char	*new_old;
@@ -37,6 +37,9 @@ int		cd(t_term *t, char *cmd)
 		getcwd(t->dirpath, sizeof(char) * 1024);
 	}
 	else
+	{
 		print_error(t, "cd", "No such file or directory");
+		return (1);
+	}
 	return (0);
 }

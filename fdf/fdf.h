@@ -27,6 +27,50 @@
 # define EDITOR 2
 # define LINE_GRADIENT 0xff
 # define LINE_DEPTH	0xff00ff
+# include <libft/os.h>
+# if (OS_FT != MAC)
+#  define ECH 65307
+#  define UP 65362
+#  define DOWN 65364
+#  define LEFT 65363
+#  define RIGHT 65361
+#  define DIVIDE 65455
+#  define MULT 65450
+#  define PLUS 65451
+#  define LESS 65453
+#  define KEY_EDIT 101
+#  define ONE 65436
+#  define TWO 65433
+#  define THREE 65435
+#  define FOUR 65430
+#  define FIVE 65437
+#  define SIX 65432
+#  define SEVEN 65429
+#  define EIGHT 65431
+#  define NINE 65434
+#  define ZERO 65438
+# else
+#  define ECH 55
+#  define UP 126
+#  define DOWN 125
+#  define LEFT 124
+#  define RIGHT 123
+#  define DIVIDE 75
+#  define MULT 67
+#  define PLUS 69
+#  define LESS 78
+#  define KEY_EDIT 14
+#  define ONE 65436
+#  define TWO 65433
+#  define THREE 65435
+#  define FOUR 65430
+#  define FIVE 65437
+#  define SIX 65432
+#  define SEVEN 65429
+#  define EIGHT 65431
+#  define NINE 65434
+#  define ZERO 65438
+# endif
 # include <string.h>
 # include <errno.h>
 
@@ -92,6 +136,8 @@ typedef struct			s_env
 	t_coord				z_dy;
 	t_coord				x;
 	t_coord				y;
+	t_point				*select;
+	int					set_z;
 }						t_env;
 
 typedef struct			s_line
@@ -108,6 +154,8 @@ typedef	struct			s_color_grad
 	int					nb_values;
 }						t_color_grad;
 
+int						mlx_key_number(int keycode);
+int						mouse_hook(int btn, int x, int y, t_env *e);
 void					put_pixel_edit(t_env *e, int x, int y, int c);
 void					print_fdf(t_point ***p);
 void					draw_axis(t_env *e);

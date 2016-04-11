@@ -39,6 +39,7 @@ void	initterm(t_term *t)
 		t->log = ft_strdup("minishell.log");
 		t->env = NULL;
 		t->path = NULL;
+		t->last_return = 0;
 //		tcgetattr(0, &t->backup);
 //		tcgetattr(0, &t->it);
 //		set_rawmode(&t->it);
@@ -81,7 +82,7 @@ void	print_error(t_term *t, char *it, char *error)
 	ft_putansi_str(t->name_txt, 2);
 	ft_putansi_str(t->name_back, 2);
 	ft_putstr_fd(t->prompt, 2);
-	ft_putstr_fd(": \033[0m\033[38;5;196m", 2);
+	ft_putstr_fd(": \033[0m\033[1;38;5;196m", 2);
 	ft_putstr_fd(it, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
@@ -110,6 +111,7 @@ void	stop(t_term *t)
 	n = 0;
 	free(t->prompt);
 	free(t->log);
+	free(t->cfg);
 	free(t->cmd_txt);
 	free(t->cmd_back);
 	free(t->pt_txt);

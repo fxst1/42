@@ -48,13 +48,13 @@ t_list	*find_path(char **t, char *cmd)
 	return (l);
 }
 
-char	*do_autocomplet(char *d, char **path, char *cmd, int *ok)
+char	*do_autocomplet(t_term	*t, char *cmd, int *ok)
 {
 	t_list	*l;
 	t_list	*t;
 	int		prnt;
 
-	l = find_path(path, cmd);
+	l = find_path(t->path, cmd);
 	t = l;
 	prnt = 1;
 	if (l && !l->next)

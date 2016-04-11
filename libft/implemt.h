@@ -13,7 +13,10 @@
 #ifndef IMPLEMT_H
 # define IMPLEMT_H
 # include "libft.h"
-
+# include <errno.h>
+# include <dirent.h>
+# include <sys/stat.h>
+# include <string.h>
 /*
 **	ft_print_memory defines
 **
@@ -30,13 +33,26 @@
 */
 # define REVERSE_ORDER	1
 
-typedef long long t_longest;
+extern int errno;
 
+typedef struct stat		t_stat;
+typedef struct dirent	t_dir;
+typedef struct			s_file
+{
+	t_stat				s;
+	char				*name;
+	struct s_file		*next;
+}						t_file;
+
+typedef long long t_longest;
+void		ft_delete_files(t_file **root);
+t_file		*ft_open(char *dirname);
+size_t		ft_strclen(const char *str, int c);
 char		*ft_getenv(char **env, char *name);
 long		ft_pow(int value, unsigned int n);
 int			ft_atoi_base(const char *nptr, const char *base);
 int			ft_atoi_casebase(const char *nptr, const char *base);
-char		*ft_itoa_base(int value, char *base_digits);
+char		*ft_itoa_base(long int value, char *base_digits);
 void		ft_putnbr_base_fd(int nb, char *base, int fd);
 void		ft_putnbr_base(int nb, char *base);
 void		ft_putdouble(double d);
@@ -48,7 +64,7 @@ void		ft_swap(void *a, void *b);
 void		ft_swapn(void *a, void *b, size_t len);
 void		ft_swaplen(void *a, void *b, size_t len_a, size_t len_b);
 void		*ft_realloc(void *addr, size_t len);
-char		*ft_setfilename(char *filename, char *ext);
+char		*ft_setfilename(char *s1, char *s2, int add_sep);
 int			ft_isspace(int c);
 void		ft_swapn(void *a, void *b, size_t len);
 void		ft_swaplen(void *a, void *b, size_t len_a, size_t len_b);

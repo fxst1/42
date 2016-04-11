@@ -17,7 +17,8 @@ GNL = ../get_next_line
 MLX = /usr/x11/lib
 
 FLAGS = -Wall -Wextra -Werror
-LIB = -lmlx -framework OpenGL -framework AppKit
+#MAC-framework OpenGL -framework AppKit
+LIB = -lft -lmlx -lX11 -lXext -lm
 
 SRC = 	./editor.c\
 		./fdf_bis.c\
@@ -29,9 +30,7 @@ SRC = 	./editor.c\
 		./init.c			\
 		./draw.c			\
 		./event.c		\
-		$(GNL)/get_next_line.c		\
 		./main.c				\
-		$(LIBFT)/libft.a
 
 HEAD = -I$(LIBFT) -I$(GNL)
 LIB_A = $(LIBFT)/libft.a
@@ -40,15 +39,19 @@ OBJ = $(SRC:.c=.o)
 all : $(NAME)
 
 $(LIB_A):
-	make -C $(LIBFT) re addfct
+	make -C $(LIBFT) addbonus
 
-$(NAME): $(LIB_A)
-	@gcc $(FLAGS) $(SRC) -I $(HEAD) $(LIB) -o $(NAME)
+$(OBJ):
+	gcc $(FLAGS) -I.. -I. $(HEAD) $(LIB) -c $(SRC) $(GNL)/get_next_line.c
+
+$(NAME): $(LIB_A) $(OBJ)
+	gcc $(FLAGS) -I.. -I. $(OBJ) get_next_line.o $(LIB_A) $(HEAD) -o $(NAME) $(LIB)
 
 clean:
 		rm -f $(OBJ)
 
 fclean: clean
+#		make -C $(LIBFT) fclean
 		rm -f $(NAME)
 
 re: fclean all

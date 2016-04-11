@@ -12,18 +12,20 @@
 
 #include "libft.h"
 
-char	*ft_setfilename(char *filename, char *ext)
+char		*ft_setfilename(char *s1, char *s2, int add_sep)
 {
-	char	*ptr;
+	int		i;
+	int		j;
+	char	*str;
 
-	ptr = filename;
-	while (*filename)
-	{
-		if (*filename == '.')
-			ptr = filename;
-		filename++;
-	}
-	if (ft_strcmp(ptr, ext))
-		ft_strcat(filename, *ext == '.' ? ext + 1 : ext);
-	return (filename);
+	i = ft_strlen(s1);
+	j = ft_strlen(s2);
+	str = (char*)malloc(sizeof(char) * (i + j + 2));
+	ft_memset(str, 0, sizeof(char) * (i + j + 2));
+	ft_strcat(str, s1);
+	ft_strcat(str + i, s2);
+	if (add_sep && *(s2 + j) != '/')
+		*(str + i + j) = '/';
+	*(str + i + j + add_sep) = 0;
+	return (str);
 }
