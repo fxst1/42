@@ -97,7 +97,7 @@ void		ft_error(t_args *arg, char *name)
 	write(2, name, ft_strlen(name));
 	write(2, " : ", 3);
 	ft_putendl_fd(strerror(errno), 2);
-	arg->ret = 2;
+	arg->ret = 1;
 }
 
 t_file		*ft_open(t_args *a, char *dn, void (*add)())

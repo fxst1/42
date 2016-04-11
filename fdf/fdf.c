@@ -35,14 +35,12 @@ static t_point	**init_fdf_line(char *buf)
 	return (p);
 }
 
-t_point			***init_fdf_points(char *fname)
+t_point			***init_fdf_points(const int fd)
 {
-	int		fd;
 	int		n;
 	t_point	***p;
 	char	*ptr;
 
-	fd = open(fname, O_RDONLY);
 	n = 0;
 	p = NULL;
 	ptr = NULL;
@@ -61,7 +59,15 @@ t_point			***init_fdf_points(char *fname)
 	return (p);
 }
 
-static void		init_content_fdf(t_env *e, char *ptr, t_point ***p, int x)
+static char		*read_color(t_color *c, char *ptr)
+{
+	*c = ft_atoi_casebase(ptr, BASE_HEX_MIN);
+	while (*ptr && (ft_isalnum(*ptr)))
+		ptr++;
+	return (ptr);
+}
+
+static void		*init_content_fdf(int mask, char *ptr, t_point ***p, int x)
 {
 	int	l;
 
@@ -74,26 +80,40 @@ static void		init_content_fdf(t_env *e, char *ptr, t_point ***p, int x)
 		if (*ptr && (*ptr == '-' || ft_isalnum(*ptr)))
 		{
 			p[x][l] = new_point(l, x, ft_atoi(ptr), 0xff);
-			init_color(e, p[x][l]);
-			while (*ptr && (ft_isalnum(*ptr) || *ptr == '-'))
+			init_color(mask, p[x][l]);
+			while (*ptr && (ft_isalnum(*ptr) || *ptr == '-') && *ptr != ',')
 				ptr++;
+			if (!ft_strncmp(ptr, ",0x", 3))
+				ptr = read_color(&p[x][l]->coul, ptr + 3);
+		}
+		else
+		{
+			ft_putstr_fd("fdf: An error occured: bad character\n", 2);
+			return (NULL);
 		}
 		l++;
 	}
+	return (p);
 }
 
-t_point			***init_fdf(t_env *e, int const fd, t_point ***p)
+t_point			***init_fdf(int mask, int const fd, t_point ***p)
 {
 	int		n;
 	char	*ptr;
 
 	n = 0;
 	ptr = NULL;
-	while (get_next_line(fd, &ptr) > 0)
+	while (p && get_next_line(fd, &ptr) > 0)
 	{
-		init_content_fdf(e, ptr, p, n++);
+		if (!init_content_fdf(mask, ptr, p, n++))
+		{
+			free_fdf(p);
+			p = NULL;
+		}
 		free(ptr);
+		ptr = NULL;
 	}
+	close(fd);
 	free(ptr);
 	return (p);
 }

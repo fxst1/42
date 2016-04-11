@@ -12,25 +12,6 @@
 
 #include "fdf.h"
 
-void		clear(t_env *e)
-{
-	int x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (x < e->l)
-	{
-		y = 0;
-		while (y < e->h)
-		{
-			put_pixel(e, x, y, 0x0);
-			y++;
-		}
-		x++;
-	}
-}
-
 void		key_spec(int keycode, t_env *e)
 {
 	t_point	p;
@@ -55,26 +36,50 @@ void		key_spec(int keycode, t_env *e)
 		e->z_dx -= 0.25;
 		e->z_dy -= 0.25;
 	}
-	else if (e->select && e->set_z)
+}
+
+int			key_input(int keycode, t_env *e)
+{
+	int	stop;
+
+	stop = 0;
+	if (e->mask & IN_SAVE)
 	{
-		 e->select->z = mlx_key_number(keycode);
-		printf("z = %d\n", (int)e->select->z);
+		if ((e->save = mlx_key_str(keycode, &stop)) && stop)
+		{
+			ft_strcat(e->save, ".fdf");
+			save_fdf(e->fdf, e->save);
+			free(e->save);
+			e->mask ^= IN_SAVE;
+			e->save = NULL;
+		}
 	}
-	else if (e->select && !e->set_z)
+	else if (e->select)
+		e->select->z = mlx_key_number(keycode, &stop);
+	if (stop)
 	{
-		e->select->coul = mlx_key_number(keycode);	
-		printf("c = %d\n", (int)e->select->coul);
+		e->mask ^= IN_INPUT;
+		open_close_color(e, 0);
 	}
+	return (0);
 }
 
 int			key_hook(int keycode, t_env *e)
 {
-	printf("%d\n", keycode);
 	if (keycode == ECH)
 	{
 		free_env(e);
 		exit(0);
 	}
+	else if (e->mask & IN_INPUT)
+		key_input(keycode, e);
+	else if (keycode == KEY_S)
+	{
+		e->mask ^= IN_INPUT;
+		e->mask ^= IN_SAVE;
+	}
+	else if (keycode == KEY_I)
+		e->mask ^= INFO;
 	else if (keycode == UP)
 		e->y -= 100;
 	else if (keycode == DOWN)
@@ -83,109 +88,33 @@ int			key_hook(int keycode, t_env *e)
 		e->x += 100;
 	else if (keycode == RIGHT)
 		e->x -= 100;
-	else if (keycode == 0)
-		e->mask = (e->mask & DRAW_AXIS) ? e->mask & ~(DRAW_AXIS)
-			: e->mask | DRAW_AXIS;
-/*	else if (keycode == KEY_EDIT)
-		e->mask = (e->mask & EDITOR) ? e->mask & ~(EDITOR)
-			: e->mask | EDITOR;
-*/	else
+	else
 		key_spec(keycode, e);
-	expose_hook(e);
-	return (keycode);
-}
-
-t_point		*get_point_at(t_env *e, int x, int y)
-{
-	int		i;
-	int		j;
-	t_point	***fdf;
-	t_point	p;
-
-	i = 0;
-	j = 0;
-	fdf = e->fdf;
-	while (fdf[i])
-	{
-		j = 0;
-		while (fdf[i][j])
-		{
-			build_3d_pt(e, fdf[i][j], &p);
-			if (p.x - 5 <= x && p.x + 5 >= x
-				&& p.y - 5 <= y && p.y + 5 >= y)
-				return (fdf[i][j]);
-			j++;
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-void		draw_pt(t_env *e, t_point *p)
-{
-	int		i;
-	int		j;
-	t_point	t;
-
-	i = 0;
-	j = 0;
-	build_3d_pt(e, p, &t);
-	while (i < 10)
-	{
-		j = 0;
-		while (j < 10)
-		{
-			put_pixel(e, t.x + i - 5, t.y + j - 5, p->coul);	
-			j++;
-		}
-		i++;
-	}
+	return (expose_hook(e));
 }
 
 int			mouse_hook(int btn, int x, int y, t_env *e)
 {
 	t_point	*p;
+	int		nan;
 
+	nan = 0;
 	(void)btn;
 	if ((p = get_point_at(e, x, y)))
 	{
 		e->select = p;
-		e->set_z = (btn == 1);
+		open_close_color(e, 1);
+		mlx_key_number(0, &nan);
+		e->mask |= IN_INPUT;
 	}
 	else
+	{
+		open_close_color(e, 0);
 		e->select = NULL;
-	printf("%p\n", e->select);
+		e->mask &= ~IN_INPUT;
+	}
 	expose_hook(e);
 	return (0);
-}
-
-void		print_info(t_env *e, t_point *p)
-{
-	char	*tmp;
-
-//	mlx_string_put(e->mlx, e->screen, 0, 0, 0xffffff, "X = ");
-	if (p)
-	{
-		mlx_string_put(e->mlx, e->screen, 0, 10, 0xffffff, "X = ");
-		tmp = ft_itoa(p->x);
-		mlx_string_put(e->mlx, e->screen, 20, 10, 0xffffff, tmp);
-		free(tmp);
-
-		mlx_string_put(e->mlx, e->screen, 0, 30, 0xffffff, "Y = ");
-		tmp = ft_itoa(p->y);
-		mlx_string_put(e->mlx, e->screen, 20, 30, 0xffffff, tmp);
-		free(tmp);
-
-		mlx_string_put(e->mlx, e->screen, 0, 50, 0xffffff, "Z = ");
-		tmp = ft_itoa(p->z);
-		mlx_string_put(e->mlx, e->screen, 20, 50, 0xffffff, tmp);
-		free(tmp);
-
-		mlx_string_put(e->mlx, e->screen, 0, 70, 0xffffff, "C = ");
-		tmp = ft_itoa(p->coul);
-		mlx_string_put(e->mlx, e->screen, 20, 70, 0xffffff, tmp);
-		free(tmp);
-	}
 }
 
 int			expose_hook(t_env *e)
@@ -194,8 +123,6 @@ int			expose_hook(t_env *e)
 	draw_fdf(e, e->fdf);
 	if (e->select)
 		draw_pt(e, e->select);
-	if (e->mask & DRAW_AXIS)
-		draw_axis(e);
 	mlx_put_image_to_window(e->mlx, e->screen, e->img, 0, 0);
 	print_info(e, e->select);
 	return (0);

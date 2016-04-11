@@ -6,16 +6,14 @@
 #    By: fjacquem <fjacquem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/08/11 17:14:40 by fjacquem          #+#    #+#              #
-#    Updated: 2015/12/16 00:06:28 by fjacquem         ###   ########.fr        #
+#    Updated: 2016/04/08 16:19:38 by fjacquem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-LIBFT = ../libft
-PRINTF = ../ft_printf
-GNL = ../get_next_line
+LIBFT = libft
 
 NAME = ft_ls
-FLAGS = -Wall -Wextra -Werror -g
+FLAGS = -Wall -Wextra -Werror
 
 CC = gcc
 SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c opts.c usage.c add_fcts.c initialize.c prt.c
@@ -26,17 +24,16 @@ all: $(NAME)
 
 $(OBJ):
 		make -C $(LIBFT) addbonus
-		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) -I$(GNL) -I.. -c $(SRC) $(GNL)/get_next_line.c
+		$(CC) $(FLAGS) -I. -I$(LIBFT) -c $(SRC)
 
 $(NAME): $(OBJ)
-		$(CC) $(FLAGS) -I. -I$(LIBFT) -I$(PRINTF) $(LIBFT_A) -I.. $(OBJ) get_next_line.o -o $(NAME)
+		$(CC) $(FLAGS) -I. -I$(LIBFT) $(LIBFT_A) $(OBJ)  -o $(NAME)
 
 clean:
-		/bin/rm -f $(OBJ) get_next_line.o
+		/bin/rm -f $(OBJ)
 
 dclean:
-#		make -C $(PRINTF) fclean
-#		make -C $(LIBFT) fclean
+		make -C $(LIBFT) fclean
 
 fclean: dclean clean
 		/bin/rm -f $(NAME)

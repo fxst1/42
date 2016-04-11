@@ -12,19 +12,23 @@
 
 #include "fdf.h"
 
-void	put_pixel(t_env *e, int x, int y, int c)
+void	put_pixel(t_buffer *buf, int x, int y, int c)
 {
-	t_buffer	*buf;
+	int		size_line;
+	int		bpp;
+	char	*data;
 
-	buf = e->buf;
-	if (x > 0 && x < e->l && y > 0 && y < e->h)
+	data = buf->data;
+	bpp = buf->bpp;
+	size_line = buf->size_line;
+	if (x > 0 && x < buf->l && y > 0 && y < buf->h)
 	{
-		buf->data[(y * buf->size_line + x * buf->bpp / 8) + 3] =  (c >> 24) & 0xff;
-		buf->data[(y * buf->size_line + x * buf->bpp / 8) + 2] =
+		data[(y * size_line + x * bpp / 8) + 3] = (c >> 24) & 0xff;
+		data[(y * size_line + x * bpp / 8) + 2] =
 			(c >> 16) & 0xff;
-		buf->data[(y * buf->size_line + x * buf->bpp / 8) + 1] =
+		data[(y * size_line + x * bpp / 8) + 1] =
 			(c >> 8) & 0xff;
-		buf->data[(y * buf->size_line + x * buf->bpp / 8)] =
+		data[(y * size_line + x * bpp / 8)] =
 			(c & 0xff);
 	}
 }
@@ -78,7 +82,7 @@ void	draw_line_x(t_env *e, t_line *l, t_point p1, t_color c)
 			p1.y += sd.y;
 		}
 		p1.x += sd.x;
-		put_pixel(e, p1.x, p1.y, ((l->coul) ? l->coul[i] : (int)c));
+		put_pixel(e->buf, p1.x, p1.y, ((l->coul) ? l->coul[i] : (int)c));
 		i++;
 	}
 }
@@ -103,7 +107,7 @@ void	draw_line_y(t_env *e, t_line *l, t_point p1, t_color c)
 			p1.x += sd.x;
 		}
 		p1.y += sd.y;
-		put_pixel(e, p1.x, p1.y, (l->coul) ? l->coul[i] : (int)c);
+		put_pixel(e->buf, p1.x, p1.y, (l->coul) ? l->coul[i] : (int)c);
 		i++;
 	}
 }

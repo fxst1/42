@@ -57,9 +57,9 @@ void			reset_color(t_point ***vct)
 	graduate_color(vct, high, low);
 }
 
-void			init_color(t_env *e, t_point *p)
+void			init_color(int mask, t_point *p)
 {
-	if (e->colorfdf == RANDOM)
+	if (mask == RANDOM)
 		p->coul = ft_random();
 	else
 	{

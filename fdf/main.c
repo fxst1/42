@@ -11,28 +11,22 @@
 /* ************************************************************************** */
 
 #include "fdf.h"
-#define PI 3.14159265359
 
-char	*init_args(t_env *e, char **s, char *fname)
+static char		*init_args(char **s, int *mask)
 {
-	s++;
-	e->save = NULL;
+	char *fname;
+
+	fname = NULL;
 	while (*s)
 	{
 		if (**s == '-')
 		{
 			if (!ft_strcmp(*s, "--color=random"))
-				e->colorfdf |= RANDOM;
+				*mask |= RANDOM;
 			else if (!ft_strcmp(*s, "--color=depth"))
-				e->colorfdf |= NORMAL;
+				*mask |= NORMAL;
 			else if (!ft_strcmp(*s, "--color=graduate"))
-				e->colorfdf |= GRADUATE;
-			else if (!ft_strncmp(*s, "--save=", 7))
-				e->save = ft_strdup((*s) + 7);
-			else if (!ft_strcmp(*s, "--axis"))
-				e->mask |= DRAW_AXIS;
-			else if (!ft_strcmp(*s, "--editor"))
-				e->mask |= EDITOR;
+				*mask |= GRADUATE;
 		}
 		else
 			fname = ft_strdup(*s);
@@ -41,32 +35,48 @@ char	*init_args(t_env *e, char **s, char *fname)
 	return (fname);
 }
 
-int		main(int argc, char **argv)
+static void		process(t_env *e, int const fd, char *fname, int mask)
+{
+	t_point	***fdf;
+
+	fdf = init_fdf_points(fd);
+	fdf = init_fdf(mask, open(fname, O_RDONLY), fdf);
+	if (fdf && (new_env(e, 600, 800, fname)))
+	{
+		e->mask = mask;
+		e->fdf = fdf;
+		if (e->mask & GRADUATE)
+			reset_color(e->fdf);
+		set_scales(e, e->fdf);
+		mlx_key_hook(e->screen, key_hook, e);
+		mlx_mouse_hook(e->screen, mouse_hook, e);
+		mlx_expose_hook(e->screen, expose_hook, e);
+		mlx_loop(e->mlx);
+	}
+	else
+		free_env(e);
+	close(fd);
+}
+
+int				main(int argc, char **argv)
 {
 	int		fd;
 	char	*fname;
-	t_env	*e;
+	int		mask;
+	t_env	e;
 
 	fname = NULL;
+	mask = 0;
 	if (argc > 1)
 	{
-		if ((e = new_env(600, 800)))
-		{
-			fname = init_args(e, argv, fname);
-			if ((fd = open(fname, O_RDONLY)) >= 0)
-			{
-				e->fdf = init_fdf_points(fname);
-				e->fdf = init_fdf(e, fd, e->fdf);
-				if (e->colorfdf == GRADUATE)
-					reset_color(e->fdf);
-				set_scales(e, e->fdf);
-				mlx_key_hook(e->screen, key_hook, e);
-				mlx_mouse_hook(e->screen, mouse_hook, e);
-				mlx_expose_hook(e->screen, expose_hook, e);
-				mlx_loop(e->mlx);
-			}
-			close(fd);
-		}
+		ft_memset(&e, 0, sizeof(t_env));
+		fname = init_args(argv + 1, &mask);
+		if ((fd = open(fname, O_RDONLY)) > 0)
+			process(&e, fd, fname, mask);
+		else
+			ft_putstr_fd("fdf: cannot open file\n", 2);
 	}
+	else
+		ft_putstr_fd(USAGE, 2);
 	return (0);
 }

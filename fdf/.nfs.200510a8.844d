@@ -6,7 +6,7 @@
 #    By: fjacquem <fjacquem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/08/11 17:14:40 by fjacquem          #+#    #+#              #
-#    Updated: 2016/04/11 20:15:37 by fjacquem         ###   ########.fr        #
+#    Updated: 2015/12/16 00:06:28 by fjacquem         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,10 +50,10 @@ $(NAME): $(LIB_A) $(OBJ)
 	gcc $(FLAGS) -I.. -I. $(OBJ) get_next_line.o $(LIB_A) $(HEAD) -o $(NAME) $(LIB)
 
 clean:
-		rm -f $(OBJ) get_next_line.o
+		rm -f $(OBJ)
 
 fclean: clean
-		make -C $(LIBFT) fclean
+#		make -C $(LIBFT) fclean
 		rm -f $(NAME)
 
 re: fclean all

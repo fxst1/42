@@ -71,6 +71,7 @@ void	file_errors(t_args *a, char **paths)
 			ft_putendl_fd(strerror(errno), 2);
 			free(paths[n]);
 			paths[n] = ft_strnew(1);
+			a->ret = 1;
 		}
 		else if (d)
 			closedir(d);
