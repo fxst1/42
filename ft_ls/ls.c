@@ -43,31 +43,44 @@ void			set_fct_cmp(t_args *arg)
 		arg->mask |= MTIME;
 }
 
+void			ls_do(t_args *arg, char *path, int n, int m)
+{
+	t_file	*root;
+	char	*reset_path;
+	char	str[1024];
+
+	reset_path = NULL;
+	root = NULL;
+	if ((m & LIST) && path[n - 1] != '/' &&
+		(n = readlink(path, str, 1024)) > 0)
+		root = init_file(arg, "\0", path);
+	else
+	{
+		reset_path = set_filename("\0", path, 1);
+		root = ft_open(arg, reset_path, arg->cmp);
+		arg->mask |= PRINT_TOTAL;
+	}
+	if (root && (m & RECURSIF))
+		ls_run(reset_path, arg, root, arg->deep);
+	else if (root)
+	{
+		arg->prt(arg, root);
+		del(&root);
+	}
+	free(reset_path);
+}
+
 int				ls(t_args *arg)
 {
-	int		n;
-	t_file	*root;
-	char	*path;
+	char	**path;
 
-	n = 0;
-	ft_strsort(arg->path, 0);
-	while (arg->path[n])
+	path = arg->path;
+	ft_strsort(path, 0);
+	while (*path)
 	{
-		if (*arg->path[n])
-		{
-			path = set_filename("\0", arg->path[n], 1);
-			root = ft_open(arg, path, arg->cmp);
-			arg->mask |= PRINT_TOTAL;
-			if (root && arg->mask & RECURSIF)
-				ls_run(path, arg, root, arg->deep);
-			else if (root)
-			{
-				arg->prt(arg, root);
-				del(&root);
-			}
-			free(path);
-		}
-		n++;
+		if (**path)
+			ls_do(arg, *path, ft_strlen(*path), arg->mask);
+		path++;
 	}
 	return (0);
 }
@@ -87,14 +100,4 @@ int				stop_ls(t_args *arg)
 	if (arg->colormap)
 		ft_mapdel(&arg->colormap, 1, &free, &free);
 	return (arg->ret);
-}
-
-char			*ft_getenv(char **env, char *name)
-{
-	int	size;
-
-	size = ft_strlen(name);
-	while (*env && ft_strncmp(name, *env, size))
-		env++;
-	return (*env);
 }

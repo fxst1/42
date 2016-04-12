@@ -13,7 +13,7 @@
 LIBFT = libft
 
 NAME = ft_ls
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 CC = gcc
 SRC = ls.c print.c tools.c file.c extension_map.c main.c print_bis.c opts.c usage.c add_fcts.c initialize.c prt.c

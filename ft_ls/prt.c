@@ -52,6 +52,11 @@ void		prepare_buffer(t_args *a, t_file *f)
 	}
 }
 
+void		parcours_basic(t_args *a, t_file *f)
+{
+
+}
+
 void		parcours_simple(t_args *a, t_file *f)
 {
 	prepare_buffer(a, f);
