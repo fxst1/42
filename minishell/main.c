@@ -91,7 +91,7 @@ int		start_prgm(t_term *t, char *cmd)
 	int		child_status;
 
 	argv = ft_strsplit(cmd, ' ');
-	argv[0] = find_in_path(t->env, &argv[0]);
+	argv[0] = (*t->env) ? find_in_path(t->env, &argv[0]) : argv[0];
 	child_pid = fork();
 	tpid = 0;
 //	ft_putansi_str(t->exe_txt, 1);
@@ -124,7 +124,7 @@ int		call_builtins(t_term *t, char *cmd, int *ok)
 	else if (!ft_strncmp(cmd, "setenv ", 7))
 		t->last_return = setenvt(t, cmd + 7);
 	else if (!ft_strncmp(cmd, "unsetenv ", 9))
-		t->env = ft_unsetenv(t, t->env, cmd + 9);
+		t->last_return = unsetenvt(t, cmd + 9);
 	else if (!ft_strcmp("reset", cmd))
 	{
 		t->last_return = 0;
@@ -187,16 +187,11 @@ int		main(int argc, char **argv, char **env)
 	int		ret;
 
 	//ft_putstr(CLEAR);
-	initterm(&t);
+	initterm(&t, env);
 	if ((ret = init_args(&t, argv + 1)) == 0)
 	{
-		t.env = init_env(env);
 		t.argc = argc;
 		t.argv = argv;
-		if (*env)
-			t.path = init_path(env);
-		else
-			t.path = NULL;
 		term_main(&t);
 		ft_putstr(RESET);
 	}

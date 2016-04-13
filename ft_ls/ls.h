@@ -110,7 +110,8 @@ enum
 	LIST = 1024,
 	ALL = 2048,
 	REVERSE = 8192,
-	COLOR = 16384
+	COLOR = 16384,
+	OUT_LINE = 32768
 
 };
 
@@ -130,6 +131,7 @@ typedef struct			s_args
 
 void					usage(void);
 void					parcours_simple(t_args *a, t_file *f);
+void					parcours_basic(t_args *a, t_file *f);
 void					delete_print(t_print *p);
 void					print_maps(t_args *a, t_print *f);
 void					set_fct_cmp(t_args *arg);

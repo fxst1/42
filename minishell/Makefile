@@ -8,8 +8,9 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 LIBS = $(LIBFT_A)
 
-BUILTIN = builtin/builtin_cd.c builtin/builtin_env.c builtin/builtin_setenv.c
-BUILTIN_O = builtin_cd.o builtin_env.o builtin_setenv.o
+BUILTIN = builtin/builtin_cd.c builtin/builtin_env.c builtin/builtin_setenv.c builtin/builtin_unsetenv.c
+BUILTIN_O = builtin_cd.o builtin_env.o builtin_setenv.o builtin_unsetenv.o
+
 SRC = term.c env.c main.c config.c 
 OBJ = $(SRC:.c=.o) $(BUILTIN_O)
 

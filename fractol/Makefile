@@ -18,7 +18,7 @@ MLX = /usr/x11/lib
 
 FLAGS = -Wall -Wextra
 
-LIB = -lm -lmlx -framework OpenGL -framework AppKit
+LIB = -lm -lmlx -framework OpenGL -framework AppKit -lpthread
 SRC = fractal.c env.c main.c common.c
 
 HEAD = -I$(LIBFT) -I$(GNL)

@@ -54,7 +54,17 @@ void		prepare_buffer(t_args *a, t_file *f)
 
 void		parcours_basic(t_args *a, t_file *f)
 {
+	t_print	*p;
 
+	(void)a;
+	while (f)
+	{
+		p = &f->p;
+		print_maps(a, p);
+		write(1, p->name, p->len_name);
+		write(1, "\033[0m\n", 5);
+		f = f->next;
+	}
 }
 
 void		parcours_simple(t_args *a, t_file *f)

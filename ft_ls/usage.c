@@ -35,11 +35,12 @@ void		usage(void)
 	ft_putstr_fd("\n  -R<deep> : recursif search, deep correspond\n", 1);
 	ft_putstr_fd("\tto the number of subfolders'deep (not necessary)\n", 1);
 	ft_putstr_fd("  -l : details\n", 1);
+	ft_putstr_fd("  -o : print by column (if '-l' it will be ignore)\n", 1);
 	ft_putstr_fd("  -n : (--numerical-id) uid / gid id instead of name\n", 1);
 	ft_putstr_fd("\tset -l option automaticaly\n", 1);
-	ft_putstr_fd("  -S : sort by size (highter first)\n", 1);
+	ft_putstr_fd("  -s : sort by size (highter first)\n", 1);
 	ft_putstr_fd("  -t : sort by modification time (newest first)\n", 1);
-	ft_putstr_fd("  -C : sort by creation time (newest first)\n", 1);
+	ft_putstr_fd("  -c : sort by creation time (newest first)\n", 1);
 	ft_putstr_fd("\tall sort options are incompatible with an ", 1);
 	ft_putstr_fd("other one\n  -r : reverse output\n", 1);
 	ft_putstr_fd("  -G : use colors", 1);

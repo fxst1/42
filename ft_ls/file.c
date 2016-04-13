@@ -113,7 +113,7 @@ t_file		*ft_open(t_args *a, char *dn, void (*add)())
 			write(1, "\n", 1);
 		else
 			a->mask |= PRINT_LINE;
-		write(1, dn, ft_strlen(dn));
+		write(1, dn, ft_strlen(dn) - 1);
 		write(1, ":\n", 2);
 		while ((e = readdir(d)))
 		{

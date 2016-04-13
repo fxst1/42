@@ -21,10 +21,13 @@
 # include <string.h>
 # include <errno.h>
 # include <sys/types.h>
+# include <pthread.h>
 # include "keys.h" 
 # define BSHIP 3
-# define MAMDELBROT 1
+# define MANDELBROT 1
 # define JULIA 2
+# define NB_THREAD 1024
+# define TH_SCL 50
 
 typedef void			*t_scn;
 
@@ -58,7 +61,9 @@ typedef struct			s_buffer
 
 typedef struct			s_env
 {
-	int					h;
+	pthread_t			th[NB_THREAD];
+
+	int					w;
 	int					l;
 	int					mask;
 
@@ -67,23 +72,36 @@ typedef struct			s_env
 	void				*img;
 	t_scn				*screen;
 
-	int				(*fractal)();
+	void				*(*fractal)();
 	int					nb_iter;
 	double				zoom;
 	double				x;
 	double				y;
 	double				re;
 	double				im;
+	double				h;
+	double				s;
+	double				v;	
 	long int			dc;
 }						t_env;
 
+typedef struct			s_arg
+{
+	t_env				*e;
+	double				s;
+	double				v;
+	int					y;
+}						t_arg;
+
+void	init_threads(t_env *e, t_arg *arguments);
 t_env	*new_env(t_env *e, int h, int l, char *name);
 void	free_env(t_env *e);
+void	init_arg(t_arg *a, t_env *e, double s, double v);
 void	clear(t_env *e, int c);
 void	reset_color(t_env *e, int c);
 void	put_pixel(t_buffer *buf, int x, int y, int c);
 int     wtf(double h, double s, double v);
-int 	burning_ship(t_env *e);
-int		mandelbrot(t_env *e);
-int		julia(t_env *e);
+void	*burning_ship(t_arg *a);
+void	*mandelbrot(t_arg *a);
+void	*julia(t_arg *a);
 #endif

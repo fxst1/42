@@ -16,12 +16,14 @@ static void		set_option_short_bis(t_args *tmp, char argv)
 {
 	if (argv == 'n')
 		tmp->mask |= (NUM_ID | LIST);
-	else if (argv == 'S')
+	else if (argv == 's')
 		tmp->mask |= SIZE;
-	else if (argv == 'C')
+	else if (argv == 'c')
 		tmp->mask |= CTIME;
 	else if (argv == 'h')
 		tmp->ret = 3;
+	else if (argv == 'o')
+		tmp->mask |= OUT_LINE;
 	else if (argv)
 	{
 		ft_putstr_fd("ft_ls: illegal option -- ", 2);
@@ -70,7 +72,7 @@ void			set_options_long(t_args *tmp, char *argv)
 	{
 		ft_putstr_fd("ft_ls: illegal option -- ", 2);
 		ft_putendl_fd(argv, 2);
-		ft_putstr_fd("usage = [-CGRSahlnrt] [file...]\n", 2);
+		ft_putstr_fd("usage = [-GRachlnrst] [file...]\n", 2);
 		tmp->ret = 2;
 	}
 }

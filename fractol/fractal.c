@@ -1,16 +1,18 @@
-#include "env.h"
+ #include "env.h"
 
-
-int	julia(t_env *e)
+void	*julia(t_arg *a)
 {
 	double newRe, newIm, oldRe, oldIm;
 	int i;
+	t_env 	*e;
 
-	for(int y = 0; y < e->h; y++)
+	e = a->e;
+	printf("Julia %d\n", a->y);
+	for(int y = a->y; y < a->y + TH_SCL; y++)
 	for(int x = 0; x < e->l; x++)
 	{
 		newRe = 1.5 * (x - e->l / 2) / (0.5 * e->zoom * e->l) + e->x;
-		newIm = (y - e->h / 2) / (0.5 * e->zoom * e->h) + e->y;
+		newIm = (y - e->w / 2) / (0.5 * e->zoom * e->w) + e->y;
 		for(i = 0; i < e->nb_iter; i++)
 		{
 			oldRe = newRe;
@@ -21,21 +23,23 @@ int	julia(t_env *e)
 				break;
 		}
 		put_pixel(e->buffer, x, y,
-			e->dc ^ wtf(i % 256, 255, 255 * (i < e->nb_iter)));	
+			e->dc ^ wtf(i % 256, a->s, a->v * (i < e->nb_iter)));	
 	}
 	return (0);
 }
 
-int	mandelbrot(t_env *e)
+void	*mandelbrot(t_arg *a)
 {
 	double newRe, newIm, oldRe, oldIm;
 	double pi, pr;
+	t_env 	*e;
 
-	for(int y = 0; y < e->h; y++)
+	e = a->e;
+	for(int y = a->y; y < a->y + TH_SCL; y++)
 	for(int x = 0; x < e->l; x++)
 	{
 		pr = 1.5 * (x - e->l / 2) / (0.5 * e->zoom * e->l) + e->x;
-		pi = (y - e->h / 2) / (0.5 * e->zoom * e->h) + e->y;
+		pi = (y - e->w / 2) / (0.5 * e->zoom * e->w) + e->y;
 		newRe = newIm = oldRe = oldIm = 0;
 		int i;
 		for(i = 0; i < e->nb_iter; i++)
@@ -47,34 +51,35 @@ int	mandelbrot(t_env *e)
 			if((newRe * newRe + newIm * newIm) > 4)
 				break;
 		}
-		put_pixel(e->buffer, x, y,
-			e->dc ^ wtf(i % 256, 255, 255 * (i < e->nb_iter)));	
+		put_pixel(e->buffer, x, a->y,
+			e->dc ^ wtf(i % 256, a->s, a->v * (i < e->nb_iter)));	
 	}
 	return (0);
 }
 
-int burning_ship(t_env *e)
+void	*burning_ship(t_arg *a)
 {
 	t_point p0, p;
 	t_point c;
 	int	k;
+	t_env 	*e;
 
-	for (int i=0;i<e->l;i++) {
-		for (int j=0;j<e->h;j++) {
-			p0.x = 0;
-			p0.y = 0;
-			c.x = e->x + 2 * e->zoom * (i / (double)e->l - 0.5);
-			c.y = e->y + 2 * e->zoom * (j / (double)e->h - 0.5);
-			for (k=0;k<e->nb_iter;k++) {
-				p.x = p0.x * p0.x - p0.y * p0.y - c.x;
-				p.y = 2 * fabs(p0.x * p0.y) - c.y;
-				p0 = p;
-				if (p.x * p.x + p.y * p.y > 10)
-					break;
-			}
-			put_pixel(e->buffer, i, j,
-				e->dc ^ wtf(k % 256, 255, 255 * (k < e->nb_iter)));
+	e = a->e;
+	for (int x = 0; x < e->l; x++)
+	{
+		p0.x = 0;
+		p0.y = 0;
+		c.x = e->x + 2 * e->zoom * (x / e->l - 0.5);
+		c.y = e->y + 2 * e->zoom * (a->y / e->w - 0.5);
+		for (k=0;k<e->nb_iter;k++) {
+			p.x = p0.x * p0.x - p0.y * p0.y - c.x;
+			p.y = 2 * fabs(p0.x * p0.y) - c.y;
+			p0 = p;
+			if (p.x * p.x + p.y * p.y > 10)
+				break;
 		}
+		put_pixel(e->buffer, x, a->y,
+			e->dc ^ wtf(k % 256, a->s, a->v * (k < e->nb_iter)));
 	}
 	return (0);
 }

@@ -53,7 +53,7 @@ void		reset_color(t_env *e, int c)
 	while (x < e->l)
 	{
 		y = 0;
-		while (y < e->h)
+		while (y < e->w)
 		{
 			i = y * buf->size_line + x * buf->bpp / 8;
 			if (buf->data[i + 1] && buf->data[i + 2] && buf->data[i])

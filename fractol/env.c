@@ -15,7 +15,7 @@
 t_env	*new_env(t_env *e, int h, int l, char *name)
 {
 	e->mask = 0;
-	e->h = h;
+	e->w = h;
 	e->l = l;
 	e->buffer = (t_buffer*)malloc(sizeof(t_buffer));
 	e->mlx = mlx_init();
@@ -37,4 +37,11 @@ void	free_env(t_env *e)
 		ft_memdel((void**)&e->buffer);
 		ft_memdel((void**)&e->mlx);
 	}
+}
+
+void	init_arg(t_arg *a, t_env *e, double s, double v)
+{
+	a->e = e;
+	a->s = s;
+	a->v = v;
 }

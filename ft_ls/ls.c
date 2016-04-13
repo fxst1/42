@@ -31,6 +31,8 @@ void			set_fct_cmp(t_args *arg)
 {
 	if (arg->mask & LIST)
 		arg->prt = &parcours;
+	else if (arg->mask & OUT_LINE)
+		arg->prt = &parcours_basic;
 	else
 		arg->prt = &parcours_simple;
 	if (arg->mask & SIZE)

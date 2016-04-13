@@ -21,7 +21,7 @@ void	set_rawmode(struct termios *termios_p)
 	termios_p->c_cc[VTIME] = 0;
 }
 
-void	initterm(t_term *t)
+void	initterm(t_term *t, char **env)
 {
 	if (t)
 	{
@@ -37,25 +37,13 @@ void	initterm(t_term *t)
 		t->cfg = ft_strdup("minishell.cfg");
 		t->prompt = ft_strdup("@minishell");
 		t->log = ft_strdup("minishell.log");
-		t->env = NULL;
-		t->path = NULL;
+		t->env = init_env(env);
 		t->last_return = 0;
 //		tcgetattr(0, &t->backup);
 //		tcgetattr(0, &t->it);
 //		set_rawmode(&t->it);
 //		tcsetattr(0, TCSANOW, &t->it);
 	}
-}
-
-char	**init_path(char **env)
-{
-	char	**t;
-
-	while (*env && ft_strncmp(*env, "PATH=", 5))
-		env++;
-	*env += 5;
-	t = ft_strsplit(*env, ':');
-	return (t);
 }
 
 char	**init_env(char **env)

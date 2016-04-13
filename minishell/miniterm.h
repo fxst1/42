@@ -56,8 +56,9 @@ typedef struct		s_term
 int				cd(t_term *t, char *cmd);
 int				env(t_term *t, char *args);
 int				setenvt(t_term *t, char *args);
+int				unsetenvt(t_term *t, char *args);
 void			print_error(t_term *t, char *it, char *error);
-void			initterm(t_term *t);
+void			initterm(t_term *t, char **env);
 char			**init_path(char **env);
 char			**init_env(char **env);
 void			print_prompt(t_term *t);
