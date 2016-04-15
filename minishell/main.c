@@ -12,136 +12,52 @@
 
 #include <miniterm.h>
 
-t_list				*find(char *dn, char *cmd, t_list **file)
+void	reset_shlvl(t_term *t)
 {
-	DIR		*d;
-	t_dir	*e;
-	t_list	*new;
+	char	*ret;
+	char	*arg[5];
+	int		value;
 
-	if ((d = opendir(dn)))
+	value = 0;
+	if ((ret = ft_getenv(t->env, "SHLVL=")))
 	{
-		while ((e = readdir(d)))
+		while (ret[value] && ft_isdigit(ret[value]))
+			value++;
+		if (!ret[value])
+			value = ft_atoi(ret);
+	}
+	arg[0] = NULL;
+	arg[1] = "-o";
+	arg[2] = "SHLVL";
+	arg[3] = ft_itoa(value + 1);
+	arg[4] = NULL;
+	setenvt(t, arg);
+	free(arg[3]);
+}
+
+void	call_laucher(t_term *t, char **cmd, int *ok)
+{
+	char	**args;
+	int		len;
+
+	len = 0;
+	t->act = last_index(t->his) + 1;
+	while (cmd[len])
+	{
+		cmd[len] = build_cmd(t->env, cmd[len], t->last_return);
+		if ((*cmd[len] != ';' && *cmd[len] != '>' && *cmd[len] != '<'
+			&& *cmd[len] != '|' && *cmd[len] != '&')
+			&& *cmd[len])
 		{
-			if (!ft_strcmp(cmd, e->d_name))
-			{
-				new = ft_lstnew(e->d_name, 2 + ft_strlen(e->d_name));
-				ft_lstadd(file, new);
-			}
+			args = ft_strsplit(cmd[len], ' ');
+			if (!call_builtins(t, args, ok))
+				start_prgm(t, args);
+			delete_tab(args);
 		}
-		closedir(d);
+		free(cmd[len]);
+		cmd[len] = NULL;
+		len++;
 	}
-	return (*file);
-}
-
-char	*find_in_path(char **env, char **cmd)
-{
-	char	**path;
-	char	*tmp;
-	int		index;
-	t_list	*files;
-
-	files = NULL;
-	index = 0;
-	tmp = ft_getenv(env, "PATH=");
-	path = ft_strsplit(tmp, ':');
-	tmp = NULL;
-	while (path[index])
-	{
-		if (!tmp && find(path[index], *cmd, &files))
-			tmp = path[index];
-		index++;
-	}
-	if (files && !files->next)
-	{
-		free(*cmd);
-		*cmd = ft_strnew(
-			ft_strlen(tmp) + files->content_size + 1);
-		ft_strcpy(*cmd, tmp);
-		ft_strcat(*cmd, "/");
-		ft_strncat(*cmd, (char*)files->content, files->content_size);
-		free(files->content);
-		free(files);
-	}
-	else
-	{
-		t_list *sw;
-		while (files)
-		{
-			sw = files->next;
-			ft_putnstr(files->content, files->content_size);
-			write(1, "\n", 1);
-			free(files->content);
-			free(files);
-			files = sw;
-		}
-	}
-	index = 0;
-	while (path[index])
-		free(path[index++]);
-	free(path);
-	return (*cmd);
-}
-
-int		start_prgm(t_term *t, char *cmd)
-{
-	char	**argv;
-	pid_t	child_pid;
-	pid_t	tpid;
-	int		index;
-	int		child_status;
-
-	argv = ft_strsplit(cmd, ' ');
-	argv[0] = (*t->env) ? find_in_path(t->env, &argv[0]) : argv[0];
-	child_pid = fork();
-	tpid = 0;
-//	ft_putansi_str(t->exe_txt, 1);
-//	ft_putansi_str(t->exe_back, 1);
-	ft_putstr_fd("\e[0m", 1);
-	if (child_pid == 0)
-	{
-		execve(argv[0], argv, t->env);
-		print_error(t, argv[0], "command not found");
-		exit(0);
-	}
-	else
-		while (tpid != child_pid)
-			tpid = wait(&child_status);
-	index = 0;
-	while (argv[index])
-		free(argv[index++]);
-	free(argv);
-	return (child_status);
-}
-
-int		call_builtins(t_term *t, char *cmd, int *ok)
-{
-	if (!ft_strcmp(cmd, "exit"))
-		*ok = 0;
-	else if (!ft_strncmp(cmd, "cd ", (*(cmd + 2) ? 3 : 2)))
-		t->last_return = cd(t, cmd);
-	else if (!ft_strncmp(cmd, "env ", (*(cmd + 3) ? 4 : 3)))
-		t->last_return = env(t, cmd + 3);
-	else if (!ft_strncmp(cmd, "setenv ", 7))
-		t->last_return = setenvt(t, cmd + 7);
-	else if (!ft_strncmp(cmd, "unsetenv ", 9))
-		t->last_return = unsetenvt(t, cmd + 9);
-	else if (!ft_strcmp("reset", cmd))
-	{
-		t->last_return = 0;
-		ft_putstr(CLEAR);
-	}
-	else if (!ft_strcmp(cmd, "setenv") || !ft_strcmp(cmd, "unsetenv"))
-	{
-		ft_putansi_str(t->name_back, 2);
-		ft_putansi_str(t->name_txt, 2);
-		ft_putstr_fd(t->prompt, 2);
-		ft_putstr_fd(": \033[38;5;196m", 2);
-		ft_putstr_fd(cmd, 2);
-		ft_putstr_fd(": bad arguments\033[0m\n", 2);
-	}
-	else
-		return (0);
-	return (1);
 }
 
 int		term_main(t_term *t)
@@ -149,33 +65,25 @@ int		term_main(t_term *t)
 	int		ok;
 	char	*line;
 	char	**cmd;
-	int		len;
 
 	ok = 1;
 	cmd = NULL;
 	print_prompt(t);
-	while (ok && get_next_line(0, &line) > 0)
+	line = ft_strnew(1024);
+	while (ok && get_cmd_line(t, &line, 0))
 	{
-		len = 0;
-		cmd = ft_build_cmd(t->env, line);
-		while (cmd[len])
-		{
-			if ((*cmd[len] != ';' && *cmd[len] != '>' && *cmd[len] != '<'
-				&& *cmd[len] != '|' && *cmd[len] != '&')
-				&& *cmd[len])
-			{
-				if (!call_builtins(t, cmd[len], &ok))
-					start_prgm(t, cmd[len]);
-			}
-			free(cmd[len]);
-			cmd[len] = NULL;
-			len++;
-		}
+		line = ft_strreplace(line, '\n', 0);
+		cmd = ft_strsplit_cmd(line);
+		call_laucher(t, cmd, &ok);
 		free(cmd);
-		free(line);
-		line = NULL;
 		if (ok)
+		{
+			historic(t, HIST_ADD, &line, &ok);
 			print_prompt(t);
+		}
+		free(line);
+		line = ft_strnew(1024);
+		tcsetattr(0, 0, &t->it);
 	}
 	free(line);
 	return (0);
@@ -186,11 +94,15 @@ int		main(int argc, char **argv, char **env)
 	t_term	t;
 	int		ret;
 
-	//ft_putstr(CLEAR);
 	initterm(&t, env);
-	if ((ret = init_args(&t, argv + 1)) == 0)
+	t.act = 0;
+	ret = 0;
+	if ((ret = 0) == 0)
 	{
+		reset_shlvl(&t);
 		t.argc = argc;
+		argv[1] = "SHLVL";
+		argv[1] = "SHLVL";
 		t.argv = argv;
 		term_main(&t);
 		ft_putstr(RESET);

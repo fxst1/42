@@ -1,19 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   builtin_commom.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 09:53:35 by fjacquem          #+#    #+#             */
-/*   Updated: 2015/11/24 09:53:37 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/04/14 22:50:05 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/04/14 22:50:16 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include <builtin.h>
 
-int		ft_isalnum(int c)
+int		setenv_error(t_term *t, int index, char **args)
 {
-	return ((c <= '9' && c >= '0') ||
-		((c <= 'z' && c >= 'a') || (c <= 'Z' && c >= 'A')));
+	if (!args[index])
+	{
+		print_error(t, "setenv", "domain needed");
+		return (1);
+	}
+	else if (!args[index + 1])
+	{
+		print_error(t, "setenv", "value needed");
+		return (1);
+	}
+	else if (args[index + 2])
+	{
+		print_error(t, "setenv", "bad arguments");
+		return (1);
+	}
+	return (0);
 }

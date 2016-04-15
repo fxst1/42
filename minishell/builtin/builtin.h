@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_isalnum.c                                       :+:      :+:    :+:   */
+/*   builtin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/24 09:53:35 by fjacquem          #+#    #+#             */
-/*   Updated: 2015/11/24 09:53:37 by fjacquem         ###   ########.fr       */
+/*   Created: 2016/04/14 22:50:23 by fjacquem          #+#    #+#             */
+/*   Updated: 2016/04/14 22:50:25 by fjacquem         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef BUILTIN_H
+# define BUILTIN_H
+# include <miniterm.h>
 
-int		ft_isalnum(int c)
-{
-	return ((c <= '9' && c >= '0') ||
-		((c <= 'z' && c >= 'a') || (c <= 'Z' && c >= 'A')));
-}
+int		setenv_error(t_term *t, int index, char **args);
+
+#endif

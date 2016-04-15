@@ -82,5 +82,6 @@ void		ft_putansi_str(char *code, int const fd);
 void		ft_putansi_nbr(int code, int const fd);
 t_longest	ft_add(int size, ...);
 char		**ft_build_cmd(char **env, char *cmd);
+char		*ft_strreplace(char *str, int occur, int repl);
 
 #endif

@@ -22,13 +22,24 @@
 # include <errno.h>
 # include <sys/types.h>
 # include <pthread.h>
+# include <SDL.h>
+# include <SDL_mixer.h>
+//# include "X11/Xlib.h"
 # include "keys.h" 
 # define BSHIP 3
 # define MANDELBROT 1
 # define JULIA 2
-# define NB_THREAD 1024
-# define TH_SCL 50
+# define NB_THREAD 25
+# define TH_SCL 100
+# define INPUT_MODE 64
+# define ANIM_MODE 16
+# define PTR_MOTION_MASK (1L<<6)
+# define MOTION_NOTIFY 6
+# define KEY_PRESS_MASK (1L<<0)
+# define KEY_PRESS 2
 
+# define WEIGTH			1000
+# define LENGTH			1000
 typedef void			*t_scn;
 
 typedef double			t_coord;
@@ -59,10 +70,18 @@ typedef struct			s_buffer
 	int					l;
 }						t_buffer;
 
+typedef struct			s_arg
+{
+	double				s;
+	double				v;
+	int					y;
+	int					x;
+}						t_arg;
+
 typedef struct			s_env
 {
-	pthread_t			th[NB_THREAD];
-
+	pthread_t			th[1024];
+	t_arg				arguments[1024];
 	int					w;
 	int					l;
 	int					mask;
@@ -71,6 +90,8 @@ typedef struct			s_env
 	void				*mlx;
 	void				*img;
 	t_scn				*screen;
+
+	t_scn				*info;
 
 	void				*(*fractal)();
 	int					nb_iter;
@@ -83,25 +104,25 @@ typedef struct			s_env
 	double				s;
 	double				v;	
 	long int			dc;
+	int					machin;
+
+	Mix_Music			*music;
+	char				*filename;
 }						t_env;
 
-typedef struct			s_arg
-{
-	t_env				*e;
-	double				s;
-	double				v;
-	int					y;
-}						t_arg;
-
-void	init_threads(t_env *e, t_arg *arguments);
-t_env	*new_env(t_env *e, int h, int l, char *name);
-void	free_env(t_env *e);
-void	init_arg(t_arg *a, t_env *e, double s, double v);
-void	clear(t_env *e, int c);
-void	reset_color(t_env *e, int c);
-void	put_pixel(t_buffer *buf, int x, int y, int c);
-int     wtf(double h, double s, double v);
-void	*burning_ship(t_arg *a);
-void	*mandelbrot(t_arg *a);
-void	*julia(t_arg *a);
+void		random_animation(t_env *e);
+void		init_threads(t_env *e, t_arg *arguments);
+t_env		*new_env(t_env *e, int h, int l, char *name);
+void		free_env(t_env *e);
+void		init_arg(t_arg *a, t_env *e, double s, double v);
+void		clear(t_env *e, int c);
+void		reset_color(t_env *e, int c);
+void		put_pixel(t_buffer *buf, int x, int y, int c);
+int    		 wtf(double h, double s, double v);
+void		*burning_ship(t_arg *a);
+void		*mandelbrot(t_env *e);
+void		*julia(t_env *a);
+char		*mlx_key_str(int keycode, int *end);
+Mix_Music	*start_music(char *filename);
+void		*stop_music(Mix_Music *music);
 #endif
