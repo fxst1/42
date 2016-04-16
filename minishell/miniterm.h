@@ -108,13 +108,15 @@ int					sub_replace_env(char **env, char **cmd, char *str, int ret);
 **	features
 */
 int					historic(t_term *t, int action, char **cmd, int *last_size);
-char				*do_autocomplet(t_term	*t, char *cmd, int *ok);
+char				*do_autocomplet(t_term	*t, char *cmd, int *ok, int index);
 char				*get_cmd_line(t_term *t, char **line, int read_value);
 void				catch_signal(int signum);
 
 /*
 **	utils
 */
+void				free_list(t_list *l);
+void				print_it(t_term *t, t_list *l, char *cmd);
 void				delete_tab(char **args);
 void				suppr_unprintable(char *str);
 char				*realloc_buffer(char *buffer, size_t size);

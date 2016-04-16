@@ -23,7 +23,7 @@ LIBS = $(LIBFT_A)
 BUILTIN = builtin/builtin_cd.c builtin/builtin_env.c builtin/builtin_setenv.c builtin/builtin_unsetenv.c builtin/builtin_common.c
 BUILTIN_O = builtin_cd.o builtin_env.o builtin_setenv.o builtin_unsetenv.o builtin_common.o
 
-SRC = term.c main.c command_parser.c command_parser_bis.c launcher.c environ_research.c utils.c read_line.c completion.c historik.c signal.c
+SRC = term.c main.c command_parser.c command_parser_bis.c launcher.c environ_research.c utils.c read_line.c completion.c historik.c signal.c completion_utils.c
 OBJ = $(SRC:.c=.o) $(BUILTIN_O)
 
 all: $(NAME)

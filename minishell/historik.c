@@ -65,7 +65,7 @@ int		historic(t_term *t, int action, char **cmd, int *last_size)
 		set_up(t, last_size, cmd);
 	else if (action == HIST_UP)
 		set_down(t, last_size, cmd);
-	else if (action == HIST_ADD)
+	else if (action == HIST_ADD && ft_strlen(*cmd) > 0)
 	{
 		while (t->his[index] && index + 1 < t->n_cmds)
 			index++;

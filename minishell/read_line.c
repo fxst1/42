@@ -73,7 +73,7 @@ int		start_completion(t_term *t, char **line, int *index, int *size)
 	int	ret;
 
 	ret = 0;
-	*line = do_autocomplet(t, *line, &ret);
+	*line = do_autocomplet(t, *line, &ret, *index);
 	*size = ft_strlen(*line) + 1;
 	*index = (*size) - 1;
 	return (0);
@@ -83,18 +83,16 @@ char	*get_cmd_line(t_term *t, char **line, int read_value)
 {
 	int		size;
 	int		index;
-	int		ntab;
 
 	size = 1;
 	index = 0;
-	ntab = 0;
 	while (read(0, &read_value, sizeof(int)) && read_value != '\n')
 	{
 		*line = realloc_buffer(*line, size);
 		if (read_value == 4283163 || read_value == 4348699)
 			index = inputs_u_d(t, read_value, line, &size);
-		else if ((read_value == 32521 || read_value == '\t') && ++ntab == 2)
-			ntab = start_completion(t, line, &index, &size);
+		else if ((read_value == 32521 || read_value == '\t'))
+			start_completion(t, line, &index, &size);
 		else if (read_value == 4414235 || read_value == 4479771)
 			inputs_l_r(read_value, &index, size);
 		else
