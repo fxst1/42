@@ -59,3 +59,33 @@ int		last_index(char **t)
 		index++;
 	return (index);
 }
+
+char		*read_line(int fd)
+{
+	char	*str;
+	char	*tmp;
+	int		len;
+	int		ret;
+
+	len = 0;
+	ret = 0;
+	str = (char*)malloc(sizeof(char) * (len + 1));
+	str[0] = 0;
+	//str[1] = 0;
+	while ((ret = read(fd, &str[len], 1)) > 0 && str[len] != '\n')
+	{
+		tmp = (char*)malloc(sizeof(char) * (len + 1));
+		ft_memcpy(tmp, str, len);
+		tmp[len] = 0;
+		free(str);
+		str = (char*)malloc(sizeof(char) * (len + 1));
+		ft_memcpy(str, tmp, len);
+		str[len] = 0;
+		free(tmp);
+		len++;
+	}
+	if (ret < 0)
+		ft_memdel((void**)&str);
+		printf("%d, %s\n", fd, str);
+		return (str);
+}

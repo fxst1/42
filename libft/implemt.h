@@ -58,7 +58,7 @@ void		ft_putnbr_base(int nb, char *base);
 void		ft_putdouble(double d);
 void		ft_puthex(unsigned int number);
 char		*ft_strrev(char *str);
-void		ft_putnstr(char *str, unsigned int offset);
+void		ft_putnstr(char *str, int offset);
 int			ft_abs(int n);
 void		ft_swap(void *a, void *b);
 void		ft_swapn(void *a, void *b, size_t len);

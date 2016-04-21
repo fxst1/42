@@ -12,6 +12,25 @@
 
 #include <miniterm.h>
 
+int		test_access(t_term *t, char *name)
+{
+	DIR	*d;
+	int	value;
+
+	value = 0;
+	if (!(d = opendir(name)))
+	{
+		if (!access(name, F_OK) && access(name, X_OK))
+		{
+			print_error(t, name, "Permission denied");
+			value = 1;
+		}
+	}
+	else
+		closedir(d);
+	return (value);
+}
+
 int		start_prgm(t_term *t, char **argv)
 {
 	pid_t	child_pid;
@@ -19,13 +38,16 @@ int		start_prgm(t_term *t, char **argv)
 	int		child_status;
 
 	argv[0] = (*t->env) ? find_in_path(t->env, &argv[0]) : argv[0];
+	if (test_access(t, argv[0]))
+		return (0);
 	child_pid = fork();
 	tpid = 0;
+	t->reading = 0;
 	ft_putstr_fd("\033[0m", 1);
 	if (child_pid == 0)
 	{
 		execve(argv[0], argv, t->env);
-		print_error(t, argv[0], "command not found");
+		print_error(t, argv[0], "Command not found");
 		exit(0);
 	}
 	else
@@ -54,6 +76,8 @@ int		call_builtins(t_term *t, char **cmd, int *ok)
 		ft_putendl(*(cmd + 1) ? *(cmd + 1) : " ");
 	else if (!ft_strcmp("reset", *cmd))
 		ft_putstr(CLEAR);
+	else if (!ft_strcmp(*cmd, "cfg"))
+		builtin_cfg(t, cmd);
 	else
 		return (0);
 	return (1);

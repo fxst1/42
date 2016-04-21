@@ -24,15 +24,16 @@ t_list	*find_file(char *filen, char *cmd)
 	{
 		while ((entry = readdir(d)))
 		{
-			if (!ft_strncmp(entry->d_name, cmd, ft_strlen(cmd)) &&
-				ft_strcmp("..", entry->d_name) && ft_strcmp(".", entry->d_name))
+			if (!*cmd || (!ft_strncmp(entry->d_name, cmd, ft_strlen(cmd)) &&
+				ft_strcmp("..", entry->d_name) &&
+				ft_strcmp(".", entry->d_name)))
 			{
-				new = ft_lstnew(entry->d_name,
-					sizeof(char) * ft_strlen(entry->d_name) + 1);
-				((char*)new->content)[new->content_size] = 0;
-				suppr_unprintable(new->content);
+				new = ft_lstnew(NULL, 0);
+				new->content = (entry->d_type == DT_DIR) ?
+					ft_strjoin(entry->d_name, "/") :
+					ft_strdup(entry->d_name);
+				new->content_size = ft_strlen(new->content);
 				ft_lstadd(&file, new);
-				new = NULL;
 			}
 		}
 		closedir(d);
@@ -74,31 +75,43 @@ t_list	*find_rest(char *loc_dir, char *cmd, int index)
 	int		i;
 	char	t[1024];
 	char	*ret;
+	char	*tmp;
 	t_list	*l;
 
 	i = index;
+	l = NULL;
 	while (i > 0 && cmd[i] != ' ')
 		i--;
 	ft_strncpy(t, &cmd[i + 1], index - i);
-	if (t[0] == '/')
+	if ((ret = ft_strrchr(t, '/')))
 	{
-		if ((ret = ft_strrchr(t, '/')))
-			*(ret + 1) = 0;
-		ret = t;
-		if ((l = find_file(ret, &cmd[i + 2])))
-		{
-			cmd[i + 2] = 0;
-		}
-		return (l);
+		tmp = ft_strdup(ret + 1);
+		*(ret + 1) = 0;
+		if ((l = find_file(t, tmp)))
+			*(ft_strrchr(cmd, '/') + 1) = 0;
+		free(tmp);
 	}
-	printf("act_dir\n");
-	return (find_file(loc_dir, &cmd[i + 1]));
+	else
+	{
+		l = find_file(loc_dir, &cmd[i + 1]);
+		cmd[i + 1] = 0;
+	}
+	return (l);
+}
+
+void	poffset(int offset)
+{
+	while (offset > 0)
+	{
+		write(1, "\033[D", 3);
+		offset--;
+	}
+	write(1, "\033[K", 3);
 }
 
 char	*do_autocomplet(t_term *t, char *cmd, int *ok, int index)
 {
 	t_list	*l;
-	t_list	*m;
 	int		prnt;
 	char	*ret;
 
@@ -106,7 +119,6 @@ char	*do_autocomplet(t_term *t, char *cmd, int *ok, int index)
 		l = find_path(ft_getenv(t->env, "PATH"), cmd);
 	else
 		l = find_rest(t->dirpath, cmd, index);
-	m = l;
 	prnt = 0;
 	if (l && !l->next)
 	{
@@ -115,10 +127,10 @@ char	*do_autocomplet(t_term *t, char *cmd, int *ok, int index)
 			*ok = 1;
 		else
 			*ok = 2;
+		poffset(index);
 		cmd = realloc_buffer(cmd, l->content_size + prnt);
 		cmd = ft_strcat(cmd, l->content);
 		ft_putstr(cmd);
-		//prnt = 0;
 	}
 	else
 		print_it(t, l, cmd);

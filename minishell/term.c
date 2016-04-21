@@ -14,34 +14,29 @@
 
 void	initterm(t_term *t, char **env)
 {
-	if (t)
-	{
-		getcwd(t->dirpath, sizeof(char) * 1024);
-		t->pt_back = ft_strdup("48;5");
-		t->pt_txt = ft_strdup("1;38;5;87");
-		t->cmd_back = ft_strdup("48;5");
-		t->cmd_txt = ft_strdup("38;5;15");
-		t->exe_back = ft_strdup("48;5");
-		t->exe_txt = ft_strdup("38;5;15");
-		t->name_back = ft_strdup("48;5");
-		t->name_txt = ft_strdup("1;38;5;69");
-		t->cfg = ft_strdup("minishell.cfg");
-		t->prompt = ft_strdup("@minishell");
-		t->n_cmds = 100;
-		t->his = (char**)malloc(sizeof(char*) * t->n_cmds);
-		t->env = init_env(env);
-		t->last_return = 0;
-		tcgetattr(0, &t->it);
-		tcgetattr(0, &t->backup);
-		set_rawmode(&t->it);
-		tcsetattr(0, 0, &t->it);
-		signal(SIGINT, &catch_signal);
-		signal(SIGABRT, &catch_signal);
-		signal(SIGQUIT, &catch_signal);
-		int index = 0;
-		while (index < 100)
-			t->his[index++] = NULL;
-	}
+	int index;
+
+	index = 0;
+	getcwd(t->dirpath, sizeof(char) * 1024);
+	t->pt_back = ft_strdup("48;5");
+	t->pt_txt = ft_strdup("1;38;5;87");
+	t->cmd_back = ft_strdup("48;5");
+	t->cmd_txt = ft_strdup("38;5;15");
+	t->exe_back = ft_strdup("48;5");
+	t->exe_txt = ft_strdup("38;5;15");
+	t->name_back = ft_strdup("48;5");
+	t->name_txt = ft_strdup("1;38;5;69");
+	t->prompt = ft_strdup("@minishell");
+	t->n_cmds = 100;
+	t->his = (char**)malloc(sizeof(char*) * t->n_cmds);
+	t->env = init_env(env);
+	t->last_return = 0;
+	tcgetattr(0, &t->it);
+	tcgetattr(0, &t->backup);
+	set_rawmode(&t->it);
+	tcsetattr(0, 0, &t->it);
+	while (index < 100)
+		t->his[index++] = NULL;
 }
 
 char	**init_env(char **env)
@@ -93,7 +88,6 @@ void	print_prompt(t_term *t)
 void	stop(t_term *t)
 {
 	free(t->prompt);
-	free(t->cfg);
 	free(t->cmd_txt);
 	free(t->cmd_back);
 	free(t->pt_txt);

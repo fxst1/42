@@ -12,6 +12,19 @@
 
 #include <miniterm.h>
 
+static void		print_error_cd(t_term *t, char *cmd, char *ret)
+{
+	char	*act;
+
+	act = NULL;
+	if (ret && !cmd)
+		act = ft_strjoin("No such file or directory: ", ret);
+	else
+		act = ft_strjoin("No such file or directory: ", cmd ? cmd : " ");
+	print_error(t, "cd", act);
+	free(act);
+}
+
 static void		change_env(t_term *t, char *new, char *old)
 {
 	char	*new_loc[4];
@@ -34,7 +47,11 @@ static int		have_arg(t_term *t, char **cmd, char *act)
 	char	*ret;
 
 	ret = ft_getenv(t->env, "OLDPWD=");
-	if (!ft_strcmp(cmd[1], "-") && chdir(ret ? ret : "/") > -1)
+	if (cmd[2])
+	{
+		print_error(t, "cd", "Too much arguments");
+	}
+	else if (!ft_strcmp(cmd[1], "-") && chdir(ret ? ret : "/") > -1)
 	{
 		getcwd(t->dirpath, sizeof(char) * 1024);
 		change_env(t, t->dirpath, act);
@@ -58,7 +75,7 @@ int				cd(t_term *t, char **cmd)
 	ok = 1;
 	ret = NULL;
 	act = ft_strdup(t->dirpath);
-	if (cmd[1] && !cmd[2])
+	if (cmd[1])
 		ok = have_arg(t, cmd, act);
 	else if ((ret = ft_getenv(t->env, "HOME")) && chdir(ret) > -1)
 	{
@@ -66,8 +83,8 @@ int				cd(t_term *t, char **cmd)
 		change_env(t, t->dirpath, act);
 		ok = 0;
 	}
-	if (ok)
-		print_error(t, "cd", "No such file or directory");
 	free(act);
+	if (ok)
+		print_error_cd(t, cmd[1], ret);
 	return (ok);
 }

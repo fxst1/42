@@ -12,17 +12,19 @@
 
 #include "implemt.h"
 
-void	ft_putnstr(char *str, unsigned int offset)
+void	ft_putnstr(char *str, int offset)
 {
-	if (str && *str)
+	int	len;
+
+	len = ft_strlen(str);
+	while (offset > 0)
 	{
-		if (offset)
-		{
-			if (ft_isprint(*str))
-				write(1, str, 1);
-			else
-				write(1, ".", 1);
-			ft_putnstr(str + 1, offset - 1);
-		}
+		write(1, str, len);
+		offset--;
+	}
+	while (offset < 0)
+	{
+		write(1, str, len);
+		offset++;
 	}
 }

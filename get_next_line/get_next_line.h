@@ -13,14 +13,12 @@
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 # ifndef BUFF_SIZE
-#  define BUFF_SIZE 1024
+#  define BUFF_SIZE 1
 # endif
 # ifndef DELIM
 #  define DELIM '\n'
 # endif
-# ifndef BIN_MODE
 #  define BIN_MODE 0
-# endif
 # include <fcntl.h>
 # include "../libft/libft.h"
 

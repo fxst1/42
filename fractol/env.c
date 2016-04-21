@@ -43,8 +43,9 @@ int			key_info(int keycode, t_env *e)
 		e->mask |= INPUT_MODE;
 	else
 	{
+
 	}
-	print_info(e);
+	expose_info(e);
 	return (0);
 }
 

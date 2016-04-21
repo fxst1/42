@@ -27,12 +27,11 @@ void	reset_shlvl(t_term *t)
 			value = ft_atoi(ret);
 	}
 	arg[0] = NULL;
-	arg[1] = "-o";
-	arg[2] = "SHLVL";
-	arg[3] = ft_itoa(value + 1);
-	arg[4] = NULL;
+	arg[1] = "SHLVL";
+	arg[2] = ft_itoa(value + 1);
+	arg[3] = NULL;
 	setenvt(t, arg);
-	free(arg[3]);
+	free(arg[2]);
 }
 
 void	call_laucher(t_term *t, char **cmd, int *ok)
@@ -94,13 +93,19 @@ int		main(int argc, char **argv, char **env)
 	t_term	t;
 	int		ret;
 
+	(void)argc;
+	(void)argv;
 	initterm(&t, env);
+	get_miniterm(&t);
 	t.act = 0;
 	ret = 0;
+//	signal(SIGINT, &catch_signal);
+	signal(SIGABRT, &catch_signal);
+	ioctl(1, TIOCGWINSZ, &t.ws);
+	signal(SIGWINCH, &catch_signal);
 	if ((ret = 0) == 0)
 	{
 		reset_shlvl(&t);
-		t.argc = argc;
 		argv[1] = "SHLVL";
 		argv[1] = "SHLVL";
 		t.argv = argv;

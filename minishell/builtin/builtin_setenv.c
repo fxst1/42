@@ -114,7 +114,7 @@ int				setenvt(t_term *t, char **cmd)
 
 	if ((overwrite = init_mask(t, cmd + 1, &domain, &value)))
 	{
-		t->env = (overwrite == 1) ? overwrite_env(t->env, domain, value) :
+		t->env = (overwrite == -1) ? overwrite_env(t->env, domain, value) :
 									not_overwrite(t->env, domain, value);
 		free(domain);
 		free(value);

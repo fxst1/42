@@ -11,13 +11,13 @@
 # **************************************************************************** #
 
 LIBFT = ../libft
-TEST = tests.c
+TEST = main.c
 NAME = libftprintf.a
 
 FLAGS = -Wall -Wextra -Werror
 CC = gcc
 
-SRC = print.c fcts_part1.c fcts_part2.c printer.c
+SRC = print_nbr.c initialize.c fcts_va_arg.c print_str.c process.c
 LIBFT_A = $(LIBFT)/libft.a
 
 OBJ = $(SRC:.c=.o)
@@ -39,7 +39,7 @@ clean:
 	/bin/rm -f tests
 
 dclean:
-	make -C $(LIBFT) fclean
+#	make -C $(LIBFT) fclean
 
 fclean: clean dclean
 	/bin/rm -f $(NAME)

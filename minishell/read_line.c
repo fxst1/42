@@ -12,13 +12,40 @@
 
 #include "miniterm.h"
 
+void	line_up_down(int str_len, int index, int read)
+{
+	int			prmpt;
+	int			col;
+	int			offset;
+
+	(void)read;
+	prmpt = get_prompt_offset();
+	col = get_miniterm(NULL)->ws.ws_col;
+	offset = prmpt + str_len;
+	if (!(offset % col))
+	{
+		write(1, "\n", 1);
+	}
+	if (read == 4414235 && (index + prmpt) % col == col - 1)
+	{
+		write(1, "\033[B", 3);
+		ft_putnstr("\033[D", col);
+	}
+	else if ((read == 127 || read == 4479771) && (index + prmpt) % col ==
+		col - 1)
+	{
+		write(1, "\033[A", 3);
+		ft_putnstr("\033[C", col);
+	}
+}
+
 void	inputs_l_r(int read_value, int *index, int size)
 {
 	if (read_value == 4414235)
 	{
 		if (*index < size - 1)
 		{
-			write(1, "\033[1C", 4);
+			write(1, "\033[C", 3);
 			(*index)++;
 		}
 	}
@@ -26,7 +53,7 @@ void	inputs_l_r(int read_value, int *index, int size)
 	{
 		if (*index > 0)
 		{
-			write(1, "\033[1D", 4);
+			write(1, "\033[D", 3);
 			(*index)--;
 		}
 	}
@@ -68,24 +95,18 @@ void	inputs_del_norm(int read_value, char **line, int *index, int *size)
 	}
 }
 
-int		start_completion(t_term *t, char **line, int *index, int *size)
-{
-	int	ret;
-
-	ret = 0;
-	*line = do_autocomplet(t, *line, &ret, *index);
-	*size = ft_strlen(*line) + 1;
-	*index = (*size) - 1;
-	return (0);
-}
-
 char	*get_cmd_line(t_term *t, char **line, int read_value)
 {
 	int		size;
 	int		index;
+	int		offset;
 
+	offset = get_prompt_offset();
 	size = 1;
 	index = 0;
+	t->reading = 1;
+	t->line = line;
+	write(1, "\033[7h", 4);
 	while (read(0, &read_value, sizeof(int)) && read_value != '\n')
 	{
 		*line = realloc_buffer(*line, size);

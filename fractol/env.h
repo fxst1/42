@@ -23,7 +23,7 @@
 # include <sys/types.h>
 # include <pthread.h>
 # include <SDL.h>
-# include <SDL_mixer.h>
+# include <SDL_audio.h>
 //# include "X11/Xlib.h"
 # include "keys.h" 
 # define BSHIP 3
@@ -106,10 +106,17 @@ typedef struct			s_env
 	long int			dc;
 	int					machin;
 
-	Mix_Music			*music;
+//	Mix_Music			*music;
 	char				*filename;
 }						t_env;
-
+/*
+typedef	struct			s_music
+{
+	Mix_Music			*data;
+	int					freq_alpha;
+	int					freq_beta;
+}						t_music;
+*/
 void		random_animation(t_env *e);
 void		init_threads(t_env *e, t_arg *arguments);
 t_env		*new_env(t_env *e, int h, int l, char *name);
@@ -123,6 +130,6 @@ void		*burning_ship(t_arg *a);
 void		*mandelbrot(t_env *e);
 void		*julia(t_env *a);
 char		*mlx_key_str(int keycode, int *end);
-Mix_Music	*start_music(char *filename);
-void		*stop_music(Mix_Music *music);
+//Mix_Music	*start_music(char *filename);
+//void		*stop_music(Mix_Music *music);
 #endif

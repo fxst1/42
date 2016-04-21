@@ -16,7 +16,7 @@ int				expose_hook(t_env *e)
 
 int				loop_hook(t_env *e)
 {
-	printf("%p\n", e);
+	//printf("%p\n", e);
 	if (e->mask & ANIM_MODE)
 	{
 		random_animation(e);	
@@ -99,11 +99,11 @@ int				key_hook(int keycode, t_env *e)
 		e->nb_iter -= 10;
 	else if (keycode == 35)
 	{
-		if (!e->mask & INPUT_MODE)
+		/*if (!e->mask & INPUT_MODE)
 			e->mask |= INPUT_MODE;
 		if (e->filename)
 			e->music = (!e->music) ? start_music(e->filename) : stop_music(e->music);
-	}
+	*/}
 	return (0);
 }
 
