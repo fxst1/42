@@ -33,20 +33,7 @@
 */
 # define REVERSE_ORDER	1
 
-extern int errno;
-
-typedef struct stat		t_stat;
-typedef struct dirent	t_dir;
-typedef struct			s_file
-{
-	t_stat				s;
-	char				*name;
-	struct s_file		*next;
-}						t_file;
-
 typedef long long t_longest;
-void		ft_delete_files(t_file **root);
-t_file		*ft_open(char *dirname);
 size_t		ft_strclen(const char *str, int c);
 char		*ft_getenv(char **env, char *name);
 long		ft_pow(int value, unsigned int n);

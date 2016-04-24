@@ -48,9 +48,6 @@ void	free_list(t_list *l)
 
 void	print_it(t_term *t, t_list *l, char *cmd)
 {
-	int	ok;
-
-	ok = 0;
 	if (l && l->next)
 	{
 		ft_putstr("\nDisplay ");

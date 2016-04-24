@@ -31,6 +31,8 @@ void	initterm(t_term *t, char **env)
 	t->his = (char**)malloc(sizeof(char*) * t->n_cmds);
 	t->env = init_env(env);
 	t->last_return = 0;
+	t->fds[0] = 1;
+	t->fds[1] = 0;
 	tcgetattr(0, &t->it);
 	tcgetattr(0, &t->backup);
 	set_rawmode(&t->it);

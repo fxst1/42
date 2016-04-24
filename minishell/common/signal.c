@@ -25,7 +25,7 @@ void		catch_signal(int signum)
 	if (signum == SIGINT)
 		print_error(t, "extern signal", "sigint");
 	else if (signum == SIGABRT)
-		print_error(t, "extern signal", "abort");
+		print_error(t, "extern signal ABORT", "... et merde ...");
 	else if (signum == SIGTERM)
 		print_error(t, "extern signal", "sigterm");
 	else if (signum == SIGWINCH)
@@ -35,6 +35,6 @@ void		catch_signal(int signum)
 	if (t->reading && signum != SIGWINCH)
 	{
 		print_prompt(t);
-		ft_putstr(*t->line);
+		ft_putstr(t->line.buffer);
 	}
 }

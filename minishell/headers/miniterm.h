@@ -12,9 +12,11 @@
 
 #ifndef MINITERM_H
 # define MINITERM_H
-# include <libft/master.h>
-# include <libft/print.h>
+# include <libft.h>
+# include <implemt.h>
+# include <print.h>
 # include <unistd.h>
+# include <explorer.h>
 # include <fcntl.h>
 # include <term.h>
 # include <dirent.h>
@@ -23,11 +25,35 @@
 # include <termcap.h>
 # include <sys/ioctl.h>
 # include <signal.h>
-# include <configs/menu.h>
+# include <menu.h>
+# include <cmdline.h>
 # include <get_next_line.h>
 # include <stdio.h>
 # undef BUFF_SIZE
 # define BUFF_SIZE 1
+# define MSHELL_SHIFT 993090331
+# define MSHELL_CTRL 993090331
+# define MSHELL_DEFAULT_LINE_SIZE 1024
+# define MSHELL_KEYUP 4283163
+# define MSHELL_KEYDOWN 4348699
+# define MSHELL_KEYRIGHT 4414235
+# define MSHELL_KEYLEFT 4479771 
+# define MSHELL_SHIFT_KEYUP 16690
+# define MSHELL_SHIFT_KEYDOWN 16946
+# define MSHELL_SHIFT_KEYRIGHT 17202
+# define MSHELL_SHIFT_KEYLEFT 17458
+# define MSHELL_CTRL_KEYUP 16693
+# define MSHELL_CTRL_KEYDOWN 16949
+# define MSHELL_CTRL_KEYRIGHT 17205
+# define MSHELL_CTRL_KEYLEFT 17461
+# define MSHELL_SCTRL_KEYRIGHT 17462
+# define MSHELL_SCTRL_KEYLEFT 17206
+# define MSHELL_SPEC_COPY 2 
+# define MSHELL_SPEC_CUT 24
+# define MSHELL_SPEC_PASTE 22
+# define MSHELL_HOME 4738843
+# define MSHELL_END 4607771
+# define MSHELL_CTRL_KEYR 18
 # define ENV_SEPARATOR ":"
 # define HIST_UP 1
 # define HIST_DOWN 2
@@ -46,7 +72,7 @@
 # define MSHELL_MASK_ENV			512
 
 /*
-**	miniterm structure
+**	Miniterm structure
 **
 **	prompt : session name
 **	dirpath: actual working directory
@@ -87,7 +113,7 @@ typedef struct		s_term
 	char			**his;
 
 	int				reading;
-	char			**line;
+	t_cmdline		line;
 
 	char			*pt_back;
 	char			*pt_txt;
@@ -102,6 +128,9 @@ typedef struct		s_term
 	struct termios	it;
 	struct winsize	ws;
 
+	int				fds[2];
+	int				redirect;
+
 	int				last_return;
 	t_list			*auto_compl;
 }					t_term;
@@ -114,12 +143,31 @@ int					env(t_term *t, char **args);
 int					setenvt(t_term *t, char **args);
 int					unsetenvt(t_term *t, char **args);
 int					builtin_cfg(t_term *t, char **args);
+int					explorer(t_term *t, char **args);
+
+/*
+**	command line
+*/
+t_cmdline			*new_cmdline(t_term *t);
+void				inputs_spec(int in, t_cmdline *cmd);
+int					goto_next_word(char *line, int size, int *index);
+int					goto_last_word(char *line, int *index);
+int					select_forward(char *line, int size, int *index, int *delt);
+int					select_backward(char *line, int *index, int *delt);
+void				print_historic(t_term *t, int *index);
+void				cut_line(t_cmdline *cmd);
+void				paste_line(t_cmdline *cmd);
+void				del_line(t_cmdline *cmd);
+void				insrt_line(t_cmdline *cmd, int ch_insert);
+void				copy_line(t_cmdline *cmd);
+void				print_cmdline(t_cmdline *cmd);
+void				reset_select(char *line, int *index, int *delt);
 
 /*
 **	term output
 */
-void				print_error(t_term *t, char *it, char *error);
 void				print_prompt(t_term *t);
+void				print_error(t_term *t, char *it, char *error);
 
 /*
 **	init / stop
@@ -140,6 +188,7 @@ char				*find_in_path(char **env, char **cmd);
 */
 int					call_builtins(t_term *t, char **cmd, int *ok);
 int					start_prgm(t_term *t, char **argv);
+int					start_prgm_pipe(t_term *t, char **argv_a, char **argv_b);
 
 /*
 **	parser
@@ -156,7 +205,7 @@ int					historic(t_term *t, int action, char **cmd, int *last_size);
 int					start_completion(t_term *t, char **line, int *index,
 						int *size);
 char				*do_autocomplet(t_term	*t, char *cmd, int *ok, int index);
-char				*get_cmd_line(t_term *t, char **line, int read_value);
+char				*get_cmd_line(t_term *t, t_cmdline *cmd, int read_value);
 void				catch_signal(int signum);
 
 /*

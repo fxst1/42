@@ -94,11 +94,12 @@ void		mycolor_callback(t_term *t)
 
 void		myname_callback(t_term *t)
 {
+		(void)t;
 	free(t->prompt);
 	t->prompt = NULL;
 	write(1, "Enter a new name:", 17);
 	t->prompt = ft_strnew(1024);
-	t->prompt = get_cmd_line(t, &t->prompt, 0);
+	t->prompt = get_cmd_line(t, new_cmdline(t), 0);
 }
 
 void		profiles_menu(t_term *t, t_menu *m)
@@ -132,25 +133,26 @@ void		mycallback(t_term *t)
 
 void		mysave_callback(t_term *t)
 {
-	char	*name;
+//	char	*name;
 
+	(void)t;
 	write(1, "Enter your save name:", 21);
-	name = ft_strnew(1024);
-	name = get_cmd_line(t, &name, 0);
+//	name = ft_strnew(1024);
+	//name = get_cmd_line(t, &name, 0);
 	write(1, "saved !\n", 1);
 	//save_term(t, ft_strcat(name, ".mshell"));
-	free(name);
+//	free(name);
 }
 
 void		myload_callback(t_term *t)
 {
-	char	*name;
-
+//	char	*name;
+	(void)t;
 	write(1, "Enter filename to load:", 23);
-	name = ft_strnew(1024);
-	name = get_cmd_line(t, &name, 0);
+	//name = ft_strnew(1024);
+	//name = get_cmd_line(t, &name, 0);
 	//load_term(t, ft_strcat(name, ".mshell"), MSHELL_MASK_ALL);
-	free(name);
+//	free(name);
 }
 
 void		mymain_menu(t_term *t, t_menu *m)

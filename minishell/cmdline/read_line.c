@@ -41,7 +41,7 @@ void	line_up_down(int str_len, int index, int read)
 
 void	inputs_l_r(int read_value, int *index, int size)
 {
-	if (read_value == 4414235)
+	if (read_value == MSHELL_KEYRIGHT)
 	{
 		if (*index < size - 1)
 		{
@@ -61,7 +61,7 @@ void	inputs_l_r(int read_value, int *index, int size)
 
 int		inputs_u_d(t_term *t, int read_value, char **line, int *size)
 {
-	if (read_value == 4283163)
+	if (read_value == MSHELL_KEYUP)
 		return (historic(t, HIST_UP, line, size) - 1);
 	return (historic(t, HIST_DOWN, line, size) - 1);
 }
@@ -95,31 +95,36 @@ void	inputs_del_norm(int read_value, char **line, int *index, int *size)
 	}
 }
 
-char	*get_cmd_line(t_term *t, char **line, int read_value)
+char	*get_cmd_line(t_term *t, t_cmdline *cmd, int read_value)
 {
-	int		size;
-	int		index;
-	int		offset;
-
-	offset = get_prompt_offset();
-	size = 1;
-	index = 0;
 	t->reading = 1;
-	t->line = line;
 	write(1, "\033[7h", 4);
 	while (read(0, &read_value, sizeof(int)) && read_value != '\n')
 	{
-		*line = realloc_buffer(*line, size);
-		if (read_value == 4283163 || read_value == 4348699)
-			index = inputs_u_d(t, read_value, line, &size);
+//		printf("<%d>\n", read_value);
+		if (read_value == MSHELL_KEYUP || read_value == MSHELL_KEYDOWN)
+			cmd->cursor = inputs_u_d(t, read_value, &cmd->buffer, &cmd->size);
 		else if ((read_value == 32521 || read_value == '\t'))
-			start_completion(t, line, &index, &size);
-		else if (read_value == 4414235 || read_value == 4479771)
-			inputs_l_r(read_value, &index, size);
-		else
-			inputs_del_norm(read_value, line, &index, &size);
+			start_completion(t, &cmd->buffer, &cmd->cursor, &cmd->size);
+		else if (read_value == MSHELL_KEYRIGHT || read_value == MSHELL_KEYLEFT)
+			inputs_l_r(read_value, &cmd->cursor, cmd->size);
+		else if (read_value == MSHELL_CTRL_KEYR)
+			print_historic(t, &cmd->cursor);
+		else if (read_value == MSHELL_SPEC_COPY)
+			copy_line(cmd);
+		else if (read_value == MSHELL_SPEC_PASTE)
+			paste_line(cmd);
+		else if (read_value == MSHELL_SPEC_CUT)	
+			cut_line(cmd);
+		else if (read_value == MSHELL_SHIFT_KEYRIGHT || read_value == MSHELL_SHIFT_KEYLEFT
+				|| read_value == MSHELL_CTRL_KEYRIGHT || read_value == MSHELL_CTRL_KEYLEFT)
+			inputs_spec(read_value, cmd);
+		else if (read_value >= 32 && read_value <= 127)
+			inputs_del_norm(read_value, &cmd->buffer, &cmd->cursor, &cmd->size);
+		if (read_value == '\e')
+			print_cmdline(cmd);
 		read_value = 0;
 	}
 	write(1, "\n", 1);
-	return (*line);
+	return (cmd->buffer);
 }

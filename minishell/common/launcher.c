@@ -31,30 +31,63 @@ int		test_access(t_term *t, char *name)
 	return (value);
 }
 
+int		start_prgm_pipe(t_term *t, char **argv_a, char **argv_b)
+{
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (pipe(pipefd) == -1)
+		return (-1);
+	tcsetattr(0, 0, &t->backup);
+	ft_putstr_fd("\033[0m", 1);
+	argv_b[0] = (*t->env) ? find_in_path(t->env, &argv_b[0]) : argv_b[0];
+	argv_a[0] = (*t->env) ? find_in_path(t->env, &argv_a[0]) : argv_a[0];
+	if ((pid = fork()) == -1)
+	{
+		close(pipefd[1]);
+		close(pipefd[0]);
+	}
+	else if (pid == 0)
+	{
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[0]);
+		execve(argv_a[0], argv_a, t->env);
+		exit(1);
+	}
+	dup2(pipefd[0], STDIN_FILENO);
+	close(pipefd[1]);
+	wait(NULL);
+	execve(argv_b[0], argv_b, t->env);
+	tcsetattr(0, 0, &t->it);
+	return (0);
+}
+
 int		start_prgm(t_term *t, char **argv)
 {
 	pid_t	child_pid;
 	pid_t	tpid;
 	int		child_status;
 
+	tcsetattr(0, 0, &t->backup);
 	argv[0] = (*t->env) ? find_in_path(t->env, &argv[0]) : argv[0];
+	ft_putstr_fd("\033[0m", 1);
 	if (test_access(t, argv[0]))
 		return (0);
 	child_pid = fork();
 	tpid = 0;
 	t->reading = 0;
-	ft_putstr_fd("\033[0m", 1);
 	if (child_pid == 0)
 	{
 		execve(argv[0], argv, t->env);
 		print_error(t, argv[0], "Command not found");
-		exit(0);
+		exit(1);
 	}
 	else
 		while (tpid != child_pid)
 		{
 			tpid = wait(&child_status);
 		}
+	tcsetattr(0, 0, &t->it);
 	t->last_return = WIFEXITED(child_status);
 	return (child_status);
 }
@@ -78,6 +111,8 @@ int		call_builtins(t_term *t, char **cmd, int *ok)
 		ft_putstr(CLEAR);
 	else if (!ft_strcmp(*cmd, "cfg"))
 		builtin_cfg(t, cmd);
+	else if (!ft_strcmp(*cmd, "explorer"))
+		explorer(t, cmd);
 	else
 		return (0);
 	return (1);

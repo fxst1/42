@@ -108,7 +108,6 @@ char	*build_cmd(char **env, char *cmd, int lret)
 		tmp = ft_strdup(cmd);
 		free(cmd);
 		cmd = replace_env(env, tmp, lret);
-		suppr_unprintable(cmd);
 		free(tmp);
 	}
 	return (cmd);

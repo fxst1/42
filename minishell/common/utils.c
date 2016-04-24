@@ -22,11 +22,13 @@ void	delete_tab(char **args)
 	free(args);
 }
 
-void	suppr_unprintable(char *str)
+void	print_cmdline(t_cmdline *cmd)
 {
-	while (*str && ft_isprint(*str))
-		str++;
-	*str = 0;
+	printf("\nbuffer = <%s>\n", cmd->buffer);
+	printf("keep = <%s>\n", cmd->keep);
+	printf("cursor = <%d>\n", cmd->cursor);
+	printf("size = <%d>\n", cmd->size);
+	printf("delt = <%d>\n", cmd->delt_select);
 }
 
 char	*realloc_buffer(char *buffer, size_t size)

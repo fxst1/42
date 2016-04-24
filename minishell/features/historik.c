@@ -56,6 +56,24 @@ void	set_down(t_term *t, int *last_size, char **cmd)
 	}
 }
 
+void	print_historic(t_term *t, int *index)
+{
+	int	i;
+
+	i = 0;
+	write(1, "\n<=====> HISTORIC <=====>\n", 26);
+	while (i < t->n_cmds && t->his[i])
+	{
+		write(1, t->his[i], ft_strlen(t->his[i]));
+		write(1, "\n", 1);
+		i++;
+	}
+	i = ft_strlen(t->line.buffer);
+	print_prompt(t);
+	write(1, t->line.buffer, i);
+	*index = i;
+}
+
 int		historic(t_term *t, int action, char **cmd, int *last_size)
 {
 	int		index;

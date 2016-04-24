@@ -17,6 +17,5 @@
 # include "btree.h"
 # include "stack.h"
 # include "map.h"
-# include "get_next_line.h"
 # include "print.h"
 #endif

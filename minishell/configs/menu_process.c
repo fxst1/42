@@ -3,15 +3,9 @@
 void		draw_menu(t_menu *m)
 {
 	int				i;
-	int				x;
-	int				y;
 	int				offset;
-	struct winsize	ws;
 
-	ws = get_miniterm(NULL)->ws;
 	i = 0;
-	x = 0;
-	y = 0;
 	offset = get_menu_xoffset(m->cnt, m->nb_cnt);
 	write(1, "\033[u", 3);
 	while (m->nb_cnt > i)
@@ -32,6 +26,10 @@ int		read_menu_input(t_menu *m, int in)
 		m->_cur_y++;
 	else if (in == 4283163)
 		m->_cur_y--;
+	else if (in == MSHELL_KEYRIGHT)
+		;//m->cur_x++;
+	else if (in == MSHELL_KEYLEFT)
+		;//m->cur_x++;
 	if (m->_cur_y > m->nb_cnt)
 		m->_cur_y = 0;
 	else if (m->_cur_y < 0)
