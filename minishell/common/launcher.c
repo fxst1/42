@@ -31,6 +31,32 @@ int		test_access(t_term *t, char *name)
 	return (value);
 }
 
+int		start_prgm_redirect(t_term *t, char **argv, char *filename)
+{
+	int		fd;
+	pid_t	pid;
+
+	if ((fd = open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0644)) == -1)
+		return (-1);
+	tcsetattr(0, 0, &t->backup);
+	ft_putstr_fd("\033[0m", 1);
+	argv[0] = (*t->env) ? find_in_path(t->env, &argv[0]) : argv[0];
+	if ((pid = fork()) == -1)
+	{
+		close(fd);
+	}
+	else if (pid == 0)
+	{
+		dup2(fd, STDOUT_FILENO);
+		execve(argv[0], argv, t->env);
+	}
+	close(fd);
+	wait(NULL);
+	tcsetattr(0, 0, &t->it);
+	return (0);
+}
+
+
 int		start_prgm_pipe(t_term *t, char **argv_a, char **argv_b)
 {
 	int		pipefd[2];
@@ -52,13 +78,12 @@ int		start_prgm_pipe(t_term *t, char **argv_a, char **argv_b)
 		dup2(pipefd[1], STDOUT_FILENO);
 		close(pipefd[0]);
 		execve(argv_a[0], argv_a, t->env);
-		exit(1);
-	}
 	dup2(pipefd[0], STDIN_FILENO);
 	close(pipefd[1]);
 	wait(NULL);
 	execve(argv_b[0], argv_b, t->env);
 	tcsetattr(0, 0, &t->it);
+	}
 	return (0);
 }
 
@@ -80,7 +105,7 @@ int		start_prgm(t_term *t, char **argv)
 	{
 		execve(argv[0], argv, t->env);
 		print_error(t, argv[0], "Command not found");
-		exit(1);
+		//exit(1);
 	}
 	else
 		while (tpid != child_pid)

@@ -75,6 +75,7 @@ void	print_error(t_term *t, char *it, char *error)
 void	print_prompt(t_term *t)
 {
 	ft_putstr(RESET);
+	//ft_putstr(ctime(NULL));
 	ft_putansi_str(t->name_back, 1);
 	ft_putansi_str(t->name_txt, 1);
 	ft_putstr(t->prompt);
