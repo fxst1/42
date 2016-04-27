@@ -16,7 +16,7 @@ t_file		*new_file(t_args *a, char *path, char *name)
 {
 	t_file	*file;
 	char	*tmp;
-	acl_t	ac;
+	//acl_t	ac;
 	int		i;
 
 	tmp = set_filename(path, name, 0);
@@ -26,16 +26,16 @@ t_file		*new_file(t_args *a, char *path, char *name)
 		file->next = NULL;
 		lstat(tmp, &file->s);
 		init_print(name, &file->s, a->mask, &file->p);
-		if ((ac = acl_get_file(tmp, ACL_TYPE_EXTENDED)))
+		/*if ((ac = acl_get_file(tmp, ACL_TYPE_EXTENDED)))
 		{
 			file->p.acl = 1;
 			acl_free((void *)ac);
-		}
+		}*/
 		if ((file->s.st_mode & S_IFMT) == S_IFLNK &&
 			(i = readlink(tmp, file->p.lnk, sizeof(char) * 1024)))
 			file->p.lnk[i] = 0;
-		file->p.attr = listxattr(tmp, NULL, 0, i ?
-			XATTR_SHOWCOMPRESSION | XATTR_NOFOLLOW : 0);
+		//file->p.attr = listxattr(tmp, NULL, 0, i ?
+		//	XATTR_SHOWCOMPRESSION | XATTR_NOFOLLOW : 0);
 	}
 	free(tmp);
 	return (file);
@@ -101,6 +101,8 @@ t_file		*ft_open(t_args *a, char *dn)
 		closedir(d);
 	}
 	else if (errno != ENOTDIR)
+	{
 		;
+	}
 	return (file);
 }

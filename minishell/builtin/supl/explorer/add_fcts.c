@@ -22,7 +22,7 @@ void		addfile(t_file **f, t_file *add, int rev)
 	last = NULL;
 	if (tmp && (name = add->p.name))
 	{
-		while (tmp && ft_strcmp(tmp->p.name, name) > 0 == !rev)
+		while (tmp && (ft_strcmp(tmp->p.name, name) > 0) == !rev)
 		{
 			last = tmp;
 			tmp = tmp->next;

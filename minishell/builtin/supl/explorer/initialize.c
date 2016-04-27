@@ -32,15 +32,17 @@ void		delete_print(t_print *p)
 
 void		init_time(t_print *p, int sort, t_stat *s)
 {
+	(void)p;
+	(void)s;
 	if (sort & CTIME)
 	{
-		p->tim = s->st_birthtime;
-		p->sec = s->st_birthtimespec;
+	//	p->tim = s->st_birthtime;
+	//	p->sec = s->st_birthtimespec;
 	}
 	else
 	{
-		p->tim = s->st_mtime;
-		p->sec = s->st_mtimespec;
+	//	p->tim = s->st_mtime;
+	//	p->sec = s->st_mtimespec;
 	}
 }
 

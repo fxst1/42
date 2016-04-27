@@ -60,9 +60,6 @@ void	print_perm(int perm)
 
 void	print_map(t_print *f, t_args *a)
 {
-	char	*ret;
-
-	ret = NULL;
 	if (f->maj && f->min)
 	{
 		write(1, f->maj, f->len_ma);

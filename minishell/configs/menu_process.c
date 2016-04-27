@@ -27,10 +27,13 @@ int		read_menu_input(t_menu *m, int in)
 	else if (in == 4283163)
 		m->_cur_y--;
 	else if (in == MSHELL_KEYRIGHT)
+	{
 		;//m->cur_x++;
+	}
 	else if (in == MSHELL_KEYLEFT)
-		;//m->cur_x++;
-	if (m->_cur_y > m->nb_cnt)
+	{
+	;//m->cur_x++;
+	}if (m->_cur_y > m->nb_cnt)
 		m->_cur_y = 0;
 	else if (m->_cur_y < 0)
 		m->_cur_y = m->nb_cnt - 1;

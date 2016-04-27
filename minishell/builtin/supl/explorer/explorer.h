@@ -43,6 +43,7 @@
 # define MONTH_II "Jul\0" "Aug\0" "Sep\0" "Oct\0" "Nov\0" "Dec\0"
 # define MONTH MONTH_I MONTH_II
 # include <stdio.h>
+# include <os.h>
 # include <fcntl.h>
 # include <unistd.h>
 # include <dirent.h>
@@ -81,7 +82,7 @@ typedef struct			s_print
 	int					len_size;
 	char				*size;
 	time_t				tim;
-	struct timespec		sec;
+	//struct timespec		sec;
 	int					is_attr;
 	int					acl;
 	char				lnk[1024];
