@@ -16,7 +16,6 @@
 # include <implemt.h>
 # include <print.h>
 # include <unistd.h>
-# include <explorer.h>
 # include <fcntl.h>
 # include <term.h>
 # include <dirent.h>
@@ -70,6 +69,9 @@
 # define MSHELL_MASK_COLOR_BGNAME	128
 # define MSHELL_MASK_HIS			256
 # define MSHELL_MASK_ENV			512
+
+typedef struct dirent	t_dir;
+typedef struct stat	t_stat;
 
 /*
 **	Miniterm structure

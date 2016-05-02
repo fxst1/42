@@ -14,5 +14,10 @@
 
 int		ft_strnequ(char const *s1, char const *s2, size_t n)
 {
-	return (!ft_strncmp(s1, s2, n));
+	while ((*s1 == *s2 && *s1) && (--n))
+	{
+		s1++;
+		s2++;
+	}
+	return (n == 0);
 }

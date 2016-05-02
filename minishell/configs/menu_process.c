@@ -12,7 +12,7 @@ void		draw_menu(t_menu *m)
 	{
 		put_cursor_at(m->cnt[i]._x,  m->cnt[i]._y, offset + 1);
 		if (m->_cur_y == i)
-			write(1, "\033[4m", 4);
+			write(1, "\033[7m", 4);
 		write(1, m->cnt[i].item, ft_strlen(m->cnt[i].item));
 		write(1, "\033[0m", 4);
 		write(1, "\033[u", 3);

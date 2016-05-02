@@ -36,12 +36,12 @@ void		init_time(t_print *p, int sort, t_stat *s)
 	(void)s;
 	if (sort & CTIME)
 	{
-	//	p->tim = s->st_birthtime;
+//		p->tim = s->st_birthtime;
 	//	p->sec = s->st_birthtimespec;
 	}
 	else
 	{
-	//	p->tim = s->st_mtime;
+		p->tim = s->st_mtime;
 	//	p->sec = s->st_mtimespec;
 	}
 }

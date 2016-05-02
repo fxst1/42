@@ -59,6 +59,21 @@ char	**init_env(char **env)
 	copy[index] = NULL;
 	return (copy);
 }
+#include <time.h>
+
+void	print_atime()
+{
+	time_t	act;
+	char	*s;
+
+	act = time(0);
+	s = ctime(&act);
+	s += 11;
+	*(s + 5) = 0;
+	write(1, "\033[31m[", 6);
+	ft_putstr(s);
+	write(1, "]\033[0m", 5);
+}
 
 void	print_error(t_term *t, char *it, char *error)
 {
@@ -75,7 +90,7 @@ void	print_error(t_term *t, char *it, char *error)
 void	print_prompt(t_term *t)
 {
 	ft_putstr(RESET);
-	//ft_putstr(ctime(NULL));
+	print_atime();
 	ft_putansi_str(t->name_back, 1);
 	ft_putansi_str(t->name_txt, 1);
 	ft_putstr(t->prompt);

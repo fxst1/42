@@ -86,21 +86,40 @@ int			prepare(t_args *a, t_file *root)
 	return (cmpt);
 }
 
-void		parcours(t_args *a, t_file *f)
+void		parcours(struct winsize *ws, t_args *a, t_file *f)
 {
 	int		blks;
+	int		cur;
+	int		page;
 
+	page = 0;
+	cur = 0;
 	blks = prepare(a, f);
+	while (f && page < a->page)
+	{
+		if (cur >= ws->ws_row - 2)
+		{
+			cur = 0;
+			page++;
+		}
+		f = f->next;
+		cur++;
+	}
 	if (f)
 	{
 		write(1, "  total ", 8);
 		ft_putnbr_fd(blks, 1);
-		write(1, "\n", 1);
+		write(1, "  page[", 7);
+		ft_putnbr_fd(page + 1, 1);
+		write(1, "/", 1);
+		ft_putnbr_fd(a->pages + 1, 1);
+		write(1, "]\n", 2);
 	}
-	while (f)
+	while (f && cur < ws->ws_row - 2)
 	{
 		write(1, "   ", 3);
 		print_stat(a, &f->p);
+		cur++;
 		f = f->next;
 	}
 }

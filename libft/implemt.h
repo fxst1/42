@@ -26,6 +26,14 @@
 # define BASE			16
 # define OFFSET_LINE		16
 
+typedef struct			s_dlist
+{
+	void				*content;
+	size_t				content_size;
+	struct s_dlist		*next;
+	struct s_dlist		*last;
+}						t_dlist;
+
 /*
 **	ft_strsort defines
 **
@@ -34,6 +42,7 @@
 # define REVERSE_ORDER	1
 
 typedef long long t_longest;
+void		*ft_keep(const void *ptr);
 size_t		ft_strclen(const char *str, int c);
 char		*ft_getenv(char **env, char *name);
 long		ft_pow(int value, unsigned int n);

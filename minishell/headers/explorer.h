@@ -14,7 +14,10 @@
 # define EXPLORER_H
 # include <map.h>
 # include <sys/ioctl.h>
-# include <miniterm.h>
+# include <libft.h>
+# include <implemt.h>
+# include <print.h>
+# include <unistd.h>
 # define LS_H
 # define PATH_SEPARATOR "/"
 # define PATH_SEPARATOR_LEN 1
@@ -55,6 +58,7 @@
 # include <string.h>
 # include <errno.h>
 # include <sys/acl.h>
+# include <miniterm.h>
 
 enum
 {
@@ -74,8 +78,6 @@ enum
 	OUT_LINE = 32768
 
 };
-
-typedef struct stat	t_stat;
 
 typedef struct			s_print
 {
@@ -110,11 +112,10 @@ typedef struct			s_file
 	struct s_file		*next;
 }						t_file;
 
-typedef struct dirent	t_dir;
-
 typedef struct			s_args
 {
-	struct winsize		ws;
+	int					page;
+	int					pages;
 	char				*path;
 	int					mask;
 	int					offset[6];
@@ -134,7 +135,7 @@ int						test_sort_alph(t_stat *swap, t_stat *tmp, int sort);
 int						test_sort_mask(t_stat *swap, t_stat *tmp, int sort,
 							int reverse);
 void					print_help(char *prgm);
-int						ls(t_args *arg);
+int						ls(t_term *t, t_args *arg);
 void					first_of_all(t_args *arg, int n);
 void					ls_run(char *path, t_args *arg, t_file *root);
 int						stop_ls(t_args *a);
@@ -149,7 +150,7 @@ void					print_time(time_t *time, int mask);
 void					del(t_file **f);
 t_file					*ft_open(t_args *a, char *dirname);
 int						sort_files(t_args *a, t_file *root, t_file *f);
-void					parcours(t_args *a, t_file *f);
+void					parcours(struct winsize *ws, t_args *a, t_file *f);
 int						found_clicolor(t_args *a, char **env);
 t_map					*init_extension_map_from_file(char *filename);
 void					build_offset(int *off, t_print *p);

@@ -17,6 +17,7 @@ CFG_DIR =		configs
 BUILTIN_DIR =	builtin
 FEATURES_DIR =	features
 CMD_DIR =		cmdline
+LEXER_DIR =		lexer
 COMMON_DIR =	common
 INCLUDE_DIR =	headers
 OBJ_DIR =		obj
@@ -57,9 +58,12 @@ BUILTIN_OBJ =	$(BUILTIN_SRC:.c=.o)
 
 
 # minishell command line
-CMD_SRC = read_line.c init_cmdline.c ctrl_inputs.c cmd_utils.c
-CMD_OBJ = $(CMD_SRC:.c=.o)
+CMD_SRC =	read_line.c init_cmdline.c ctrl_inputs.c cmd_utils.c
+CMD_OBJ =	$(CMD_SRC:.c=.o)
 
+# minishell lexer
+LEXER_SRC =	command.c lexer.c word.c redirection.c parse.c
+LEXER_OBJ =	$(LEXER_SRC:.c=.o)
 
 # minishell implementation
 FEATURES_SRC =	command_parser.c command_parser_bis.c environ_research.c\
@@ -80,14 +84,16 @@ SRCS =	$(addprefix $(GNL_DIR)/,$(GNL_SRC))\
 		$(addprefix $(CFG_DIR)/,$(CFG_SRC))\
 		$(addprefix $(CMD_DIR)/,$(CMD_SRC))\
 		$(addprefix $(COMMON_DIR)/,$(COMMON_SRC))\
-		$(addprefix $(EXPLORER_DIR)/,$(EXPLORER_SRC))
+		$(addprefix $(EXPLORER_DIR)/,$(EXPLORER_SRC))\
+		$(addprefix $(LEXER_DIR)/,$(LEXER_SRC))
 OBJS =	$(COMMON_OBJ)\
 		$(FEATURES_OBJ)\
 		$(BUILTIN_OBJ)\
 		$(GNL_OBJ)\
 		$(CFG_OBJ)\
 		$(CMD_OBJ)\
-		$(EXPLORER_OBJ)
+		$(EXPLORER_OBJ)\
+		$(LEXER_OBJ)
 OBJS_MOVED =	$(addprefix $(OBJ_DIR)/,$(OBJS))
 
 all: $(NAME)

@@ -26,6 +26,6 @@ int				explorer(t_term *t, char **args)
 		found_clicolor(&tmp, t->env);
 	if (tmp.mask & COLOR)
 		tmp.typemap = init_typemap(t->env);
-	ls(&tmp);
+	ls(t, &tmp);
 	return (0);//stop_ls(&tmp));
 }
