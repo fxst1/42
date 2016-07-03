@@ -23,7 +23,6 @@ LIB = -lmlx -framework OpenGL -framework AppKit
 SRC = 	./editor.c\
 		./fdf_bis.c\
 		./color.c\
-		./env.c	\
 		./opts.c	\
 		./fdf.c 			\
 		./matrix.c		\
