@@ -20,8 +20,8 @@
 /*
 **	ft_print_memory defines
 **
-**		BASE:			values' base
-**		OFFSET_LINE:	number of values by lines
+**	BASE:			values' base
+**	OFFSET_LINE:	number of values by lines
 */
 # define BASE			16
 # define OFFSET_LINE		16
@@ -37,11 +37,15 @@ typedef struct			s_dlist
 /*
 **	ft_strsort defines
 **
-**		REVERSE_ORDER	: high -> low
+**	REVERSE_ORDER	: high -> low
 */
 # define REVERSE_ORDER	1
 
 typedef long long t_longest;
+char		*ft_strwordcpy_skip(char **s);
+char		*ft_strword_skip(char **s);
+char		*ft_strword(char *s);
+t_list		*ft_lstnew_noalloc(void *cnt, size_t cnt_size);
 void		*ft_keep(const void *ptr);
 size_t		ft_strclen(const char *str, int c);
 char		*ft_getenv(char **env, char *name);

@@ -30,13 +30,14 @@ SRC = ft_memset.c ft_bzero.c ft_memcpy.c ft_memmove.c ft_memchr.c ft_memdel.c\
 BONUS_STACK = ft_stknew.c ft_stkinit.c ft_stkempty.c ft_stkfull.c ft_stkclear.c\
 	ft_stkpop.c ft_stkpush.c
 BONUS_BTREE = ft_btreenew.c ft_btreeadd.c ft_btreefree.c ft_btreeforeach.c
-BONUS_FCT = ft_keep.c ft_strclen.c ft_build_cmd.c\
+BONUS_FCT = ft_keep.c ft_strclen.c ft_build_cmd.c ft_lstnew_noalloc.c ft_strword.c\
 	ft_getenv.c ft_lstfree.c ft_lstsize.c ft_lstadd_begin.c ft_strcasecmp.c\
 	ft_atoi_casebase.c ft_atoi_base.c ft_isspace.c ft_random.c ft_memndel.c\
 	ft_strsort.c ft_strsplit_cmd.c ft_strcut.c ft_putansi_str.c ft_putansi_nbr.c\
 	ft_setfilename.c ft_realloc.c ft_abs.c ft_swap.c ft_putnstr.c ft_pow.c\
 	ft_putnbr_base_fd.c ft_putnbr_base.c ft_itoa_base.c ft_print_memory.c\
-	ft_strrev.c ft_putdouble.c ft_puthex.c ft_swapn.c ft_swaplen.c ft_strnword.c
+	ft_strrev.c ft_putdouble.c ft_puthex.c ft_swapn.c ft_swaplen.c ft_strnword.c\
+	ft_lstadd_end.c ft_strword_skip.c ft_strwordcpy_skip.c
 BONUS_MAP = ft_mapnew.c ft_mapdel.c ft_mapget.c ft_mapadd_at.c ft_mapadd_begin.c ft_mapadd_end.c
 BONUS_GARBAGE = ft_gc.c ft_gcnew.c ft_gcdym.c ft_gcref.c ft_gcadd.c ft_gcstop.c ft_gcprint.c
 BONUS_ALL = $(SRC) $(BONUS_FCT) $(BONUS_MAP) $(BONUS_STACK) $(BONUS_BTREE) $(BONUS_GARBAGE)
