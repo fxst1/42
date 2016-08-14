@@ -10,50 +10,47 @@
 #                                                                              #
 # **************************************************************************** #
 
+CC = gcc
+FLAGS = -Wall -Wextra -Werror -g -O3
 NAME = fractol
+LINK = -lmlx -lXext -lX11 -lm -lft
 
-LIBFT = ../libft
-GNL = ../get_next_line
-MLX = /usr/x11/lib
+LIBFT_DIR = ./libft/
+INC_DIR = ./include/
+OBJ_DIR = ./obj/
+SRC_DIR = ./src/
 
-FLAGS = -Wall -Wextra
+SRCS =	main.c common.c\
+		fractal.c env.c\
+		mlx_++/mlx_get_str.c\
+		music_init.c
 
-LIB = -lm -lmlx -framework OpenGL -framework AppKit -lpthread -O3
-SRC = fractal.c env.c main.c common.c music_init.c
+SRC = $(addprefix $(SRC_DIR), $(SRCS))
+OBJS = $(addsuffix .o, $(basename $(SRCS)))
+OBJ = $(addprefix $(OBJ_DIR), $(notdir $(OBJS)))
 
-HEAD = -I$(LIBFT) -I$(GNL) -I /usr/X11/include
-LIB_A = $(LIBFT)/libft.a
-OBJ = $(SRC:.c=.o)
+VPATH = $(shell find $(SRC_DIR) -type d)
 
-SDL2		= -framework SDL2
-SDL2_MIXER  = -framework SDL2_mixer
+all: $(NAME)
 
-SDL2_HEADER			= -I ~/Library/Frameworks/SDL2.framework/Headers/
-SDL2_HEADER_MIXER   = -I ~/Library/Frameworks/SDL2_mixer.framework/Headers/
+$(NAME): $(OBJ)
+	make -C $(LIBFT_DIR)
+	$(CC) $(FLAGS) -I $(INC_DIR) -I . $(LIBFT_DIR)libft.a $(OBJ) -o $(NAME) $(LINK)
 
-SDL         = -F ~/Library/Frameworks $(SDL2_MIXER) $(SDL2)
-SDL_HEADER  = -F ~/Library/Frameworks $(SDL2_HEADER_MIXER) $(SDL2_HEADER)
-
-all : $(NAME)
-
-$(LIB_A):
-	make -C $(LIBFT) addfct
-
-$(OBJ):
-	gcc $(FLAGS) -I.. -I. $(HEAD) $(SDL_HEADER) -c $(SRC)
-
-$(NAME): $(LIB_A) $(OBJ)
-	gcc $(FLAGS) -I.. -I. $(OBJ) $(LIB_A) $(HEAD) -o $(NAME) $(LIB) $(SDL) $(SDL_HEADER)
+$(OBJ_DIR)%.o: %.c
+	@mkdir $(OBJ_DIR) 2> /dev/null || echo "" > /dev/null
+	$(CC) $(FLAGS) -I $(INC_DIR) -I . -c $< -o $@
 
 clean:
-		rm -f $(OBJ)
+	@rm -vrf $(OBJ_DIR)
+	make -C $(LIBFT_DIR) clean
 
-fclean: clean
-#		make -C $(LIBFT) fclean
-		rm -f $(NAME)
+fclean:
+	@rm -vrf $(OBJ_DIR)
+	@rm -vf $(NAME)
 
 re: fclean all
 
-sdl_install :
+sdl_install:
 	curl https://dl.dropboxusercontent.com/u/22561204/SDL/Archive.zip > /tmp/Archive.zip
 	unzip -o /tmp/Archive.zip -d ~/Library/Frameworks/
