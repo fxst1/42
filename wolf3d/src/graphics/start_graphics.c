@@ -33,7 +33,7 @@ t_graphics		*start_graphics(char *name, int x, int y)
 	g->buf->l = x;
 	g->buf->data = mlx_get_data_addr(g->img, &g->buf->bpp, &g->buf->size_line, &g->buf->endian);
 	mlx_put_image_to_window(g->mlx, g->screen, g->img, 0, 0);
-	mlx_key_hook(g->screen, event, g);
+	mlx_hook(g->screen, KEY_PRESS, KEY_PRESS_MASK, event, g);
 	return (g);
 }
 

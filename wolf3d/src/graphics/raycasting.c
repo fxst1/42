@@ -193,7 +193,7 @@ static void		ray__draw_texture(t_graphics *g, t_ray *r, int x)
 	{
 		int d = y * 256 - g->buf->h * 128 + lineHeight * 128;
 		int texY = ((d * g->textures_h) / lineHeight) / 256;
-		if (texNum < 8)
+		if (texNum < MAX_TEXTURES)
 	 		color = g->textures[texNum][g->textures_h * texY + texX];
 		else
 			color = ft_random();

@@ -9,13 +9,13 @@ int				event(int keycode, t_graphics *g)
 	
 	old_plane_x = c.plane_x;
 	old_dir_x = c.dir_x;
-	printf("%d, %p\n", keycode, w.walls);
+	//printf("%d, %p\n", keycode, w.walls);
 	//move forward if no wall in front of you
 	if (keycode == 65307)
 		stop_graphics(g);
 	if (keycode == 65362)
 	{
-		printf("%d, %d\n", (int)(c.pos_x + c.dir_x * c.speed), (int)c.pos_y);
+		//printf("%d, %d\n", (int)(c.pos_x + c.dir_x * c.speed), (int)c.pos_y);
 		if(w.walls[(int)(c.pos_x + c.dir_x * c.speed)][(int)(c.pos_y)] == 0)
 			c.pos_x += c.dir_x * c.speed;
 		if(w.walls[(int)(c.pos_x)][(int)(c.pos_y + c.dir_y * c.speed)] == 0)

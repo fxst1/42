@@ -1,11 +1,29 @@
 #include <graphics.h>
 
+int		get_next_integer(const int fd, int *addr)
+{
+	int	ret;
+	int	c;
+
+	*addr = 0;
+	c = 0;
+	while ((ret = read(fd, &c, 1)) > 0)
+	{
+		if (!ft_isdigit(c))
+			break ;
+		else
+		{
+			*addr *= 10;
+			*addr += c - '0';
+		}
+	}
+	return (ret);
+}
+
 int		load_walls(t_world *w, int **walls, int fd)
 {
 	int		x;
 	int		y;
-	int		z;
-	char	c;
 
 	if (walls)
 	{
@@ -15,34 +33,14 @@ int		load_walls(t_world *w, int **walls, int fd)
 			x = 0;
 			walls[y] = (int*)malloc(sizeof(int) * w->x_max);
 			ft_bzero(walls[y], sizeof(int) * w->x_max);
-			c = 0;
-			z = 0;
-			while (read(fd, &c, 1))
+			while (x < w->x_max)
 			{
-				printf("%c",c );
-				if (c == ',' || c == '\n')
-				{
-					walls[y][x] = z;
-					if (c == '\n')
-						break ;
-					z = 0;
-					x++;
-				}
-				else if (ft_isdigit(c))
-				{
-					z *= 10;
-					z += c - '0';
-				}
-				else
-				{
-					write(2, "Bad file\n", 9);
-					return (0);
-				}
+				get_next_integer(fd, &walls[y][x]);
+				x++;
 			}
-			if (z)
-				walls[y][x] = z;
 			y++;
 		}
+		printf("\n");
 	}
 	else
 	{
@@ -55,22 +53,17 @@ int		load_walls(t_world *w, int **walls, int fd)
 int		read_file(t_world *w, char *filename, int fd)
 {
 	int		ret;
-	char	*str;
 
 	ret = 0;
 	ft_memset(w, 0, sizeof(t_world));
 	w->name = filename;
-	if ((ret = get_next_line(fd, &str)) > 0)
+	if ((ret = get_next_integer(fd, &w->x_max)) > 0)
 	{
-		w->x_max = ft_atoi(str);
-		free(str);
-		get_next_line(fd, &str);
-		w->y_max = ft_atoi(str);
+		get_next_integer(fd, &w->y_max);
 		printf("(%d, %d)\n", w->x_max, w->y_max);
 		w->walls = (int**)malloc(sizeof(int*) * (w->y_max + 1));
 		if (!load_walls(w, w->walls, fd))
 				ret = -1;
-		free(str);
 	}
 	if (ret == -1)
 	{

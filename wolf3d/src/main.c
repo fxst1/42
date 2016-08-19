@@ -25,7 +25,6 @@ int		main(int argc, char **argv)
 			else
 			{
 				load_textures(g, &g->textures, 64, 64);
-				printf("(%p\n", g->buf);
 				raycasting(g);
 				mlx_loop(g->mlx);
 			}

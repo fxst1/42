@@ -8,9 +8,9 @@ int			**load_textures(t_graphics *g, int ***texture, int w, int h)
 	int		xycolor;
 	int		ycolor;
 
-	*texture = (int**)malloc(sizeof(int*) * 8);
+	*texture = (int**)malloc(sizeof(int*) * MAX_TEXTURES);
 	x = 0;
-	while (x < 8)
+	while (x < MAX_TEXTURES)
 		(*texture)[x++] = malloc(sizeof(int) * w * h);
 	g->textures_w = w;
 	g->textures_h = h;	
@@ -31,6 +31,7 @@ int			**load_textures(t_graphics *g, int ***texture, int w, int h)
 			(*texture)[5][w * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
 			(*texture)[6][w * y + x] = 65536 * ycolor; //red gradient
 			(*texture)[7][w * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
+			(*texture)[8][w * y + x] = x % 16 + y % 16;
 			y++;
 		}
 		x++;

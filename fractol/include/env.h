@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   fdf.h                                              :+:      :+:    :+:   */
+/*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjacquem <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FDF_H
-# define FDF_H
+#ifndef ENV_H
+# define ENV_H
 # include <mlx.h>
 # include <math.h>
 # include <stdio.h>
@@ -23,11 +23,6 @@
 # include <string.h>
 # include <errno.h>
 # include <sys/types.h>
-# include <pthread.h>
-/*
-	# include <SDL/SDL.h>
-	# include <SDL/SDL_audio.h>
-*/
 # include <keys.h> 
 # define SCALE_X 0.1
 # define SCALE_Y 0.2

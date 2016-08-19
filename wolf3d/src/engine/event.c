@@ -9,7 +9,7 @@ int				event(int keycode, t_graphics *g)
 
 	old_dir_x = c.dir_x;
 	old_plane_x = c.plane_x;
-	printf("%p\n", w.walls);
+	//printf("%p\n", w.walls);
 	//move forward if no wall in front of you
 	if (keycode == 65362)
 	{

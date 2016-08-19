@@ -62,12 +62,12 @@ $(OBJ_DIR)%.o: $(ENGINE_DIR)%.c
 
 clean:
 	rm -f $(OBJ)
-#	make -C $(LIB_DIR) clean
+	make -C $(LIB_DIR) clean
 
 fclean:
 	rm -rf $(OBJ)
 	rm -f $(NAME)
-#	make -C $(LIB_DIR) fclean
+	make -C $(LIB_DIR) fclean
 
 re: fclean all
 

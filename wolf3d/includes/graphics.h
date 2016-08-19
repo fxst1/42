@@ -9,6 +9,11 @@
 # include <camera.h>
 # include <engine.h>
 # include <stdio.h>
+# define MAX_TEXTURES 9
+# define PTR_MOTION_MASK (1L<<6)
+# define MOTION_NOTIFY 6
+# define KEY_PRESS_MASK (1L<<0)
+# define KEY_PRESS 2
 
 typedef struct			s_buffer
 {
@@ -120,7 +125,7 @@ t_line					init_line(t_point p1, t_point p2);
 
 int						expose_hook(t_graphics *e);
 
-int			**load_textures(t_graphics *g, int ***texture, int w, int h);
+int						**load_textures(t_graphics *g, int ***texture, int w, int h);
 
 
 #endif
