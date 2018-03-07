@@ -6,7 +6,7 @@
 #    By: fjacquem <fjacquem@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/08/11 17:14:40 by fjacquem          #+#    #+#              #
-#    Updated: 2015/12/16 00:06:28 by fjacquem         ###   ########.fr        #
+#    Updated: 2018/03/07 14:48:41 by fxst1            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -64,7 +64,7 @@ HEADS = $(HEAD_ESS) $(HEAD_REST) $(HEAD_MAP) $(HEAD_GNX) $(HEAD_FCT) $(HEAD_BTRE
 SRC_ALL = $(SRC_ESS) $(SRC_FCT) $(SRC_MAP) $(BONUS_STACK) $(BONUS_BTREE) $(BONUS_GARBAGE)\
 			$(SRC_GNX)
 
-OBJS =	$(SRC_ALL:.c=.o)
+OBJS =	$(addprefix ./obj/,$(SRC_ALL:.c=.o))
 
 all: $(NAME)
 
@@ -73,11 +73,12 @@ $(NAME): $(OBJS)
 		@echo "\033[38;5;27mLibft created\033[0m"
 		@ranlib $(NAME)
 
-%.o: %.c
+./obj/%.o: %.c
+		@mkdir -p $(@D)
 		$(CC) $(FLAGS) $(INC) -c $< -o $@
 
 clean:
-		@rm -f $(OBJS)
+		@rm -rf ./obj
 
 fclean: clean
 		@rm -f $(NAME)
@@ -94,4 +95,4 @@ dymheader:
 		@sudo mkdir $(HEAD_CPY) 2> /dev/null || echo " " > /dev/null
 		@sudo cp -f $(HEADS) $(HEAD_CPY)
 
-.PHONY: re fclean clean all 
+.PHONY: re fclean clean all
